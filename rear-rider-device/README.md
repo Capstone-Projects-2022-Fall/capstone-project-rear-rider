@@ -1,6 +1,11 @@
 ## Prerequisites
 Run the command to install the relevant python packages necessary for communicating with the bluetooth daemon.
-`sudo apt-get install python3-dbus`
+
+- `sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0`
+
+- `pip install dbus-python`
+- `pip install pycairo`
+- `pip install PyGObject`
 
 ## Notes
 
