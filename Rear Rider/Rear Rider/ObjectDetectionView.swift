@@ -11,7 +11,7 @@ import Vision
 
 struct ObjectDetectionView: View {
     let model = MobileNetV2()
-    let photos = ["bike","car","person"]
+    let photos = ["bike","Car","person"]
     @State private var currentIndex: Int = 0
     @State private var classificationLabel: String = ""
     

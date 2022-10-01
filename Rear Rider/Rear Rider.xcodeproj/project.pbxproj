@@ -14,6 +14,8 @@
 		4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */; };
 		4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */; };
 		487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487C63AD28E4F8700022F0A7 /* HomeView.swift */; };
+		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
+		C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
 		4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		487C63AD28E4F8700022F0A7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
+				C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */,
+				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
 				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
 				4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */,
 				4851CE0C28E49485003B5B76 /* Assets.xcassets */,
@@ -147,6 +153,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
+				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
+				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */,
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
@@ -279,9 +287,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -292,7 +301,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "RearRider.Rear-Rider";
+				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -308,9 +317,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -321,7 +331,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "RearRider.Rear-Rider";
+				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

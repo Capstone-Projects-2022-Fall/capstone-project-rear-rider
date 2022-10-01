@@ -14,12 +14,10 @@ struct HomeView: View {
                 NavigationLink(destination: ObjectDetectionView()) {
                     Text("Machine Learning Demo")
                 }
-                
-//                  Uncomment once BT view is in project
-//
-//                NavigationLink(destination: BTConnectionView()) {
-//                    Text("Bluetooth Connection Demo")
-//                }
+
+                NavigationLink(destination: BluetoothView()) {
+                    Text("Bluetooth Connection Demo")
+                }
                  
             }.navigationBarTitle("Rear Rider", displayMode: .inline)
         }
