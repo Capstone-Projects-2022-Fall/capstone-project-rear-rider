@@ -5,6 +5,8 @@ class Process():
     async def begin(self):
         """
         Begin listening to this process.
+
+        NotImplementedError is thrown because the method is meant to be implemented by an inheriting class.
         """
         raise NotImplementedError()
 
