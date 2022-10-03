@@ -1,11 +1,38 @@
 import asyncio
 import threading
+from typing import Union
 from process import Process
 
 class ChildProcess(Process):
     """
-    A child process executed in a shell program.
+    A child process to be executed in a shell program.
+
+
+    ## Test
+    
+    The handler of message_type should be defined as:
+
+    1. Coroutine function.
+    2. Its name as on_message_type.
+
+    For example:
+    Imagine message_type == "data", then the handler for this message_type
+    should be named "on_data".
+    
+    ```python
+    class ChildProcessImplementation(ChildProcess):
+        # ...
+        async def on_data():
+            \"""
+            Implementation
+            \"""
+        # ...
+    ```
     """
+    _program: str
+    "The command to execute as the program."
+    _stdin: Union[asyncio.StreamWriter, None]
+    "A pipe to the child's input."
     def __init__(self, program: str):
         self._program = program
         self._stdin = None
@@ -81,42 +108,30 @@ class ChildProcess(Process):
     
     def on_wait_ready(self):
         """
-        Unimplemented.
+        An empty function.
+
+        An inheriting class can override this method to customize what happens before the parent process receives a ready signal from the child process.
         """
         pass
     
     def on_done(self):
         """
-        Unimplemented.
+        An empty function.
+
+        An inheriting class can override this method to customize what happens when the child process is done communicating with the parent process. 
         """
         pass
 
     def on_ready(self):
         """
-        Unimplemented.
+        An empty function.
+
+        An inheriting class can override this method to customize what happens when the child process is ready for communication
         """
         pass
 
     async def _on_message(self, message_type: str):
         """
         Calls the message_type handler of the class.
-        The handler of message_type should be defined as:
-
-        1. Coroutine function.
-        2. Its name as on_message_type.
-
-        For example:
-        Imagine message_type == "data", then the handler for this message_type
-        should be named "on_data".
-        
-        ```python
-        class ChildProcessImplementation(ChildProcess):
-            # ...
-            async def on_data():
-                \"""
-                Implementation
-                \"""
-            # ...
-        ```
         """
         await self.__getattribute__('on_{}'.format(message_type))()

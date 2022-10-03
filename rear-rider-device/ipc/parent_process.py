@@ -2,6 +2,9 @@ from sys import stdin, stdout
 from process import Process
 
 class ParentProcess(Process):
+    """
+    Allows a process, a child process, to communicate with its parent.
+    """
     def __init__():
         pass
     
@@ -50,9 +53,15 @@ class ParentProcess(Process):
         self.writeline('done')
     
     def pre_ready(self):
+        """
+        An inheriting class can override this method to customize what happens before the child process sends a "ready" signal to the parent process.
+        """
         pass
 
     def pre_done(self):
+        """
+        An inheriting class can override this method to customize what happens before the child process sends a "done" signal to the parent process.
+        """
         pass
 
     async def _on_command(self, command):
