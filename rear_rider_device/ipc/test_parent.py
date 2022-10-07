@@ -1,7 +1,7 @@
 import asyncio
 import concurrent.futures
 
-from process import Process
+from i_process import Process
 from child_process import ChildProcess
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -68,7 +68,7 @@ def main():
         # We create a thread for each to-be-executed child process
         # so that asyncio manages one child process per thread.
         for child_process in child_processes:
-            executor.submit(asyncio.run, child_process.begin())
+            futures.append(executor.submit(asyncio.run, child_process.begin()))
     concurrent.futures.wait(futures)
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from sys import stdin, stdout
-from process import Process
+from ipc.i_process import Process
 
 class ParentProcess(Process):
     """
@@ -14,6 +14,7 @@ class ParentProcess(Process):
         Raises EOFError when EOF has been reached.
         """
         line = stdin.buffer.readline()
+        stdin.buffer.flush()
         if len(line) == 0:
             raise EOFError()
         return line.decode().rstrip()
@@ -32,9 +33,11 @@ class ParentProcess(Process):
         Does not return until an "exit" command or EOF
         has been reached.
         """
-        self.pre_ready()
+        await self.pre_ready()
         self.writeline('ready')
-
+        
+        # ack = await self.readline()
+        # if ack == 'ready_ack':
         i = 0
         while True:
             try:
@@ -45,14 +48,15 @@ class ParentProcess(Process):
                 # empty message
                 continue
             if command == 'exit':
+                self.pre_done()
+                self.writeline('done')
                 break
             else:
                 await self._on_command(command)
-        
-        self.pre_done()
-        self.writeline('done')
+        else:
+            self.no_ack()
     
-    def pre_ready(self):
+    async def pre_ready(self):
         """
         An inheriting class can override this method to customize what happens before the child process sends a "ready" signal to the parent process.
         """
@@ -64,5 +68,15 @@ class ParentProcess(Process):
         """
         pass
 
+    def no_ack():
+        pass
+
+    def no_on_handler(on_command: str, err: Exception):
+        pass
+
     async def _on_command(self, command):
-        await self.__getattribute__('on_{}'.format(command))()
+        on_command = 'on_{}'.format(command)
+        try:
+            await self.__getattribute__(on_command)()
+        except Exception as err:
+            self.no_on_handler(on_command, err)
