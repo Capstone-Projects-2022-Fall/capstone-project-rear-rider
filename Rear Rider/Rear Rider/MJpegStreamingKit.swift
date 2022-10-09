@@ -12,6 +12,7 @@
 // Connect to an URL and stream video in mjpeg format.
 
 import UIKit
+import CoreML
 
 open class MjpegStreamingController: NSObject, URLSessionDataDelegate, ObservableObject {
     
@@ -31,6 +32,8 @@ open class MjpegStreamingController: NSObject, URLSessionDataDelegate, Observabl
     open var didFinishLoading: (()->Void)?
     open var contentURL: URL?
     @Published open var uiImage = UIImage()
+    
+    let model = MobileNetV2()
     
     override public init() {
         super.init()
@@ -109,5 +112,23 @@ open class MjpegStreamingController: NSObject, URLSessionDataDelegate, Observabl
         }
         
         completionHandler(disposition, credential)
+    }
+    
+    func classify(image img: UIImage) -> String {
+        let resizedImage = img.resizeImageTo(size: CGSize(width: 224, height: 224))
+        let buffer = resizedImage!.convertToBuffer()
+        
+        let output = try? model.prediction(image: buffer!)
+        
+        if let output = output {
+            let results = output.classLabelProbs.sorted { $0.1 > $1.1 }
+            let result = results.map { (key, value) in
+                return "\(key) = \(String(format: "%.2f", value * 100))%"
+            }.joined(separator: "\n")
+            
+            return result
+        }
+        
+        return ""
     }
 }
