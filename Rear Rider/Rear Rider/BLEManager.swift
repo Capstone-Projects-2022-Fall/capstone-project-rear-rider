@@ -75,7 +75,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     ///   - RSSI: a NSNumber describing the signal strength
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
                         advertisementData: [String: Any], rssi RSSI: NSNumber) {
-        if peripheral.name != nil && peripheral.name == "raspberrypi" {
+        if peripheral.name != nil && peripheral.name == "RearRider" {
             addStatusMessage(message: "Found \(peripheral.name!)")
             myPeripheral = peripheral
             myPeripheral.delegate = self
