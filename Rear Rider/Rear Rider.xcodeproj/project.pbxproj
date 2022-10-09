@@ -14,6 +14,8 @@
 		4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */; };
 		4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */; };
 		487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487C63AD28E4F8700022F0A7 /* HomeView.swift */; };
+		C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28828F2731F001D7F1D /* CameraTestView.swift */; };
+		C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */; };
 /* End PBXBuildFile section */
@@ -27,6 +29,9 @@
 		4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
 		4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		487C63AD28E4F8700022F0A7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C307D28828F2731F001D7F1D /* CameraTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTestView.swift; sourceTree = "<group>"; };
+		C307D28A28F2734A001D7F1D /* MJpegStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJpegStreaming.h; sourceTree = "<group>"; };
+		C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MJpegStreamingKit.swift; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,6 +69,9 @@
 				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
+				C307D28A28F2734A001D7F1D /* MJpegStreaming.h */,
+				C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */,
+				C307D28828F2731F001D7F1D /* CameraTestView.swift */,
 				C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */,
 				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
 				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
@@ -155,6 +163,8 @@
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
+				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
+				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
 				4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */,
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,

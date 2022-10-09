@@ -18,6 +18,10 @@ struct HomeView: View {
                 NavigationLink(destination: BluetoothView()) {
                     Text("Bluetooth Connection Demo")
                 }
+                
+                NavigationLink(destination: CameraTestView()) {
+                    Text("Stream")
+                }
                  
             }.navigationBarTitle("Rear Rider", displayMode: .inline)
         }
