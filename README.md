@@ -12,3 +12,27 @@ Rear Rider is an alert system to notify cyclists of approaching objects and vehi
 - Bobby Palko
 - Calin Pescaru
 - Paul Sutton
+
+## README
+
+### Python Requirements
+
+- Camera streaming
+
+Install the system packages necessary for python wheel builds.
+
+```bash
+sudo apt-get install libcap-dev
+sudo apt install -y python3-picamera2 --no-install-recommends
+sudo apt install -y python3-libcamera python3-kms++
+sudo apt install -y python3-prctl libatlas-base-dev ffmpeg libopenjp2-7 python3-pip
+```
+
+Create a python virtual environment.
+```bash
+python -m venv .venv --system-site-packages
+
+pip install -r requirements.txt
+```
+
+Python development / testing environment is set up now 👍.
