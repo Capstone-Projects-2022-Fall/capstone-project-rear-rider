@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2070E42528F5B7AB002F4EBA /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2070E42428F5B7AB002F4EBA /* FrameView.swift */; };
+		2070E42728F5B816002F4EBA /* FrameHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2070E42628F5B816002F4EBA /* FrameHandler.swift */; };
+		2070E42B28F5B8D1002F4EBA /* LiveVideoDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2070E42A28F5B8D1002F4EBA /* LiveVideoDisplayView.swift */; };
 		4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */; };
 		4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */; };
 		4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4851CE0C28E49485003B5B76 /* Assets.xcassets */; };
@@ -21,6 +24,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2070E42428F5B7AB002F4EBA /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
+		2070E42628F5B816002F4EBA /* FrameHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameHandler.swift; sourceTree = "<group>"; };
+		2070E42A28F5B8D1002F4EBA /* LiveVideoDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveVideoDisplayView.swift; sourceTree = "<group>"; };
+		20F91F6728F6364200A363C5 /* Rear-Rider-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Rear-Rider-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4851CE0528E49485003B5B76 /* Rear Rider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rear Rider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderApp.swift; sourceTree = "<group>"; };
 		4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionView.swift; sourceTree = "<group>"; };
@@ -66,11 +73,15 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
+				20F91F6728F6364200A363C5 /* Rear-Rider-Info.plist */,
 				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
 				C307D28A28F2734A001D7F1D /* MJpegStreaming.h */,
 				C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */,
+				2070E42428F5B7AB002F4EBA /* FrameView.swift */,
+				2070E42628F5B816002F4EBA /* FrameHandler.swift */,
+				2070E42A28F5B8D1002F4EBA /* LiveVideoDisplayView.swift */,
 				C307D28828F2731F001D7F1D /* CameraTestView.swift */,
 				C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */,
 				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
@@ -165,9 +176,12 @@
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
 				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
+				2070E42728F5B816002F4EBA /* FrameHandler.swift in Sources */,
 				4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */,
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
+				2070E42B28F5B8D1002F4EBA /* LiveVideoDisplayView.swift in Sources */,
+				2070E42528F5B7AB002F4EBA /* FrameView.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,15 +311,18 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = T53AYVVL5N;
+				DEVELOPMENT_TEAM = 5KVT845VZL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Rear-Rider-Info.plist";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera required for live video";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -327,15 +344,18 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = T53AYVVL5N;
+				DEVELOPMENT_TEAM = 5KVT845VZL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Rear-Rider-Info.plist";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera required for live video";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

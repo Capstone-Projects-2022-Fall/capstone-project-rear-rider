@@ -22,6 +22,9 @@ struct HomeView: View {
                 NavigationLink(destination: CameraTestView()) {
                     Text("Stream")
                 }
+                NavigationLink(destination: LiveVideoDisplayView()){
+                    Text("Live Video")
+                }
                  
             }.navigationBarTitle("Rear Rider", displayMode: .inline)
         }
