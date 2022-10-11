@@ -10,10 +10,11 @@ import SwiftUI
 import AVKit
 
 struct CameraTestView: View {
-    @ObservedObject private var stream = MjpegStreamingController()
+    @ObservedObject private var stream = MjpegStreamingController(url: "http://10.42.0.1:8000/stream.mjpg")
     @State private var playing = true
     @State private var mlResult = ""
-    
+    private var mLModel = ImageIdentification()
+
     var body: some View {
         VStack {
             Image(uiImage: stream.uiImage)
@@ -38,7 +39,7 @@ struct CameraTestView: View {
                 }.disabled(!playing)
                 
                 Button(action: {
-                    mlResult = stream.classify(image: stream.uiImage)
+                    self.mlResult = mLModel.classify(image: stream.uiImage)
                 }) {
                     Text("Classify")
                 }
