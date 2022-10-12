@@ -5,9 +5,15 @@ from typing import Callable, Literal, Union
 from advertisement.rear_rider_adv import RearRiderAdvertisement
 
 from bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE, TestAdvertisement
-from bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE, GObject
+from bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE
+from gi.repository import GLib
+from agent.simple import Agent
+
 from services.hello_world import HelloWorldService
 from rearrider_app import RearRiderApplication
+
+AGENT_MANAGER_IFACE = 'org.bluez.AgentManager1'
+AGENT_PATH = '/bluez/simpleagent'
 
 def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_read: Callable[[], str]):
     global mainloop
@@ -20,10 +26,11 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
     if not adapter:
         print('GattManager1 interface not found')
         return
+    
+    obj = bus.get_object(BLUEZ_SERVICE_NAME, adapter)
 
     def get_object_interface(INTERFACE: Literal):
-        return dbus.Interface(
-            bus.get_object(BLUEZ_SERVICE_NAME, adapter),
+        return dbus.Interface(obj,
             INTERFACE)
 
     service_manager = get_object_interface(GATT_MANAGER_IFACE)
@@ -84,16 +91,32 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
             print('Advertising forever...')
         
         return unregister_advertisement
+    
+    simple_agent = Agent(bus, AGENT_PATH)
+    def register_agent():
+        obj = bus.get_object(BLUEZ_SERVICE_NAME, '/org/bluez')
+        agent_manager = dbus.Interface(obj, AGENT_MANAGER_IFACE)
+        agent_manager.RegisterAgent(AGENT_PATH, 'NoInputNoOutput')
+        agent_manager.RequestDefaultAgent(AGENT_PATH)
 
-    mainloop = GObject.MainLoop()
+        def unregister_agent():
+            agent_manager.UnregisterDefaultAgent(AGENT_PATH)
+        
+        return unregister_agent
+
+    mainloop = GLib.MainLoop()
 
     register_app()
+
+    unregister_agent = register_agent()
 
     unregister_advertisement = register_advertisement()
 
     mainloop.run()
 
     unregister_advertisement()
+
+    unregister_agent()
 
 
 if __name__ == '__main__':
