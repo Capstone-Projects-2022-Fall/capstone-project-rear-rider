@@ -30,15 +30,13 @@ class AccelerometerCharacteristic(Characteristic):
         self.vector: tuple[float, float, float] = (0.0,0.0,0.0)
     
     def StartNotify(self):
-        if not self.notifying:
+        if self.notifying:
             return
         self.notifying = True
         def notify():
-            data = 'self.read_data()'
-            print('DATA: {}'.format(data))
-            value = dbus.ByteArray('{}'
-                .format(data).encode('utf8'))
+            value = self._get_vector_data()
             self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
+            print('DATA: {}'.format(value))
             return self.notifying
             
         GObject.timeout_add(1000, notify)
@@ -56,10 +54,17 @@ class AccelerometerCharacteristic(Characteristic):
         stdout.flush()
         nums = self.vector
         
-        data = dbus.ByteArray('{},{},{}'.format(
-            nums[0], nums[1], nums[2]
-        ).encode('utf8'))
+        data = self._get_vector_data()
         print(data)
         return data
+    
+    def _get_vector_data(self):
+        """
+        As a byte string in ut8.
+        """
+        nums = self.vector
+        return dbus.ByteArray('{},{},{}'.format(
+            nums[0], nums[1], nums[2]
+        ).encode('utf8'))
     
 

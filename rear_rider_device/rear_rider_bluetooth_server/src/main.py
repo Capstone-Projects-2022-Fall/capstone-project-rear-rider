@@ -6,7 +6,7 @@ from advertisement.rear_rider_adv import RearRiderAdvertisement
 
 from bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE, TestAdvertisement
 from bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE, GObject
-from rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService
+from services.hello_world import HelloWorldService
 from rearrider_app import RearRiderApplication
 
 def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_read: Callable[[], str]):
@@ -97,4 +97,4 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
 
 
 if __name__ == '__main__':
-    main(print, None)
+    main(print, None, None)
