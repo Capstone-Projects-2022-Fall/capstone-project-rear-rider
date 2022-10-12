@@ -10,10 +10,10 @@ import SwiftUI
 import Vision
 
 struct ObjectDetectionView: View {
-    let model = MobileNetV2()
     let photos = ["bike","Car","person"]
     @State private var currentIndex: Int = 0
     @State private var classificationLabel: String = ""
+    private var mLModel = ImageIdentification()
     
     var body: some View {
         
@@ -52,22 +52,9 @@ struct ObjectDetectionView: View {
     private func classifyImage() {
         let currentImageName = photos[currentIndex]
         
-        guard let image = UIImage(named: currentImageName),
-            let resizedImage = image.resizeImageTo(size: CGSize(width: 224, height: 224)),
-            let buffer = resizedImage.convertToBuffer() else {
-                return
-            }
+        guard let image = UIImage(named: currentImageName) else { return }
         
-        let output = try? model.prediction(image: buffer)
-        
-        if let output = output {
-            let results = output.classLabelProbs.sorted { $0.1 > $1.1 }
-            let result = results.map { (key, value) in
-                return "\(key) = \(String(format: "%.2f", value * 100))%"
-            }.joined(separator: "\n")
-            
-            self.classificationLabel = result
-        }
+        self.classificationLabel = mLModel.classify(image: image)
     }
 }
 
