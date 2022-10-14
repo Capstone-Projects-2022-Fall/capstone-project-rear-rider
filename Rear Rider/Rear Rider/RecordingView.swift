@@ -8,8 +8,44 @@
 import SwiftUI
 
 struct RecordingView: View {
+    
+    @State var isRecording: Bool = false
+    @State var url: URL?
+    @State var shareVideo: Bool = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Spacer()
+            .overlay(alignment: .center) {
+                Button {
+                    if isRecording {
+                        // Task for async
+                        Task {
+                            do {
+                                self.url = try await stopRecording()
+                                isRecording = false
+                                shareVideo.toggle()
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                        
+                    } else {
+                        startRecording { error in
+                            if let error = error {
+                                print(error.localizedDescription)
+                                return
+                            }
+                            isRecording = true
+                        }
+                    }
+                } label: {
+                    // recording icon
+                    Image(systemName: isRecording ? "record.circle.fill" : "record.circle")
+                        .font(.largeTitle)
+                        .foregroundColor(isRecording ? .red : .white)
+                }
+            }
+            .shareSheet(show: $shareVideo, items: [url])
     }
 }
 
