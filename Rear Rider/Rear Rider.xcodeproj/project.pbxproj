@@ -98,9 +98,6 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
-				484C2BDD28FA13C800B713D8 /* RecordingExtension.swift */,
-				484C2BDC28FA13C800B713D8 /* RecordingView.swift */,
-				484C2BDB28FA13C800B713D8 /* ShareSheet.swift */,
 				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
@@ -112,6 +109,9 @@
 				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
 				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
 				4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */,
+				484C2BDC28FA13C800B713D8 /* RecordingView.swift */,
+				484C2BDD28FA13C800B713D8 /* RecordingExtension.swift */,
+				484C2BDB28FA13C800B713D8 /* ShareSheet.swift */,
 				4851CE0C28E49485003B5B76 /* Assets.xcassets */,
 				4851CE0E28E49485003B5B76 /* Preview Content */,
 			);

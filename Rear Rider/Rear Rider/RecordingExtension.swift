@@ -6,15 +6,36 @@
 //
 
 import SwiftUI
+import ReplayKit
 
-struct RecordingExtension: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+extension View {
+    
+    func startRecording(completion: @escaping (Error?)->()) {
+        let recorder = RPScreenRecorder.shared()
+        recorder.startRecording(handler: completion)
     }
-}
-
-struct RecordingExtension_Previews: PreviewProvider {
-    static var previews: some View {
-        RecordingExtension()
+    
+    func stopRecording()async throws->URL {
+        let name = UUID().uuidString + ".mov"
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(name)
+        
+        let recorder = RPScreenRecorder.shared()
+        try await recorder.stopRecording(withOutput: url)
+        
+        return url
+    }
+    
+    // Custom modifier to share video
+    func shareSheet(show: Binding<Bool>, items: [Any?])->some View {
+        return self
+            .sheet(isPresented: show) {} content: {
+                let items = items.compactMap { item -> Any? in
+                    return item
+                }
+                
+                if !items.isEmpty {
+                    ShareSheet(items: items)
+                }
+            }
     }
 }

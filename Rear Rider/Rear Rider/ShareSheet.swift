@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-struct ShareSheet: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct ShareSheet: UIViewControllerRepresentable {
+    
+    var items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        return UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
-}
-
-struct ShareSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        ShareSheet()
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        
     }
 }
