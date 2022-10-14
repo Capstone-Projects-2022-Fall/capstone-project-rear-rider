@@ -19,6 +19,8 @@ struct CameraTestView: View {
         VStack {
             Image(uiImage: stream.uiImage)
             
+            RecordingView()
+            
             Spacer()
             
             Text(mlResult)

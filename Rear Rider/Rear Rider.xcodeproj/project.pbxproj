@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		484C2BDE28FA13C800B713D8 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484C2BDB28FA13C800B713D8 /* ShareSheet.swift */; };
+		484C2BDF28FA13C800B713D8 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484C2BDC28FA13C800B713D8 /* RecordingView.swift */; };
+		484C2BE028FA13C800B713D8 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484C2BDD28FA13C800B713D8 /* RecordingExtension.swift */; };
 		4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */; };
 		4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */; };
 		4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4851CE0C28E49485003B5B76 /* Assets.xcassets */; };
@@ -34,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		484C2BDB28FA13C800B713D8 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareSheet.swift; path = ../../../../../../Desktop/ShareSheet.swift; sourceTree = "<group>"; };
+		484C2BDC28FA13C800B713D8 /* RecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordingView.swift; path = ../../../../../../Desktop/RecordingView.swift; sourceTree = "<group>"; };
+		484C2BDD28FA13C800B713D8 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordingExtension.swift; path = ../../../../../../Desktop/RecordingExtension.swift; sourceTree = "<group>"; };
 		4851CE0528E49485003B5B76 /* Rear Rider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rear Rider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderApp.swift; sourceTree = "<group>"; };
 		4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionView.swift; sourceTree = "<group>"; };
@@ -92,6 +98,9 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
+				484C2BDD28FA13C800B713D8 /* RecordingExtension.swift */,
+				484C2BDC28FA13C800B713D8 /* RecordingView.swift */,
+				484C2BDB28FA13C800B713D8 /* ShareSheet.swift */,
 				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
@@ -228,6 +237,7 @@
 			files = (
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
+				484C2BDF28FA13C800B713D8 /* RecordingView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,
 				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
@@ -236,6 +246,8 @@
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
+				484C2BE028FA13C800B713D8 /* RecordingExtension.swift in Sources */,
+				484C2BDE28FA13C800B713D8 /* ShareSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
