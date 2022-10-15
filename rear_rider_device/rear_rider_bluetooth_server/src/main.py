@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import signal
 from sys import stdout
 from typing import Callable, Literal, Union
 
@@ -14,6 +15,7 @@ from rearrider_app import RearRiderApplication
 
 AGENT_MANAGER_IFACE = 'org.bluez.AgentManager1'
 AGENT_PATH = '/bluez/simpleagent'
+BLUETOOTH_ALIAS = 'RearRiderPi4'
 
 def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_read: Callable[[], str]):
     global mainloop
@@ -26,12 +28,14 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
     if not adapter:
         print('GattManager1 interface not found')
         return
-    
-    obj = bus.get_object(BLUEZ_SERVICE_NAME, adapter)
 
     def get_object_interface(INTERFACE: Literal):
-        return dbus.Interface(obj,
+        return dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
             INTERFACE)
+
+    adapter_props = get_object_interface('org.freedesktop.DBus.Properties')
+    adapter_props.Set('org.bluez.Adapter1',
+                      'Powered', dbus.Boolean(1))
 
     service_manager = get_object_interface(GATT_MANAGER_IFACE)
 
@@ -43,17 +47,26 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
 
         def register_app_cb():
             print('RegisterApplication was successful.')
-            pass
+            adapter_props.Set("org.bluez.Adapter1", "Alias", BLUETOOTH_ALIAS)
+            adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+            adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(1))
+
+        def unregister_app_cb():
+            print('RegisterApplication was successful.')
+            adapter_props.Set("org.bluez.Adapter1", "Alias", None)
+            # adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+            adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(0))
 
         def register_app_error_cb():
             print('RegisterApplication was unsuccessful.')
-            pass
 
         print('Registering GATT application...')
 
         service_manager.RegisterApplication(app.get_path(), {},
                                         reply_handler=register_app_cb,
                                         error_handler=register_app_error_cb)
+        
+        unregister_app_cb
     
 
     rear_rider_adv = RearRiderAdvertisement(bus, 0)
@@ -65,6 +78,8 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
         timeout = 0
         def register_ad_cb():
             print('Advertisement registered')
+            print(rear_rider_adv.get_properties())
+            # rear_rider_adv.Powe
             if on_ready is not None:
                 on_ready(app.hello_world_service, app.sensors_service)
             else:
@@ -106,7 +121,7 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
 
     mainloop = GLib.MainLoop()
 
-    register_app()
+    unregister_app = register_app()
 
     unregister_agent = register_agent()
 
@@ -117,6 +132,9 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
     unregister_advertisement()
 
     unregister_agent()
+
+    unregister_app()
+
 
 
 if __name__ == '__main__':
