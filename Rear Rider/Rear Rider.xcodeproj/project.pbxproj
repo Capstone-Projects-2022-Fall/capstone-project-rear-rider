@@ -22,7 +22,6 @@
 		C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E328FC80B2001F24A3 /* RecordingView.swift */; };
 		C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */; };
 		C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */; };
-		C36AA2EA28FC81C9001F24A3 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E928FC81C9001F24A3 /* MainView.swift */; };
 		C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2EB28FC8278001F24A3 /* RiderView.swift */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */; };
@@ -57,7 +56,6 @@
 		C36AA2E328FC80B2001F24A3 /* RecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingExtension.swift; sourceTree = "<group>"; };
-		C36AA2E928FC81C9001F24A3 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		C36AA2EB28FC8278001F24A3 /* RiderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderView.swift; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothView.swift; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 				C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */,
 				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
 				C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */,
-				C36AA2E928FC81C9001F24A3 /* MainView.swift */,
 				C36AA2EB28FC8278001F24A3 /* RiderView.swift */,
 				4851CE0C28E49485003B5B76 /* Assets.xcassets */,
 				4851CE0E28E49485003B5B76 /* Preview Content */,
@@ -242,7 +239,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
-				C36AA2EA28FC81C9001F24A3 /* MainView.swift in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,

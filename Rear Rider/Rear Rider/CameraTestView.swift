@@ -27,27 +27,11 @@ struct CameraTestView: View {
             Spacer()
             
             Text(mlResult)
-            
-            HStack(spacing: 100) {
-//                Button(action: {
-//                    stream.play()
-//                    playing = true
-//                }) {
-//                    Text("Play")
-//                }.disabled(playing)
-//
-//                Button(action: {
-//                    stream.stop()
-//                    playing = false
-//                }) {
-//                    Text("Stop")
-//                }.disabled(!playing)
                 
-                Button(action: {
-                    self.mlResult = mLModel.classify(image: stream.uiImage)
-                }) {
-                    Text("Classify")
-                }
+            Button(action: {
+                self.mlResult = mLModel.classify(image: stream.uiImage)
+            }) {
+                Text("Classify")
             }
         }
         .onAppear() {

@@ -14,7 +14,7 @@ struct Rear_RiderApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView()
+            HomeView()
                 .environmentObject(bleManager)
         }
     }
