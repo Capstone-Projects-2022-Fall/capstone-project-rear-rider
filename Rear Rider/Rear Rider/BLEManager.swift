@@ -12,6 +12,9 @@ import Foundation
 import CoreBluetooth
 
 
+let piName = "RearRiderPi4"
+
+
 /// Structure for status messages; conforms to the Identifiable protocol
 struct StatusMsg: Identifiable {
     let id: Int
@@ -28,6 +31,7 @@ struct Message: Identifiable {
 struct CBUUIDs {
     static let BLEServiceUUID = CBUUID(string: "b4b1a70c-ba22-4e02-aba1-85d7e3171209")
     static let BLECharacteristicUUID = CBUUID(string: "3bd0b2f7-72f8-4497-bbe5-6bc3db448b95")
+    static let BLENotifyCharacteristicUUID = CBUUID(string: "9f7bb8c9-4b29-4118-98ac-292557551cdf")
 }
 
 /// The purpose of this class is to set the iPhone as a central manager and connect to the RaspberryPi as a peripheral
@@ -35,9 +39,11 @@ struct CBUUIDs {
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, CBPeripheralManagerDelegate {
     private var myCentral: CBCentralManager!
     private var myPeripheral: CBPeripheral!
-    private var myCharacteristic: CBCharacteristic!
+    private var reverseCharacteristic: CBCharacteristic!
+    private var notifyCharacteristic: CBCharacteristic!
     
     @Published var isSwitchedOn = false
+    @Published var connected = false
     @Published var messages = [Message]()
     @Published var statusMsgs = [StatusMsg]()
     
@@ -53,6 +59,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {
             isSwitchedOn = true
+            self.startScanning()
         }
         else {
             isSwitchedOn = false
@@ -75,7 +82,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     ///   - RSSI: a NSNumber describing the signal strength
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
                         advertisementData: [String: Any], rssi RSSI: NSNumber) {
-        if peripheral.name != nil && peripheral.name == "raspberrypi" {
+        if peripheral.name != nil && peripheral.name == piName {
             addStatusMessage(message: "Found \(peripheral.name!)")
             myPeripheral = peripheral
             myPeripheral.delegate = self
@@ -110,8 +117,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             messages.append(newMessage)
         
             let valueString = (msg as NSString).data(using: String.Encoding.utf8.rawValue)
-            myPeripheral.writeValue(valueString!, for: myCharacteristic, type: CBCharacteristicWriteType.withResponse)
-            myPeripheral.readValue(for: myCharacteristic)
+            myPeripheral.writeValue(valueString!, for: reverseCharacteristic, type: CBCharacteristicWriteType.withResponse)
+            myPeripheral.readValue(for: reverseCharacteristic)
         }
     }
     
@@ -173,20 +180,20 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             print(characteristic.description)
             
             if characteristic.uuid.isEqual(CBUUIDs.BLECharacteristicUUID) {
-                myCharacteristic = characteristic
-                addStatusMessage(message: "Characteristic set")
+                reverseCharacteristic = characteristic
+                addStatusMessage(message: "Reverse Characteristic set")
+                connected = true
+            }
+            
+            else if characteristic.uuid.isEqual(CBUUIDs.BLENotifyCharacteristicUUID) {
+                notifyCharacteristic = characteristic
+                addStatusMessage(message: "Notify Characteristic set")
+                connected = true
                 
-                //peripheral.readValue(for: characteristic)
-                //peripheral.setNotifyValue(true, for: myCharacteristic!)
+                peripheral.setNotifyValue(true, for: notifyCharacteristic)
             }
         }
     }
-    
-//    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
-//        if characteristic.isNotifying {
-//            print("Characteristic notifying.")
-//        }
-//    }
     
     /// Called when the value of a characterisitc is updated and appends the value to the messages array
     /// - Parameters:
@@ -194,18 +201,23 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     ///   - characteristic: a CBCharacteristic
     ///   - error: an Error type; holds information about the error, if any
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        var charASCIIValue = NSString()
-        
-        guard characteristic == myCharacteristic,
-              let charValue = characteristic.value,
-              let ASCIIString = NSString(data: charValue, encoding: String.Encoding.utf8.rawValue) else {
-            return
+        if characteristic == reverseCharacteristic {
+            let ASCIIString = NSString(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8.rawValue)
+            let newMessage = Message(id: messages.count, msg: "R: \(ASCIIString! as String)")
+            messages.append(newMessage)
+            print("Value received \(ASCIIString! as String).")
         }
-        
-        charASCIIValue = ASCIIString
-        let newMessage = Message(id: messages.count, msg: "R: \(charASCIIValue as String)")
-        messages.append(newMessage)
-        print("Value received \(charASCIIValue as String).")
+        else if characteristic == notifyCharacteristic {
+            let ASCIIString = NSString(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8.rawValue)
+            let newMessage = Message(id: messages.count, msg: "R: \(ASCIIString! as String)")
+            messages.append(newMessage)
+            print("Value received \(ASCIIString! as String).")
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
+        connected = false
+        startScanning()
     }
     
     /// Appends a message to the status messages array
@@ -213,5 +225,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private func addStatusMessage(message msg: String) {
         let newStatus = StatusMsg(id: statusMsgs.count, msg: msg)
         statusMsgs.append(newStatus)
+        print(msg)
+    }
+    
+    func toggleNotifyCharacteristic(enabled e: Bool) {
+        myPeripheral.setNotifyValue(e, for: notifyCharacteristic)
     }
 }

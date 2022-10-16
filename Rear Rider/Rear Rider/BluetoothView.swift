@@ -11,7 +11,7 @@
 import SwiftUI
 
 struct BluetoothView: View {
-    @ObservedObject var bleManager = BLEManager()
+    @EnvironmentObject var bleManager: BLEManager
     @State private var msg = ""
     @State private var showDisconnectAlert = false
     @State private var selection = ""
