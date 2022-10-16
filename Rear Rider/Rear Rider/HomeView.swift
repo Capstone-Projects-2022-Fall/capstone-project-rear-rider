@@ -8,22 +8,42 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var bleManager: BLEManager
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                NavigationLink(destination: ObjectDetectionView()) {
-                    Text("Machine Learning Demo")
+        VStack {
+            HStack {
+                Button {
+                    bleManager.startScanning()
+                } label: {
+                    if bleManager.connected {
+                        Image(systemName: "b.circle")
+                            .foregroundColor(.green)
+                    }
+                    else {
+                        Image(systemName: "b.circle")
+                            .foregroundColor(.red)
+                    }
                 }
 
-                NavigationLink(destination: BluetoothView()) {
-                    Text("Bluetooth Connection Demo")
-                }
-                
-                NavigationLink(destination: CameraTestView()) {
-                    Text("Stream")
-                }
-                 
-            }.navigationBarTitle("Rear Rider", displayMode: .inline)
+                Image(systemName: "wifi.circle")
+                    .foregroundColor(.green)
+            }
+            
+            TabView {
+                RiderView()
+                    .tabItem {
+                        Image(systemName: "bicycle")
+                    }
+                CameraTestView()
+                    .tabItem {
+                        Image(systemName: "camera")
+                    }
+                BluetoothView()
+                    .tabItem {
+                        Image(systemName: "wrench.and.screwdriver")
+                    }
+            }
         }
     }
 }

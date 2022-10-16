@@ -13,6 +13,29 @@ Rear Rider is an alert system to notify cyclists of approaching objects and vehi
 - Calin Pescaru
 - Paul Sutton
 
+## Creating a systemd service
+
+The Bluetooth server needs to be up and running when the Raspberry Pi boots in order to have a seamless connection and experience. To achieve this goal a systemd service needs to be created.
+In a text editor create a file, for example **rearrider.service**, and save it under **/etc/systemd/system**. Then, add the following lines:
+
+	[Unit]
+	Description=Bluetooth Server
+	After=bluetooth.service
+
+	[Service]
+	ExecStart=/home/pi/path_to_server
+	Restart=always
+
+	[Install]
+	WantedBy=bluetooth.target
+
+Then, run these commands:
+
+	sudo systemctl enable rearrider.service
+	sudo systemctl daemon-reload
+
+Now the Bluetooth server starts when the Pi boots. Also, Bluetooth has to be in discoverable mode so uncomment the line **DiscoverableTimeout = 0** under **/etc/bluetooth/main.conf**.
+
 ## Instructions on running the system
 
 1. Make sure the Pi is up and running and that the OS is installed.

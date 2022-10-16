@@ -10,6 +10,7 @@ import SwiftUI
 import AVKit
 
 struct CameraTestView: View {
+    @EnvironmentObject var bleManager: BLEManager
     @ObservedObject private var stream = MjpegStreamingController(url: "http://10.42.0.1:8000/stream.mjpg")
     @State private var playing = true
     @State private var mlResult = ""
@@ -18,36 +19,25 @@ struct CameraTestView: View {
     var body: some View {
         VStack {
             Image(uiImage: stream.uiImage)
+                .resizable()
+                .frame(width: 640, height: 480)
             
             RecordingView()
             
             Spacer()
             
             Text(mlResult)
-            
-            HStack(spacing: 100) {
-                Button(action: {
-                    stream.play()
-                    playing = true
-                }) {
-                    Text("Play")
-                }.disabled(playing)
                 
-                Button(action: {
-                    stream.stop()
-                    playing = false
-                }) {
-                    Text("Stop")
-                }.disabled(!playing)
-                
-                Button(action: {
-                    self.mlResult = mLModel.classify(image: stream.uiImage)
-                }) {
-                    Text("Classify")
-                }
+            Button(action: {
+                self.mlResult = mLModel.classify(image: stream.uiImage)
+            }) {
+                Text("Classify")
             }
         }
         .onAppear() {
+            if (bleManager.connected) {
+                bleManager.toggleNotifyCharacteristic(enabled: false)
+            }
             stream.play()
         }
     }
