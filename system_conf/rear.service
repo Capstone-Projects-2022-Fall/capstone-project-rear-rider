@@ -1,0 +1,14 @@
+[Unit]
+Description=rearriderservice
+After=multi-user.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory={{ venv_home }}
+ExecStart=ExecStart={{ venv_home }}/bin/python {{ venv_home }}/main.py --serve-in-foreground > /home/pi/rrider.log 2>&1
+Restart=on-failure
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
