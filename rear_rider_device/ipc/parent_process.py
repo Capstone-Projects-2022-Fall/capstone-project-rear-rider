@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from sys import stdin, stdout
 from ipc.i_process import Process
 
@@ -34,6 +35,11 @@ class ParentProcess(Process):
         has been reached.
         """
         await self.pre_ready()
+
+        def done():
+            self.pre_done()
+            self.writeline('done')
+
         self.writeline('ready')
         
         # ack = await self.readline()
@@ -43,13 +49,16 @@ class ParentProcess(Process):
             try:
                 command = await self.readline()
             except EOFError:
+                done()
+                break
+            except KeyboardInterrupt:
+                done()
                 break
             if len(command) == 0:
                 # empty message
                 continue
             if command == 'exit':
-                self.pre_done()
-                self.writeline('done')
+                done()
                 break
             else:
                 await self._on_command(command)
@@ -71,8 +80,11 @@ class ParentProcess(Process):
     def no_ack():
         pass
 
-    def no_on_handler(on_command: str, err: Exception):
+    def no_on_handler(self, on_command: str, err: Exception):
         pass
+    
+    # async def _log(self, message: str):
+    #     print('{} message'.format(datetime()))
 
     async def _on_command(self, command):
         on_command = 'on_{}'.format(command)

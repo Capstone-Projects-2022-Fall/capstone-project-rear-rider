@@ -17,6 +17,7 @@ Rear Rider is an alert system to notify cyclists of approaching objects and vehi
 ## Running main Rear Rider backend application.
 
 ```bash
+sudo apt-get install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev python3-venv gir1.2-gtk-3.0 libglib2.0-dev
 # Create a virtual environment in python if not done so yet.
 python -m venv .venv
 
