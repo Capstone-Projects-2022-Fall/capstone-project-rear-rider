@@ -13,6 +13,25 @@ Rear Rider is an alert system to notify cyclists of approaching objects and vehi
 - Calin Pescaru
 - Paul Sutton
 
+## Running main Rear Rider backend application.
+
+```bash
+# Create a virtual environment in python if not done so yet.
+python -m venv .venv
+
+# Edit .venv/pyenv.cfg to allow the virtual environment access to python packages downloaded from `apt-get install`.
+# Add the following line to the aforementioned file:
+# include-system-site-packages = true
+
+# Activate the virtual environment.
+source .venv/bin/activate
+# Install the required python packages from pip.
+pip install -r ./requirements.txt
+# Change the working directory to the rear rider device directory.
+cd ./rear_rider_device
+python ./main.py
+```
+
 ## Creating a systemd service
 
 The Bluetooth server needs to be up and running when the Raspberry Pi boots in order to have a seamless connection and experience. To achieve this goal a systemd service needs to be created.

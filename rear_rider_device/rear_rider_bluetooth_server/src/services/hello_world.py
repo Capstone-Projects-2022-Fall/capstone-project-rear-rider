@@ -8,8 +8,12 @@ class HelloWorldService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.SENSORS_SVC_UUID, True)
-        self.add_characteristic(ReverseTextCharacteristic(bus, 0, self))
-        self.add_characteristic(AppendCounterWithNotificationCharacteristic(bus, 1, self))
+        reverse_text_chr = ReverseTextCharacteristic(bus, 0, self)
+        append_counter_chr = AppendCounterWithNotificationCharacteristic(bus, 1, self)
+        self.add_characteristic(reverse_text_chr)
+        self.add_characteristic(append_counter_chr)
+
+        self.reverse_text_chr = reverse_text_chr
 
 class ReverseTextCharacteristic(Characteristic):
     """

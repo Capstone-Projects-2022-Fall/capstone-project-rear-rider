@@ -1,5 +1,5 @@
 from bluez.example_gatt_server import Service, dbus, DBUS_OM_IFACE
-# from services.sensors import SensorsService
+from services.sensors import SensorsService
 from services.hello_world import HelloWorldService
 
 class RearRiderApplication(dbus.service.Object):
@@ -7,12 +7,19 @@ class RearRiderApplication(dbus.service.Object):
     org.bluez.GattApplication1 interface implementation
     """
     services: list[Service]
-    def __init__(self, bus):
+    def __init__(self, bus, read_data):
         self.path = '/'
         self.services = []
         dbus.service.Object.__init__(self, bus, self.path)
-        self.add_service(HelloWorldService(bus, 0))
-        #self.add_service(SensorsService(bus, 1))
+
+        hello_world_service = HelloWorldService(bus, 0)
+        sensors_service = SensorsService(bus, 1, read_data)
+
+        self.add_service(hello_world_service)
+        self.add_service(sensors_service)
+        
+        self.hello_world_service = hello_world_service
+        self.sensors_service = sensors_service
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
