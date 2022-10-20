@@ -10,9 +10,12 @@ import UIKit
 
 @main
 struct Rear_RiderApp: App {
+    @StateObject var bleManager = BLEManager()
+    
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(bleManager)
         }
     }
 }

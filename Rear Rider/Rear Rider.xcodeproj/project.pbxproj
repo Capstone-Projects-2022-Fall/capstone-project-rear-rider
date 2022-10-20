@@ -19,6 +19,10 @@
 		48F4415228F62EFD00F7C9AA /* ImageIdentificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4415128F62EFD00F7C9AA /* ImageIdentificationTest.swift */; };
 		C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28828F2731F001D7F1D /* CameraTestView.swift */; };
 		C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */; };
+		C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E328FC80B2001F24A3 /* RecordingView.swift */; };
+		C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */; };
+		C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */; };
+		C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2EB28FC8278001F24A3 /* RiderView.swift */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */; };
 /* End PBXBuildFile section */
@@ -49,6 +53,10 @@
 		C307D28828F2731F001D7F1D /* CameraTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTestView.swift; sourceTree = "<group>"; };
 		C307D28A28F2734A001D7F1D /* MJpegStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJpegStreaming.h; sourceTree = "<group>"; };
 		C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MJpegStreamingKit.swift; sourceTree = "<group>"; };
+		C36AA2E328FC80B2001F24A3 /* RecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingExtension.swift; sourceTree = "<group>"; };
+		C36AA2EB28FC8278001F24A3 /* RiderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderView.swift; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +111,10 @@
 				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
 				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
 				4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */,
+				C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */,
+				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
+				C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */,
+				C36AA2EB28FC8278001F24A3 /* RiderView.swift */,
 				4851CE0C28E49485003B5B76 /* Assets.xcassets */,
 				4851CE0E28E49485003B5B76 /* Preview Content */,
 			);
@@ -233,8 +245,12 @@
 				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
 				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
 				4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */,
+				C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */,
+				C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */,
+				C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */,
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
+				C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -381,7 +397,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -395,7 +411,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -411,7 +427,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -425,7 +441,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

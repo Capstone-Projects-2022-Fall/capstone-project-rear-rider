@@ -13,7 +13,6 @@ Rear Rider is an alert system to notify cyclists of approaching objects and vehi
 - Calin Pescaru
 - Paul Sutton
 
-
 ## Running main Rear Rider backend application.
 
 ```bash
@@ -33,3 +32,39 @@ cd ./rear_rider_device
 python ./main.py
 ```
 
+## Creating a systemd service
+
+The Bluetooth server needs to be up and running when the Raspberry Pi boots in order to have a seamless connection and experience. To achieve this goal a systemd service needs to be created.
+In a text editor create a file, for example **rearrider.service**, and save it under **/etc/systemd/system**. Then, add the following lines:
+
+	[Unit]
+	Description=Bluetooth Server
+	After=bluetooth.service
+
+	[Service]
+	ExecStart=/home/pi/path_to_server
+	Restart=always
+
+	[Install]
+	WantedBy=bluetooth.target
+
+Then, run these commands:
+
+	sudo systemctl enable rearrider.service
+	sudo systemctl daemon-reload
+
+Now the Bluetooth server starts when the Pi boots. Also, Bluetooth has to be in discoverable mode so uncomment the line **DiscoverableTimeout = 0** under **/etc/bluetooth/main.conf**.
+
+## Instructions on running the system
+
+1. Make sure the Pi is up and running and that the OS is installed.
+2. Clone the repo under /home/pi.
+3. Follow the instructions under **Running main Rear Rider backend application** to install all the dependencies required.
+4. Follow the instructions under **Create a systemd service**. This will create a service that starts automatically when Pi boots enabling the Bluetooth connection (as of right now create a service for the Bluetooth script under **rear_rider_device/rear_rider_bluetooth_server/src/main.py**).
+5. Using Xcode, open the project under **Rear Rider** and install the application on your phone.
+6. Reboot the Pi.
+7. Now go to the iPhone's settings, Bluetooth, and connect to RearRiderPi4 once it's available.
+8. Also, under the Wi-Fi settings, connect to the RearRider hotspot.
+9. Now launch the Rear Rider app.
+
+The application has three tabs. The first tab is the main view. Here the rider can see alerts when an object is approaching (TBD). The next view is the Live Streaming. The app will connect to the Pi over Wi-Fi and stream a live feed from the camera. The user has the option to record the streaming and to use ML to detect the objects in the feed. The last tab is the settings tab (TBD). At the top of the screen there are two icons that show if the Bluetooth and Wi-Fi connections are available by turning green.
