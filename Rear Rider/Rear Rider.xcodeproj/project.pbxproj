@@ -14,6 +14,8 @@
 		4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */; };
 		4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */; };
 		487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487C63AD28E4F8700022F0A7 /* HomeView.swift */; };
+		48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CB852C2902E60700283DBD /* RearRiderAlerts.swift */; };
+		48CB852F2902EF5200283DBD /* vehicleAlert.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */; };
 		48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4414128F6258C00F7C9AA /* ImageIdentification.swift */; };
 		48F4414B28F62E7C00F7C9AA /* Rear_RiderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4414A28F62E7C00F7C9AA /* Rear_RiderTests.swift */; };
 		48F4415228F62EFD00F7C9AA /* ImageIdentificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4415128F62EFD00F7C9AA /* ImageIdentificationTest.swift */; };
@@ -46,6 +48,8 @@
 		4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
 		4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		487C63AD28E4F8700022F0A7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		48CB852C2902E60700283DBD /* RearRiderAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RearRiderAlerts.swift; sourceTree = "<group>"; };
+		48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = vehicleAlert.mp3; sourceTree = "<group>"; };
 		48F4414128F6258C00F7C9AA /* ImageIdentification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentification.swift; sourceTree = "<group>"; };
 		48F4414828F62E7C00F7C9AA /* Rear RiderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Rear RiderTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48F4414A28F62E7C00F7C9AA /* Rear_RiderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderTests.swift; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
+				48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */,
 				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
@@ -115,6 +120,7 @@
 				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
 				C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */,
 				C36AA2EB28FC8278001F24A3 /* RiderView.swift */,
+				48CB852C2902E60700283DBD /* RearRiderAlerts.swift */,
 				4851CE0C28E49485003B5B76 /* Assets.xcassets */,
 				4851CE0E28E49485003B5B76 /* Preview Content */,
 			);
@@ -221,6 +227,7 @@
 			files = (
 				4851CE1028E49485003B5B76 /* Preview Assets.xcassets in Resources */,
 				4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */,
+				48CB852F2902EF5200283DBD /* vehicleAlert.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +245,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */,
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
@@ -397,7 +405,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = T53AYVVL5N;
+				DEVELOPMENT_TEAM = GSVBY5A2AP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -411,7 +419,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -427,7 +435,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = T53AYVVL5N;
+				DEVELOPMENT_TEAM = GSVBY5A2AP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -441,7 +449,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

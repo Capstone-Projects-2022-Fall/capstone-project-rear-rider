@@ -9,6 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var bleManager: BLEManager
+    let alert = try! RearRiderAlerts(
+        fileName: "vehicleAlert"
+    )
     
     var body: some View {
         VStack {
@@ -29,6 +32,14 @@ struct HomeView: View {
                 Image(systemName: "wifi.circle")
                     .foregroundColor(.green)
             }
+            
+            Spacer().padding()
+            
+            Button {
+                alert.playAudioAlert()
+            } label: {
+                Text("Honk")
+            }.padding()
             
             TabView {
                 RiderView()
