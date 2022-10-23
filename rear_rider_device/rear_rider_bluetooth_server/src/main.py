@@ -5,19 +5,34 @@ from typing import Callable, Literal, Union
 
 from advertisement.rear_rider_adv import RearRiderAdvertisement
 
-from bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE, TestAdvertisement
+from bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE
 from bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE
 from gi.repository import GLib
 from agent.simple import Agent
 
 from services.hello_world import HelloWorldService
+from services.characteristics.strobe_light import StrobeLight
+from services.sensors import SensorsService
+
 from rearrider_app import RearRiderApplication
 
 AGENT_MANAGER_IFACE = 'org.bluez.AgentManager1'
 AGENT_PATH = '/bluez/simpleagent'
 BLUETOOTH_ALIAS = 'RearRiderPi4'
 
-def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_read: Callable[[], str]):
+
+def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsService], None]], on_read: Callable[[], str],
+        strobe_light: StrobeLight):
+    """
+    """
+    # First check all the variables are not none in order to ensure the main is valid.
+    try:
+        assert(print != None)
+        assert(on_ready != None)
+        assert(on_read != None)
+        assert(strobe_light != None)
+    except AssertionError:
+        print('Condition for main function not met!')
     global mainloop
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -41,7 +56,9 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
 
     ad_manager = get_object_interface(LE_ADVERTISING_MANAGER_IFACE)
 
-    app = RearRiderApplication(bus, read_data=on_read)
+    app = RearRiderApplication(bus, read_data=on_read,
+        strobe_light=strobe_light
+    )
 
     def register_app():
 
@@ -138,4 +155,34 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService], None]], on_r
 
 
 if __name__ == '__main__':
-    main(print, None, None)
+    # This main function is used only for testing purposes.
+
+    strobe_on = False
+
+    def turn_on():
+        """
+        Tests turning on the strobe light.
+        """
+        strobe_on = True
+        print("on")
+    
+    def turn_off():
+        """
+        Tests turning off the strobe light.
+        """
+        strobe_on = False
+        print("off")
+    
+    def is_on():
+        """
+        Tests turning on the strobe light.
+        """
+        return strobe_on
+
+    strobe_light = StrobeLight(
+        turn_on,
+        turn_off,
+        is_on,
+        frequency=5
+    )
+    main(print, None, None, strobe_light)

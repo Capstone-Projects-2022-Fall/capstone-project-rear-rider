@@ -138,6 +138,18 @@ class ChildProcess(Process):
         An inheriting class can override this method to customize what happens when the child process is ready for communication
         """
         pass
+    
+    async def _wait_ack(self, command_to_ack: str) -> None:
+        """
+        Wait on an acknowledgment for a command.
+
+        command_to_ack: str
+            The exact string to acknowledge, excluding any new line characters.
+        """
+        line = await self.readline()
+        if line != command_to_ack:
+            raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
+        return
 
     async def _on_message(self, message_type: str):
         """

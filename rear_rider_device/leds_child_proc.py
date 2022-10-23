@@ -4,9 +4,16 @@ from ipc.child_process import ChildProcess
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-class BluetoothServerChildProcess(ChildProcess):
-    def __init__(self, leds_child_process):
-        super().__init__("python {}/bluetooth.py".format(dir_path))
+DEFAULT_STROBE_VALUE = '5 0'
+"""
+5 times per second for 0 seconds
+
+0 seconds == indefinite amount of time.
+"""
+
+class LedsChildProcess(ChildProcess):
+    def __init__(self):
+        super().__init__("python {}/leds_proc.py".format(dir_path))
 
     def _print_header(self, message: str):
         return super()._print('==== Bluetooth Process ====\n{}'.format(message))
@@ -22,25 +29,28 @@ class BluetoothServerChildProcess(ChildProcess):
         self._print_header('sensor_data_stream begin')
         
         self._print_header('sensor_data_stream_end')
-    
-    async def on_set_data_ack(self):
-        self._print('on_set_data_ack')
-
-    async def on_read_accelerometer(self):
-        self._print('on_read_accelerometer')
 
     #############
     # LED STUFF #
     #############
 
     async def on_led_strobe_on(self):
-        self._print('led_strob_on')
+        self._print('led_strobe_on')
+        await self.writeline(
+            'strobe_on\n'
+            '{}'.format(DEFAULT_STROBE_VALUE)
+        )
 
     async def on_led_strobe_off(self):
         self._print('led_strobe_off')
+        await self.writeline('strobe_off')
+        await self._wait_ack('strobe_off_ack')
+        await self._wait_ack('strobe_off_ok')
     
     async def is_strobe_on(self):
         self._print('is_strobe_on')
+        await self.writeline('is_strobe_on')
+
     
     async def is_strobe_on_response(self, strobe_on: bool):
         await self.writeline(

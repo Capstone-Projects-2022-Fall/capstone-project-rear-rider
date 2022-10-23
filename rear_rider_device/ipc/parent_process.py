@@ -14,6 +14,13 @@ class ParentProcess(Process):
         Read a line from stdin.
         Raises EOFError when EOF has been reached.
         """
+        return self.readline_sync()
+    
+    def readline_sync(self):
+        """
+        Read a line from stdin.
+        Raises EOFError when EOF has been reached.
+        """
         line = stdin.buffer.readline()
         stdin.buffer.flush()
         if len(line) == 0:
@@ -79,6 +86,20 @@ class ParentProcess(Process):
 
     def no_ack():
         pass
+
+    async def _wait_ack(self, command_to_ack: str) -> None:
+        """
+        Wait on an acknowledgment for a command.
+
+        command_to_ack: str
+            The exact string to acknowledge, excluding any new line characters.
+        """
+        line = await self.readline()
+        if command_to_ack == 'debug_ack':
+            return
+        if line != command_to_ack:
+            raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
+        return
 
     def no_on_handler(self, on_command: str, err: Exception):
         pass
