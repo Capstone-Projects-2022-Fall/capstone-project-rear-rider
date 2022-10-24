@@ -1,7 +1,6 @@
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
-import readline
 from sys import path
+from threading import Thread
 from typing import Union
 from ipc.parent_process import ParentProcess
 from actuators.led_strip import LedStripController, create_neopixel
@@ -10,7 +9,7 @@ path.append("rear_rider_bluetooth_server/src/")
 
 WHITE = (255, 255, 255)
 OFF_COLOR = (0,0,0)
-STROBE_TASK_FUTURE_WAIT_TIME = 0
+STROBE_TASK_FUTURE_WAIT_TIME = 0.1
 """
 In seconds
 """
@@ -19,11 +18,11 @@ class LedsParentProcess(ParentProcess):
     """
     The parent process of the leds process.
     """
-    _strobe_task_future: Union[None, asyncio.Task]
+    _strobe_task_thread: Union[None, Thread]
     def __init__(self, led_strip: LedStripController):
         self.led_strip = led_strip
         self._strobe_on = False
-        self._strobe_task_future = None
+        self._strobe_task_thread = None
     
     async def on_turn_on(self):
         """
@@ -59,56 +58,44 @@ class LedsParentProcess(ParentProcess):
         """
         self.writeline('strobe_ack\nFormat: [frequency] [duration]')
         params_line = await self.readline()
-
-        if self._strobe_task_future is not None:
-            # TODO: Evaluate possible race condition here.
-            try:
-                self.writeline('strobe_task_waiting')
-                # await self._wait_ack('debug_ack')
-                await asyncio.tasks.wait_for(
-                        asyncio.tasks.shield(self._strobe_task_future),
-                        STROBE_TASK_FUTURE_WAIT_TIME)
-                self._strobe_task_future = None
-            except TimeoutError:
-                self.writeline('strobe_on_busy')
-                return
-                
-        def threaded_strobe_task():
-            """
-            Returns a coroutine 
-            """
-            def strobe_task():
-                # async def strobe():
-                def strobe():
-                    try:
-                        params = params_line.split(' ')
-                        frequency = int(params[0])
-                        duration = float(params[1])
-                        self._strobe_on = True
-                        sleep_seconds = (1/frequency) / 2
-                        num_flashes = int(frequency * duration)
-                        self.led_strip.fill(WHITE)
-                        i = 0
-                        while self._strobe_on and (duration == 0.0 and frequency > 0) or (i < num_flashes):
-                            self.led_strip.blink(sleep_seconds,
-                                open_color=WHITE,
-                                closed_color=OFF_COLOR,
-                            )
-
-                            i += 1
-                    except Exception as e:
-                        self.writeline('strobe_error\n{}'.format(e))
-                        pass
-                    finally:
-                        self._strobe_on = False
-                # asyncio.run(strobe())
-                strobe()
-            return asyncio.to_thread(strobe_task)
-                
-        if self._strobe_task_future is not None:
+        if self._strobe_on:
             self.writeline('strobe_on_busy')
             return
-        self._strobe_task_future = asyncio.create_task(threaded_strobe_task(), name='strobe_task')
+        await self._join_strobe_thread()
+        # Race condition on set variable?
+        self._strobe_on = True
+        
+        def strobe_task():
+            """
+            @startuml
+            participant MainThread as main_thread
+            participant StrobeTaskThread as strobe_thread
+
+            main_thread -> strobe_thread: run
+            @enduml
+            """
+            try:
+                params = params_line.split(' ')
+                frequency = int(params[0])
+                duration = float(params[1])
+                sleep_seconds = (1/frequency) / 2
+                num_flashes = int(frequency * duration)
+                self.led_strip.fill(WHITE)
+                i = 0
+                print('test')
+                while self._strobe_on and (duration == 0.0 and frequency > 0) or (i < num_flashes):
+                    self.led_strip.blink(sleep_seconds,
+                        open_color=WHITE,
+                        closed_color=OFF_COLOR,
+                    )
+                    i += 1
+            except Exception as e:
+                self.writeline('strobe_error\n{}'.format(e))
+                pass
+            finally:
+                self._strobe_on = False
+        self._strobe_task_thread = Thread(target=strobe_task, name='strobe_task')
+        self._strobe_task_thread.start()
     
     async def on_set_brightness(self):
         """
@@ -147,10 +134,19 @@ class LedsParentProcess(ParentProcess):
         # self.writeline(
         #     'strobe_off_ack'
         # )
-        self._strobe_on = False
+        await self._join_strobe_thread()
         # self.writeline(
         #     'strobe_off_ok'
         # )
+    
+    async def _join_strobe_thread(self):
+        # Set _strobe_on to False to tell the thread to stop
+        self._strobe_on = False
+
+        if self._strobe_task_thread is not None:
+            self.writeline('strobe_task_waiting')
+            self._strobe_task_thread.join()
+            self._strobe_task_thread = None
 
 help_str_all = ''
 
