@@ -57,7 +57,7 @@ class ChildProcess(Process):
 
     def _print(self, message: str):
         for message_line in message.splitlines():
-            print('{}: {}'.format(threading.current_thread().native_id, message_line))
+            print('{} {}: {}'.format(threading.current_thread().native_id, self._get_name(), message_line))
         print(flush=True)
 
     async def begin(self):
@@ -82,8 +82,8 @@ class ChildProcess(Process):
             if ready_signal != EXPECTED_READY_SIGNAL:
                 self._print(ready_signal)
                 # `ready` was the expected first line read, but it was not received.
-                raise Exception("Expected the child process\'s ready signal to be `{expected_ready_signal}`"
-                        .format(expected_ready_signal=EXPECTED_READY_SIGNAL))
+                raise Exception("Expected the child process\'s ready signal to be `{expected_ready_signal}` not `{ready_signal}`"
+                        .format(expected_ready_signal=EXPECTED_READY_SIGNAL, ready_signal=ready_signal))
 
             await self.on_ready()
 
@@ -113,7 +113,7 @@ class ChildProcess(Process):
         try:
             await _begin()
         except Exception as err:
-            self._print('Exception on childprocess.\n{}'.format(err.with_traceback()))
+            self._print('Exception on childprocess.\n{}'.format(err))
     
     async def on_wait_ready(self):
         """
@@ -151,8 +151,18 @@ class ChildProcess(Process):
             raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
         return
 
+    def no_on_handler(self, on_command, err):
+        raise NotImplementedError('no_on_handler is not implemented')
+
     async def _on_message(self, message_type: str):
         """
         Calls the message_type handler of the class.
         """
-        await self.__getattribute__('on_{}'.format(message_type))()
+        on_message_type = 'on_{}'.format(message_type)
+        try:
+            await self.__getattribute__(on_message_type)()
+        except AttributeError as err:
+            self.no_on_handler(on_message_type, err)
+
+    def _get_name(self) -> str:
+        return 'ChildProcess'

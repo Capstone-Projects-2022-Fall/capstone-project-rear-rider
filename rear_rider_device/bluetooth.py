@@ -1,4 +1,5 @@
 import asyncio
+import concurrent.futures
 from concurrent.futures import Future, ThreadPoolExecutor
 from pkgutil import get_data
 import readline
@@ -23,7 +24,7 @@ class BluetoothParentProcess(ParentProcess):
     _help_message = (
             'help\n'
             '== Help ==\n'
-            'set_data\nhelp')
+            'set_data\nhelp\n== help_string_end ==')
     def __init__(self, bluetooth_ready: Future, create_strobe_light: Callable[[Any],StrobeLight]):
         self._bluetooth_ready = bluetooth_ready
         self.strobe_light = create_strobe_light(self)
@@ -56,13 +57,13 @@ class BluetoothParentProcess(ParentProcess):
         if data_type_line == 'accelerometer':
             data = await self.readline()
             # TODO: Add critical section guard here
-            self.writeline('set_data_ack')
+            # self.writeline('set_data_ack')
             nums = data.split(',')
             self.sensors_service.accelerometer_characteristic.vector = (
                 float(nums[0]),float(nums[1]),float(nums[2]))
         else:
             # TODO: Add critical section guard here
-            self.writeline('set_data_ack')
+            # self.writeline('set_data_ack')
             pass
     
     async def on_help(self):
@@ -83,7 +84,8 @@ class BluetoothParentProcess(ParentProcess):
             self.writeline('is_strobe_on')
             return bool(self.readline_sync())
         finally:
-            self.writeline('strobe_on_ack')
+            # self.writeline('strobe_on_ack')
+            pass
 
 
 if __name__ == '__main__':
@@ -129,5 +131,6 @@ if __name__ == '__main__':
                 )
 
             futures.append(executor.submit(asyncio.run, bt_server_main_task_co()))
+        concurrent.futures.wait(futures)
     # Begin session with the parent process. The parent process is collecting the data.
     asyncio.run(main())

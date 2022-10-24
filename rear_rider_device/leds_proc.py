@@ -64,7 +64,7 @@ class LedsParentProcess(ParentProcess):
             # TODO: Evaluate possible race condition here.
             try:
                 self.writeline('strobe_task_waiting')
-                await self._wait_ack('debug_ack')
+                # await self._wait_ack('debug_ack')
                 await asyncio.tasks.wait_for(
                         asyncio.tasks.shield(self._strobe_task_future),
                         STROBE_TASK_FUTURE_WAIT_TIME)
@@ -78,7 +78,8 @@ class LedsParentProcess(ParentProcess):
             Returns a coroutine 
             """
             def strobe_task():
-                async def strobe():
+                # async def strobe():
+                def strobe():
                     try:
                         params = params_line.split(' ')
                         frequency = int(params[0])
@@ -100,7 +101,8 @@ class LedsParentProcess(ParentProcess):
                         pass
                     finally:
                         self._strobe_on = False
-                asyncio.run(strobe())
+                # asyncio.run(strobe())
+                strobe()
             return asyncio.to_thread(strobe_task)
                 
         if self._strobe_task_future is not None:
@@ -132,7 +134,7 @@ class LedsParentProcess(ParentProcess):
     def no_on_handler(self, on_command: str, err: Exception):
         self.writeline(
             'no_on_handler\n'
-            '>> {} <<'.format(on_command)
+            '>> {} << {}'.format(on_command, err)
         )
     
     async def on_is_strobe_on(self):
@@ -142,13 +144,13 @@ class LedsParentProcess(ParentProcess):
         )
     
     async def on_strobe_off(self):
-        self.writeline(
-            'strobe_off_ack'
-        )
+        # self.writeline(
+        #     'strobe_off_ack'
+        # )
         self._strobe_on = False
-        self.writeline(
-            'strobe_off_ok'
-        )
+        # self.writeline(
+        #     'strobe_off_ok'
+        # )
 
 help_str_all = ''
 
@@ -167,7 +169,6 @@ def help_command(command: str, description: str, params: list[tuple[str,str,str]
         params_help_str += '            No parameters.'
     else:
         for param in params:
-            print(len(param))
             params_help_str += '{}\n'.format(help_command_param(
                 param[0], param[1], param[2]
             ))
@@ -201,7 +202,7 @@ help_commands_section_str = (
     'Commands:\n'
     '{}'.format(help_commands_str))
 
-help_str_all += help_commands_section_str
+help_str_all += '{}\nhelp_string_end'.format(help_commands_section_str)
 
 if __name__ == '__main__':
     pixels = create_neopixel()

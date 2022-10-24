@@ -101,6 +101,14 @@ class ParentProcess(Process):
             raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
         return
 
+    def _wait_ack_sync(self, command_to_ack: str):
+        line = self.readline_sync()
+        if command_to_ack == 'debug_ack':
+            return
+        if line != command_to_ack:
+            raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
+        return
+
     def no_on_handler(self, on_command: str, err: Exception):
         pass
     
