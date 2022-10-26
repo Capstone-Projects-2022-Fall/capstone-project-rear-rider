@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var bleManager: BLEManager
-    var alert = RearRiderAlerts()
     
     var body: some View {
         VStack {
