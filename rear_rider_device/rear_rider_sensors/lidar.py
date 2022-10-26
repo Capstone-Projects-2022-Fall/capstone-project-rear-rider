@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*
-import pigpio
+import RPi.GPIO as pigpio
 import time
 
 RX = 23
