@@ -1,37 +1,27 @@
 # -*- coding: utf-8 -*
-import pigpio
-import time
+import serial
 
-RX = 23
-
-pi = pigpio.pi()
-pi.set_mode(RX, pigpio.INPUT)
-pi.bb_serial_read_open(RX, 115200)
+ser = serial.Serial("/dev/ttyAMA0", 115200)
 
 def getTFminiData():
     while True:
-        print("#############")
-        time.sleep(0.05)	#change the value if needed
-        (count, recv) = pi.bb_serial_read(RX)
+        count = ser.in_waiting
         if count > 8:
-            for i in range(0, count-9):
-                if recv[i] == 89 and recv[i+1] == 89: # 0x59 is 89
-                    checksum = 0
-                    for j in range(0, 8):
-                        checksum = checksum + recv[i+j]
-                        checksum = checksum % 256
-                        if checksum == recv[i+8]:
-                            distance = recv[i+2] + recv[i+3] * 256
-                            strength = recv[i+4] + recv[i+5] * 256
-                            if distance <= 1200 and strength < 2000:
-                                print(distance, strength) 
-                                #else:
-                                # raise ValueError('distance error: %d' % distance)	
-                                # #i = i + 9
+            recv = ser.read(9)
+            ser.reset_input_buffer()
+            if recv[0] == 'Y' and recv[1] == 'Y': # 0x59 is 'Y'
+                low = int(recv[2].encode('hex'), 16)
+                high = int(recv[3].encode('hex'), 16)
+                distance = low + high * 256
+                print(distance)
+                
+
 
 if __name__ == '__main__':
     try:
+        if ser.is_open == False:
+            ser.open()
         getTFminiData()
-    except:
-        pi.bb_serial_read_close(RX)
-        pi.stop()
+    except KeyboardInterrupt:   # Ctrl+C
+        if ser != None:
+            ser.close()
