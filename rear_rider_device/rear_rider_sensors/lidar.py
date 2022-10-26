@@ -10,7 +10,7 @@ pi.bb_serial_read_open(RX, 115200)
 
 def getTFminiData():
     while True:
-        #print("#############")
+        print("#############")
         time.sleep(0.05)	#change the value if needed
         (count, recv) = pi.bb_serial_read(RX)
         if count > 8:
