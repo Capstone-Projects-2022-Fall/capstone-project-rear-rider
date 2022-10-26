@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */; };
-		4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */; };
 		4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4851CE0C28E49485003B5B76 /* Assets.xcassets */; };
 		4851CE1028E49485003B5B76 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4851CE0F28E49485003B5B76 /* Preview Assets.xcassets */; };
-		4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */; };
 		4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */; };
 		487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487C63AD28E4F8700022F0A7 /* HomeView.swift */; };
 		48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CB852C2902E60700283DBD /* RearRiderAlerts.swift */; };
@@ -25,6 +23,7 @@
 		C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */; };
 		C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */; };
 		C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2EB28FC8278001F24A3 /* RiderView.swift */; };
+		C3744F28290983DD00AE9A22 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C3744F27290983DD00AE9A22 /* YOLOv3.mlmodel */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */; };
 /* End PBXBuildFile section */
@@ -42,10 +41,8 @@
 /* Begin PBXFileReference section */
 		4851CE0528E49485003B5B76 /* Rear Rider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rear Rider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderApp.swift; sourceTree = "<group>"; };
-		4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionView.swift; sourceTree = "<group>"; };
 		4851CE0C28E49485003B5B76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4851CE0F28E49485003B5B76 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
 		4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		487C63AD28E4F8700022F0A7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		48CB852C2902E60700283DBD /* RearRiderAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RearRiderAlerts.swift; sourceTree = "<group>"; };
@@ -61,6 +58,7 @@
 		C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingExtension.swift; sourceTree = "<group>"; };
 		C36AA2EB28FC8278001F24A3 /* RiderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderView.swift; sourceTree = "<group>"; };
+		C3744F27290983DD00AE9A22 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,8 +102,8 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
+				C3744F27290983DD00AE9A22 /* YOLOv3.mlmodel */,
 				48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */,
-				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
 				C307D28A28F2734A001D7F1D /* MJpegStreaming.h */,
@@ -114,7 +112,6 @@
 				C307D28828F2731F001D7F1D /* CameraTestView.swift */,
 				C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */,
 				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
-				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
 				4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */,
 				C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */,
 				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
@@ -246,13 +243,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */,
-				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
+				C3744F28290983DD00AE9A22 /* YOLOv3.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,
 				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
 				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
-				4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */,
 				C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */,
 				C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */,
 				C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */,
@@ -405,7 +401,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -419,7 +415,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -435,7 +431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -449,7 +445,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -464,7 +460,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
@@ -484,7 +480,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;

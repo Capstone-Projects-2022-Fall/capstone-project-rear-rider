@@ -30,6 +30,6 @@ struct RiderView: View {
 
 struct RiderView_Previews: PreviewProvider {
     static var previews: some View {
-        RiderView()
+        RiderView().environmentObject(BLEManager())
     }
 }
