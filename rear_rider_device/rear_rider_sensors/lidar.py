@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*
-import RPi.GPIO as pigpio
+import pigpio
 import time
 
 RX = 23
 
-# pi = pigpio.pi()
-pigpio.set_mode(RX, pigpio.INPUT)
-pigpio.bb_serial_read_open(RX, 115200) 
+pi = pigpio.pi()
+pi.set_mode(RX, pigpio.INPUT)
+pi.bb_serial_read_open(RX, 115200) 
 
 def getTFminiData():
 	while True:
