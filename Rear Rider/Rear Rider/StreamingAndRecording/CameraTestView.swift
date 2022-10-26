@@ -12,24 +12,33 @@ import AVKit
 struct CameraTestView: View {
     @EnvironmentObject var bleManager: BLEManager
     @ObservedObject private var stream = MjpegStreamingController(url: "http://10.42.0.1:8000/stream.mjpg")
-    @State private var playing = true
-    @State private var mlResult = ""
     private var mLModel = ImageIdentification()
 
     var body: some View {
         VStack {
-            Image(uiImage: stream.uiImage)
-                .resizable()
-                .frame(width: 640, height: 480)
+            ZStack {
+                ForEach (mLModel.bndRects) { rect in
+                    Rectangle()
+                        .frame(width: rect.rect.width, height: rect.rect.height)
+                        .border(.yellow, width: 1)
+                        .zIndex(20)
+                        .foregroundColor(.clear)
+                        .position(x: rect.rect.minX + rect.rect.width / 2, y: rect.rect.minY - rect.rect.height / 2)
+                }
+                
+                Image(uiImage: stream.uiImage)
+                    .resizable()
+                    .scaledToFit()
+            }
+            .scaledToFit()
             
             RecordingView()
             
-            Spacer()
-            
-            Text(mlResult)
+            //Spacer()
                 
             Button(action: {
-                self.mlResult = mLModel.classify(image: stream.uiImage)
+                mLModel.bndRects.removeAll()
+                mLModel.detectObjects(image: stream.uiImage)
             }) {
                 Text("Classify")
             }
@@ -45,6 +54,6 @@ struct CameraTestView: View {
 
 struct CameraTest_Previews: PreviewProvider {
     static var previews: some View {
-        CameraTestView()
+        CameraTestView().environmentObject(BLEManager())
     }
 }

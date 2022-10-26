@@ -94,6 +94,6 @@ struct BluetoothView: View {
 
 struct BluetoothView_Previews: PreviewProvider {
     static var previews: some View {
-        BluetoothView()
+        BluetoothView().environmentObject(BLEManager())
     }
 }
