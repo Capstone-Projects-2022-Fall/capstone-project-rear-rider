@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 import serial
 
-ser = serial.Serial("/dev/ttyAMA0", 115200)
+ser = serial.Serial("/dev/ttyS0", 115200)
 
 def getTFminiData():
     while True:
