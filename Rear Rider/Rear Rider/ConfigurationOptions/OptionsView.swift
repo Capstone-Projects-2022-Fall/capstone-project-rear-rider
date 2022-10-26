@@ -72,6 +72,8 @@ struct OptionsView: View {
         }
     }
     
+    
+    // these are written out separately as to not clog up the view itself
     /**
      * Sets the config object's audio to the new selection and saves it
      */

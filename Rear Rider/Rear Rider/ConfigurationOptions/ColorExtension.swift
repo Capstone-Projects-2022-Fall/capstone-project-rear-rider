@@ -44,10 +44,11 @@ extension Color {
      * Takes an rgb string "rgb(#,#,#)" and converts it to a Color
      */
     static func fromRGBString(rgbString: String) -> Color {
+        // TODO validate the incoming string so we know it's how we expect it
         let characters = CharacterSet(charactersIn: "(,)")
         let rgbValues = rgbString.components(separatedBy: characters)
         
-        // default these to white if parsing fails
+        // default these to black if parsing fails
         var redF = 0.0
         var blueF = 0.0
         var greenF = 0.0

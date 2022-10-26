@@ -141,8 +141,8 @@ class UserConfig: ObservableObject {
         let encoder = JSONEncoder()
         if let encodedData = try? encoder.encode(data) {
             defaults.set(encodedData, forKey: "RearRiderConfig")
-            // TODO send the conf to the device
             print("SAVED: \(data)")
+            // TODO send the conf to the device
         }
         
     }
