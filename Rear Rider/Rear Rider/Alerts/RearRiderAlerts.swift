@@ -59,13 +59,4 @@ class RearRiderAlerts {
             print(error)
         }
     }
-    
-    /**
-     * Calls the BlueTooth service to send a request to the Rear Rider device with the requested configuration options
-     * @param pattern: String - the user configured pattern the lights should flash. Currently only "strobe" is acceptable
-     * @param color: String, optional - an rgb color code 
-     */
-    func callLights(pattern: String, color: String? = "") {
-        
-    }
 }
