@@ -30,16 +30,6 @@ struct HomeView: View {
                 Image(systemName: "wifi.circle")
                     .foregroundColor(.green)
             }
-            
-//            Spacer().padding()
-//            
-//            Button {
-//                try! alert.loadSoundFile(fileName: "vehicleAlert")
-//                alert.playAudioAlert()
-//            } label: {
-//                Text("Honk")
-//            }.padding()
-            
             TabView {
                 RiderView()
                     .tabItem {
