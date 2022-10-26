@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /**
  * A Codable object to store our user data that can easily be passed as JSON
@@ -109,6 +110,8 @@ class UserConfig: ObservableObject {
                 self.lightPattern = savedData.lightPattern
                 self.lightColor = savedData.lightColor
                 self.lightBrightness = savedData.lightBrightness
+                
+                print("LOADED: \(savedData)")
             } else {
                 throw ConfigErrors.loadError("Error decoding RearRiderConfig Data!")
             }
@@ -139,6 +142,7 @@ class UserConfig: ObservableObject {
         if let encodedData = try? encoder.encode(data) {
             defaults.set(encodedData, forKey: "RearRiderConfig")
             // TODO send the conf to the device
+            print("SAVED: \(data)")
         }
         
     }

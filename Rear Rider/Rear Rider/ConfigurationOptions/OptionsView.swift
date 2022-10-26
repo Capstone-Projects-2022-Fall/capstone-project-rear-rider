@@ -36,32 +36,38 @@ struct OptionsView: View {
         self._confAudio = State(wrappedValue: conf.audioFile)
         self._confLightPattern = State(wrappedValue: conf.lightPattern)
         self._confLightBrightness = State(wrappedValue: conf.lightBrightness)
-//        self._confLightColor = State
+        self._confLightColor = State(wrappedValue: Color.fromRGBString(rgbString: conf.lightColor))
     }
     
     var body: some View {
         VStack {
             Text("Options")
             List {
-                Picker("Audio Alert", selection: $confAudio.onChange(setAudio), content: {
-                    ForEach(audioFiles, id: \.self) {
-                        audioFile in Text(audioFile.description).tag(audioFile.rawValue)
-                    }
-                })
-                Picker("Light Pattern", selection: $confLightPattern.onChange(setLights), content: {
-                    ForEach(lightPatterns, id: \.self) {
-                        lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
-                    }
-                })
-                Picker("Light Pattern", selection: $confLightBrightness.onChange(setBrightness), content: {
-                    ForEach(lightBrightness, id: \.self) {
-                        brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
-                    }
-                })
-                ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
-                )
-                Text("Color Value: \(confLightColor.toRGBString())")
-
+                Section {
+                    Picker("Audio Alert", selection: $confAudio.onChange(setAudio), content: {
+                        ForEach(audioFiles, id: \.self) {
+                            audioFile in Text(audioFile.description).tag(audioFile.rawValue)
+                        }
+                    })
+                } header: {
+                    Text("Audio")
+                }
+                Section {
+                    Picker("Pattern", selection: $confLightPattern.onChange(setLights), content: {
+                        ForEach(lightPatterns, id: \.self) {
+                            lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
+                        }
+                    })
+                    Picker("Brightness", selection: $confLightBrightness.onChange(setBrightness), content: {
+                        ForEach(lightBrightness, id: \.self) {
+                            brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
+                        }
+                    })
+                    ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
+                    )
+                } header: {
+                    Text("Lights")
+                }
             }
         }
     }

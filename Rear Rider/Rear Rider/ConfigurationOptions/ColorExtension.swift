@@ -39,4 +39,37 @@ extension Color {
         
         return "rgb(\(red),\(green),\(blue))"
     }
+    
+    /**
+     * Takes an rgb string "rgb(#,#,#)" and converts it to a Color
+     */
+    static func fromRGBString(rgbString: String) -> Color {
+        let characters = CharacterSet(charactersIn: "(,)")
+        let rgbValues = rgbString.components(separatedBy: characters)
+        
+        // default these to white if parsing fails
+        var redF = 0.0
+        var blueF = 0.0
+        var greenF = 0.0
+        
+        // can we loop this somehow?
+        if let red = NumberFormatter().number(from: rgbValues[1]) {
+            redF = CGFloat(truncating: red)
+        }
+        
+        if let green = NumberFormatter().number(from: rgbValues[2]) {
+            greenF = CGFloat(truncating: green)
+        }
+        
+        if let blue = NumberFormatter().number(from: rgbValues[3]) {
+            blueF = CGFloat(truncating: blue)
+        }
+        
+        return Color(UIColor(
+            red: redF/255,
+            green: greenF/255,
+            blue: blueF/255,
+            alpha: 1.0
+        ))
+    }
 }

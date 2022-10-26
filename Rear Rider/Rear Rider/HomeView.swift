@@ -31,14 +31,14 @@ struct HomeView: View {
                     .foregroundColor(.green)
             }
             
-            Spacer().padding()
-            
-            Button {
-                try! alert.loadSoundFile(fileName: "vehicleAlert")
-                alert.playAudioAlert()
-            } label: {
-                Text("Honk")
-            }.padding()
+//            Spacer().padding()
+//            
+//            Button {
+//                try! alert.loadSoundFile(fileName: "vehicleAlert")
+//                alert.playAudioAlert()
+//            } label: {
+//                Text("Honk")
+//            }.padding()
             
             TabView {
                 RiderView()
@@ -52,6 +52,11 @@ struct HomeView: View {
                 BluetoothView()
                     .tabItem {
                         Image(systemName: "wrench.and.screwdriver")
+                    }
+                OptionsView()
+                    .tabItem {
+                        Image(systemName:
+                                "gear")
                     }
             }
         }
