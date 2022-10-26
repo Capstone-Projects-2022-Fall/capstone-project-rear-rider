@@ -33,7 +33,7 @@ struct OptionsView: View {
     
     let alert = RearRiderAlerts()
     
-    // need to wrap these in this init to get access to the conf variable and set these
+    // need to wrap these in this init to get access to self for the conf variable and set these
     init() {
         self._confAudio = State(wrappedValue: conf.audioFile)
         self._confLightPattern = State(wrappedValue: conf.lightPattern)
@@ -73,7 +73,6 @@ struct OptionsView: View {
             }
         }
     }
-    
     
     // these are written out separately as to not clog up the view itself
     /**

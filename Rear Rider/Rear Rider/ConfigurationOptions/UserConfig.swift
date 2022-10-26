@@ -144,7 +144,6 @@ class UserConfig: ObservableObject {
             print("SAVED: \(data)")
             // TODO send the conf to the device
         }
-        
     }
     
     /**
