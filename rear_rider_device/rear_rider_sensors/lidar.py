@@ -7,10 +7,10 @@ ser = serial.Serial("/dev/ttyS0", 115200)
 def getTFminiData():
     while True:
         #time.sleep(0.1)
-        count = ser.in_waiting
+        count = ser.in_waiting  # Count the number of bytes in the input buffer
         if count > 8:
-            recv = ser.read(9)   
-            ser.reset_input_buffer() 
+            recv = ser.read(9)   # Read up to 9 bytes
+            ser.reset_input_buffer() # Clear the buffer
             # type(recv), 'str' in python2(recv[0] = 'Y'), 'bytes' in python3(recv[0] = 89)
             # type(recv[0]), 'str' in python2, 'int' in python3 
             
