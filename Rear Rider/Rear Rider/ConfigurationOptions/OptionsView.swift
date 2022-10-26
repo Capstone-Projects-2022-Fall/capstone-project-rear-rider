@@ -31,6 +31,8 @@ struct OptionsView: View {
     let lightPatterns: [ConfigOptions.LightPattern] = ConfigOptions.LightPattern.allCases
     let lightBrightness: [ConfigOptions.LightBrightness] = ConfigOptions.LightBrightness.allCases
     
+    let alert = RearRiderAlerts()
+    
     // need to wrap these in this init to get access to the conf variable and set these
     init() {
         self._confAudio = State(wrappedValue: conf.audioFile)
@@ -80,6 +82,11 @@ struct OptionsView: View {
     func setAudio(to value: String) {
         conf.audioFile = confAudio
         saveConf()
+        // play audio sound
+        if !conf.audioFile.isEmpty {
+            try! alert.loadSoundFile(fileName: conf.audioFile)
+            alert.playAudioAlert()
+        }
     }
     
     /**
