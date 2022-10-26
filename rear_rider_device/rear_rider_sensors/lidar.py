@@ -27,7 +27,8 @@ def getTFminiData():
                 highS = int(recv[5].encode('hex'), 16)
                 distance = lowD + highD * 256
                 strength = lowS + highS * 256
-                print(distance, strength)
+                print("Distatnce: %f Signal Strength: %d"%((distance * 0.01), strength))
+                # time.sleep(1)
             
             # you can also distinguish python2 and python3: 
             #import sys
