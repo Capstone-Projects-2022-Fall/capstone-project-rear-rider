@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*
-import pyserial
+import serial
 import time
 
-ser = pyserial.Serial("COM12", 115200)
+ser = serial.Serial("COM12", 115200)
 
 def getTFminiData():
     while True:
