@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		484558412908941B002D81FC /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484558402908941B002D81FC /* OptionsView.swift */; };
+		4845584929089EAA002D81FC /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584829089EAA002D81FC /* UserConfig.swift */; };
 		4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */; };
 		4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */; };
 		4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4851CE0C28E49485003B5B76 /* Assets.xcassets */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
+		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
 		4851CE0528E49485003B5B76 /* Rear Rider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rear Rider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderApp.swift; sourceTree = "<group>"; };
 		4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionView.swift; sourceTree = "<group>"; };
@@ -83,6 +87,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		484558422908942F002D81FC /* StreamingAndRecording */ = {
+			isa = PBXGroup;
+			children = (
+				C307D28828F2731F001D7F1D /* CameraTestView.swift */,
+				C307D28A28F2734A001D7F1D /* MJpegStreaming.h */,
+				C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */,
+				C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */,
+				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
+				C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */,
+			);
+			path = StreamingAndRecording;
+			sourceTree = "<group>";
+		};
+		4845584329089489002D81FC /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */,
+				48CB852C2902E60700283DBD /* RearRiderAlerts.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
+		48455845290894A7002D81FC /* BlueTooth */ = {
+			isa = PBXGroup;
+			children = (
+				C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */,
+				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
+			);
+			path = BlueTooth;
+			sourceTree = "<group>";
+		};
+		4845584629089503002D81FC /* ObjectIdentification */ = {
+			isa = PBXGroup;
+			children = (
+				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
+				48F4414128F6258C00F7C9AA /* ImageIdentification.swift */,
+				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
+				4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */,
+			);
+			path = ObjectIdentification;
+			sourceTree = "<group>";
+		};
+		4845584729089E87002D81FC /* ConfigurationOptions */ = {
+			isa = PBXGroup;
+			children = (
+				484558402908941B002D81FC /* OptionsView.swift */,
+				4845584829089EAA002D81FC /* UserConfig.swift */,
+			);
+			path = ConfigurationOptions;
+			sourceTree = "<group>";
+		};
 		4851CDFC28E49484003B5B76 = {
 			isa = PBXGroup;
 			children = (
@@ -104,23 +159,14 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
-				48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */,
-				4851CE1C28E4C22D003B5B76 /* MobileNetV2.mlmodel */,
+				4845584729089E87002D81FC /* ConfigurationOptions */,
+				4845584629089503002D81FC /* ObjectIdentification */,
+				48455845290894A7002D81FC /* BlueTooth */,
+				4845584329089489002D81FC /* Alerts */,
+				484558422908942F002D81FC /* StreamingAndRecording */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
-				C307D28A28F2734A001D7F1D /* MJpegStreaming.h */,
-				C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */,
-				48F4414128F6258C00F7C9AA /* ImageIdentification.swift */,
-				C307D28828F2731F001D7F1D /* CameraTestView.swift */,
-				C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */,
-				C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */,
-				4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */,
-				4851CE1E28E4C3A2003B5B76 /* UIImage+Extension.swift */,
-				C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */,
-				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
-				C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */,
 				C36AA2EB28FC8278001F24A3 /* RiderView.swift */,
-				48CB852C2902E60700283DBD /* RearRiderAlerts.swift */,
 				4851CE0C28E49485003B5B76 /* Assets.xcassets */,
 				4851CE0E28E49485003B5B76 /* Preview Content */,
 			);
@@ -248,6 +294,7 @@
 				48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */,
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
+				484558412908941B002D81FC /* OptionsView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,
 				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
@@ -260,6 +307,7 @@
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
 				C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
+				4845584929089EAA002D81FC /* UserConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

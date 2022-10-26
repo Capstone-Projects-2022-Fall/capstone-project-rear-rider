@@ -9,9 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var bleManager: BLEManager
-    let alert = try! RearRiderAlerts(
-        fileName: "vehicleAlert"
-    )
+    var alert = RearRiderAlerts()
     
     var body: some View {
         VStack {
@@ -36,6 +34,7 @@ struct HomeView: View {
             Spacer().padding()
             
             Button {
+                try! alert.loadSoundFile(fileName: "vehicleAlert")
                 alert.playAudioAlert()
             } label: {
                 Text("Honk")
