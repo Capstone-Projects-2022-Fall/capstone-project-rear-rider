@@ -22,16 +22,21 @@ extension Binding {
 
 struct OptionsView: View {
     @ObservedObject var conf = UserConfig()
-    @State var confAudio = ""
-    @State var confLightPattern = ""
+    @State var confAudio: String = ""
+    @State var confLightPattern: String = ""
+    @State var confLightBrightness: Int = 1
+    @State var confLightColor: Color = .white
     
     let audioFiles: [ConfigOptions.AudioFile] = ConfigOptions.AudioFile.allCases
     let lightPatterns: [ConfigOptions.LightPattern] = ConfigOptions.LightPattern.allCases
+    let lightBrightness: [ConfigOptions.LightBrightness] = ConfigOptions.LightBrightness.allCases
     
     // need to wrap these in this init to get access to the conf variable and set these
     init() {
         self._confAudio = State(wrappedValue: conf.audioFile)
         self._confLightPattern = State(wrappedValue: conf.lightPattern)
+        self._confLightBrightness = State(wrappedValue: conf.lightBrightness)
+//        self._confLightColor = State
     }
     
     var body: some View {
@@ -48,6 +53,15 @@ struct OptionsView: View {
                         lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
                     }
                 })
+                Picker("Light Pattern", selection: $confLightBrightness.onChange(setBrightness), content: {
+                    ForEach(lightBrightness, id: \.self) {
+                        brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
+                    }
+                })
+                ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
+                )
+                Text("Color Value: \(confLightColor.toRGBString())")
+
             }
         }
     }
@@ -65,6 +79,22 @@ struct OptionsView: View {
      */
     func setLights(to value: String) {
         conf.lightPattern = confLightPattern
+        saveConf()
+    }
+    
+    /**
+     * Sets the config object's light brightness to the new selection and saves it
+     */
+    func setBrightness(to value: Int) {
+        conf.lightBrightness = confLightBrightness
+        saveConf()
+    }
+    
+    /**
+     * Sets the config object's light color value to a string RBG representation of the new selection and saves it
+     */
+    func setColor(to value: Color) {
+        conf.lightColor = confLightColor.toRGBString()
         saveConf()
     }
     

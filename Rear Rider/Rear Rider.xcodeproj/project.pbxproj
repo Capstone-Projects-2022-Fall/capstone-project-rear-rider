@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		484558412908941B002D81FC /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484558402908941B002D81FC /* OptionsView.swift */; };
 		4845584929089EAA002D81FC /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584829089EAA002D81FC /* UserConfig.swift */; };
+		4845584B2909768E002D81FC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584A2909768E002D81FC /* ColorExtension.swift */; };
 		4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */; };
 		4851CE0B28E49485003B5B76 /* ObjectDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */; };
 		4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4851CE0C28E49485003B5B76 /* Assets.xcassets */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
+		4845584A2909768E002D81FC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		4851CE0528E49485003B5B76 /* Rear Rider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rear Rider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderApp.swift; sourceTree = "<group>"; };
 		4851CE0A28E49485003B5B76 /* ObjectDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionView.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			children = (
 				484558402908941B002D81FC /* OptionsView.swift */,
 				4845584829089EAA002D81FC /* UserConfig.swift */,
+				4845584A2909768E002D81FC /* ColorExtension.swift */,
 			);
 			path = ConfigurationOptions;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */,
 				4851CE1D28E4C22D003B5B76 /* MobileNetV2.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
+				4845584B2909768E002D81FC /* ColorExtension.swift in Sources */,
 				484558412908941B002D81FC /* OptionsView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,

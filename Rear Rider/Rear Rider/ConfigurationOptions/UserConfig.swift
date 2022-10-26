@@ -14,6 +14,7 @@ struct ConfigData: Codable {
     let audioFile: String
     let lightPattern: String
     let lightColor: String
+    let lightBrightness: Int
 }
 
 /**
@@ -33,6 +34,7 @@ enum ConfigOptions {
             }
         }
     }
+
     enum LightPattern: String, CaseIterable, Equatable {
         case strobe = "strobe"
         case off = ""
@@ -43,6 +45,23 @@ enum ConfigOptions {
                     return "Strobe"
                 case .off:
                     return "None"
+            }
+        }
+    }
+    
+    enum LightBrightness: Int, CaseIterable, Equatable {
+        case low = 1
+        case medium = 2
+        case high = 3
+        
+        var description: String {
+            switch self {
+                case .low:
+                    return "Low"
+                case .medium:
+                    return "Medium"
+                case .high:
+                    return "High"
             }
         }
     }
@@ -62,9 +81,12 @@ enum ConfigErrors: Error {
  */
 class UserConfig: ObservableObject {
     let defaults = UserDefaults.standard
+    
+    // default values. get overwritten on successful load
     var audioFile: String = ConfigOptions.AudioFile.honk.rawValue
     var lightPattern: String = ConfigOptions.LightPattern.strobe.rawValue
     var lightColor: String = ""
+    var lightBrightness: Int = 1
 
     init() {
         do {
@@ -82,9 +104,11 @@ class UserConfig: ObservableObject {
         if let encodedData = defaults.object(forKey: "RearRiderConfig") as? Data {
             let decoder = JSONDecoder()
             if let savedData = try? decoder.decode(ConfigData.self, from: encodedData) {
+                // TODO make this a loop
                 self.audioFile = savedData.audioFile
                 self.lightPattern = savedData.lightPattern
                 self.lightColor = savedData.lightColor
+                self.lightBrightness = savedData.lightBrightness
             } else {
                 throw ConfigErrors.loadError("Error decoding RearRiderConfig Data!")
             }
@@ -104,12 +128,19 @@ class UserConfig: ObservableObject {
             throw error
         }
 
-        let data = ConfigData(audioFile: audioFile, lightPattern: lightPattern, lightColor: lightColor)
+        // any way to dynamically add these?
+        let data = ConfigData(
+            audioFile: audioFile,
+            lightPattern: lightPattern,
+            lightColor: lightColor,
+            lightBrightness: lightBrightness
+        )
         let encoder = JSONEncoder()
         if let encodedData = try? encoder.encode(data) {
             defaults.set(encodedData, forKey: "RearRiderConfig")
+            // TODO send the conf to the device
         }
-        // TODO do we want to send the conf to the device here? Which will be the source of truth in a conflict?
+        
     }
     
     /**
@@ -121,7 +152,10 @@ class UserConfig: ObservableObject {
             throw ConfigErrors.validationError("Unacceptable audio file")
         }
         if !ConfigOptions.LightPattern.allCases.contains(where: {$0.rawValue == self.lightPattern}) {
-            throw ConfigErrors.validationError("Unacceptable light pattern")
+            throw ConfigErrors.validationError("Unacceptable light pattern value")
+        }
+        if !ConfigOptions.LightBrightness.allCases.contains(where: {$0.rawValue == self.lightBrightness}) {
+            throw ConfigErrors.validationError("Unacceptable brightness value")
         }
     }
 }
