@@ -26,9 +26,9 @@
 		C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */; };
 		C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */; };
 		C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2EB28FC8278001F24A3 /* RiderView.swift */; };
-		C3744F28290983DD00AE9A22 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C3744F27290983DD00AE9A22 /* YOLOv3.mlmodel */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */; };
+		C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,9 +64,9 @@
 		C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingExtension.swift; sourceTree = "<group>"; };
 		C36AA2EB28FC8278001F24A3 /* RiderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderView.swift; sourceTree = "<group>"; };
-		C3744F27290983DD00AE9A22 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3BD658428E8DB7C0042CEB4 /* BluetoothView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothView.swift; sourceTree = "<group>"; };
+		C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5m.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 <<<<<<< HEAD
+<<<<<<< HEAD
 				4845584729089E87002D81FC /* ConfigurationOptions */,
 				4845584629089503002D81FC /* ObjectIdentification */,
 				48455845290894A7002D81FC /* BlueTooth */,
@@ -170,6 +171,9 @@
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
 =======
 				C3744F27290983DD00AE9A22 /* YOLOv3.mlmodel */,
+=======
+				C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */,
+>>>>>>> a7e3ec8 (changed the model to a smaller version)
 				48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */,
 				4851CE0828E49485003B5B76 /* Rear_RiderApp.swift */,
 				487C63AD28E4F8700022F0A7 /* HomeView.swift */,
@@ -310,7 +314,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */,
-				C3744F28290983DD00AE9A22 /* YOLOv3.mlmodel in Sources */,
 				C3BD658528E8DB7C0042CEB4 /* BluetoothView.swift in Sources */,
 				4845584B2909768E002D81FC /* ColorExtension.swift in Sources */,
 				484558412908941B002D81FC /* OptionsView.swift in Sources */,
@@ -320,6 +323,7 @@
 				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
 				C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */,
 				C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */,
+				C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */,
 				C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */,
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
