@@ -26,7 +26,7 @@ class ImageIdentification: ObservableObject {
     
     func initVisionModel() -> VNCoreMLModel {
         do {
-            let model = try? YOLOv3(configuration: MLModelConfiguration()).model
+            let model = try? yolov5m(configuration: MLModelConfiguration()).model
             return try VNCoreMLModel(for: model!)
         } catch {
             fatalError("Failed to create Vsion model: \(error).")
@@ -62,8 +62,6 @@ class ImageIdentification: ObservableObject {
     }
     
     func detectObjects(image img: UIImage) {
-        //self.bndRects.removeAll()
-        
         // process prediction in background
         DispatchQueue.global().async {
             let resizedImage = img.resizeImageTo(size: CGSize(width: 416, height: 416))
