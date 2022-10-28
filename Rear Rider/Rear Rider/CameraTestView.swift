@@ -33,8 +33,6 @@ struct CameraTestView: View {
             .scaledToFit()
             
             RecordingView()
-            
-            //Spacer()
                 
             Button(action: {
                 mLModel.bndRects.removeAll()
