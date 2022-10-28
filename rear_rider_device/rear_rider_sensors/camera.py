@@ -1,13 +1,15 @@
+from threading import Thread
+from typing import Union
 from picamera2 import Picamera2
 from datetime import datetime
 from datetime import date
 import os
-from videoprops import get_video_properties
+
+from rear_rider_sensors.camera_stream import StreamingServer, begin_stream
 
 class RRMedia:
     def __init__(self):
         self.media_id
-
 
 class RRCamera:
 
@@ -24,6 +26,8 @@ class RRCamera:
         self.media_loc = storage_path + name
         self.def_vid_len = 10
         self.def_loc = storage_path
+        self._stream_thread: Union[None, Thread] = None
+        self._stream_server: Union[None, StreamingServer] = None
 
     def takePhoto(self, photoName):
         photoLocation = self.def_loc + photoName
@@ -37,197 +41,28 @@ class RRCamera:
         self.pc.start_and_record_video(videoLocation, duration = videoLen)
 
     def beginStream(self):
-        import io
-        import logging
-        import socketserver
-        from http import server
-        from threading import Condition, Thread
+        def on_stream_server(stream_server: StreamingServer):
+            self._stream_server = stream_server
+        if self._is_streaming():
+            return
+        self._stream_thread = Thread(target=begin_stream,
+                args=(self.pc, on_stream_server,))
+        self._stream_thread.start()
 
-        from picamera2 import Picamera2
-        from picamera2.encoders import JpegEncoder
-        from picamera2.outputs import FileOutput
-        PAGE = """\
-        <html>
-        <head>
-        <title>picamera2 MJPEG streaming demo</title>
-        </head>
-        <body>
-        <h1>Picamera2 MJPEG Streaming Demo</h1>
-        <img src="stream.mjpg" width="640" height="480" />
-        </body>
-        </html>
-        """
-
-
-        class StreamingOutput(io.BufferedIOBase):
-            def __init__(self):
-                self.frame = None
-                self.condition = Condition()
-
-            def write(self, buf):
-                with self.condition:
-                    self.frame = buf
-                    self.condition.notify_all()
-
-
-        class StreamingHandler(server.BaseHTTPRequestHandler):
-            def do_GET(self):
-                if self.path == '/':
-                    self.send_response(301)
-                    self.send_header('Location', '/index.html')
-                    self.end_headers()
-                elif self.path == '/index.html':
-                    content = PAGE.encode('utf-8')
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'text/html')
-                    self.send_header('Content-Length', len(content))
-                    self.end_headers()
-                    self.wfile.write(content)
-                elif self.path == '/stream.mjpg':
-                    self.send_response(200)
-                    self.send_header('Age', 0)
-                    self.send_header('Cache-Control', 'no-cache, private')
-                    self.send_header('Pragma', 'no-cache')
-                    self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
-                    self.end_headers()
-                    try:
-                        while True:
-                            with output.condition:
-                                output.condition.wait()
-                                frame = output.frame
-                            self.wfile.write(b'--FRAME\r\n')
-                            self.send_header('Content-Type', 'image/jpeg')
-                            self.send_header('Content-Length', len(frame))
-                            self.end_headers()
-                            self.wfile.write(frame)
-                            self.wfile.write(b'\r\n')
-                    except Exception as e:
-                        logging.warning(
-                            'Removed streaming client %s: %s',
-                            self.client_address, str(e))
-                else:
-                    self.send_error(404)
-                    self.end_headers()
-
-
-        class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
-            allow_reuse_address = True#!/usr/bin/python3
-
-        # Mostly copied from https://picamera.readthedocs.io/en/release-1.13/recipes2.html
-        # Run this script, then point a web browser at http:<this-ip-address>:8000
-        # Note: needs simplejpeg to be installed (pip3 install simplejpeg).
-
-        import io
-        import logging
-        import socketserver
-        from http import server
-        from threading import Condition, Thread
-
-        from picamera2 import Picamera2
-        from picamera2.encoders import JpegEncoder
-        from picamera2.outputs import FileOutput
-
-        PAGE = """\
-        <html>
-        <head>
-        <title>picamera2 MJPEG streaming demo</title>
-        </head>
-        <body>
-        <h1>Picamera2 MJPEG Streaming Demo</h1>
-        <img src="stream.mjpg" width="640" height="480" />
-        </body>
-        </html>
-        """
-
-
-        class StreamingOutput(io.BufferedIOBase):
-            def __init__(self):
-                self.frame = None
-                self.condition = Condition()
-
-            def write(self, buf):
-                with self.condition:
-                    self.frame = buf
-                    self.condition.notify_all()
-
-
-        class StreamingHandler(server.BaseHTTPRequestHandler):
-            def do_GET(self):
-                if self.path == '/':
-                    self.send_response(301)
-                    self.send_header('Location', '/index.html')
-                    self.end_headers()
-                elif self.path == '/index.html':
-                    content = PAGE.encode('utf-8')
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'text/html')
-                    self.send_header('Content-Length', len(content))
-                    self.end_headers()
-                    self.wfile.write(content)
-                elif self.path == '/stream.mjpg':
-                    self.send_response(200)
-                    self.send_header('Age', 0)
-                    self.send_header('Cache-Control', 'no-cache, private')
-                    self.send_header('Pragma', 'no-cache')
-                    self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
-                    self.end_headers()
-                    try:
-                        while True:
-                            with output.condition:
-                                output.condition.wait()
-                                frame = output.frame
-                            self.wfile.write(b'--FRAME\r\n')
-                            self.send_header('Content-Type', 'image/jpeg')
-                            self.send_header('Content-Length', len(frame))
-                            self.end_headers()
-                            self.wfile.write(frame)
-                            self.wfile.write(b'\r\n')
-                    except Exception as e:
-                        logging.warning(
-                            'Removed streaming client %s: %s',
-                            self.client_address, str(e))
-                else:
-                    self.send_error(404)
-                    self.end_headers()
-
-
-        class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
-            allow_reuse_address = True
-            daemon_threads = True
-
-
-        self.pc.configure(self.pc.create_video_configuration(main={"size": (640, 480)}))
-        output = StreamingOutput()
-        self.pc.start_recording(JpegEncoder(), FileOutput(output))
-
-        try:
-            address = ('', 8000)
-            server = StreamingServer(address, StreamingHandler)
-            server.serve_forever()
-        finally:
-            self.pc.stop_recording()
-
-            daemon_threads = True
-
-
-        #picam2 = Picamera2()
-        self.pc.configure(self.pc.create_video_configuration(main={"size": (640, 480)}))
-        output = StreamingOutput()
-        self.pc.start_recording(JpegEncoder(), FileOutput(output))
-
-        try:
-            address = ('', 8000)
-            server = StreamingServer(address, StreamingHandler)
-            server.serve_forever()
-        finally:
-            self.pc.stop_recording()
 
     def endStream(self):
-            print('hello there')
-        #try:
-            self.pc.stop_recording()
-        #except:
-            #pass
+        if self._is_streaming():
+            # Close the server so that the port can be reused.
+            self._stream_server.server_close()
+            # Stop serving the stream to clients.
+            self._stream_server.shutdown()
+            # Don't leave an unjoined thread.
+            self._stream_thread.join()
+            self._stream_server = None
+            self._stream_thread = None
+    
+    def _is_streaming(self):
+        return self._stream_thread is not None
 
     def DefMediaName(media_type : str):
         now = datetime.now()

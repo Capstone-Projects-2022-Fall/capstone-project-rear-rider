@@ -28,7 +28,7 @@ class CameraParentProcess(ParentProcess):
         self.camera.beginStream()
     async def on_get_recording(self):
         self.camera.startRec("IPC_RECORDING_TEST.mp4", 15)
-    async def on_get_end_stream(self):
+    async def on_end_stream(self):
         self.camera.endStream()
     async def on_help(self):
         self.writeline(">get_picture: takes a photo via the camera and saves it.\n\t-no parameters needed, but you can specify a name if needed.\n" + 
