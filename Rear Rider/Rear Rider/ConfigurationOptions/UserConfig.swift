@@ -86,7 +86,7 @@ class UserConfig: ObservableObject {
     // default values. get overwritten on successful load
     var audioFile: String = ConfigOptions.AudioFile.honk.rawValue
     var lightPattern: String = ConfigOptions.LightPattern.strobe.rawValue
-    var lightColor: String = ""
+    var lightColor: String = "rgb(255,255,255)"
     var lightBrightness: Int = 1
 
     init() {
