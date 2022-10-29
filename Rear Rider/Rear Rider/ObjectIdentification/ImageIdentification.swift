@@ -18,7 +18,14 @@ struct BoundingRect: Identifiable {
 
 class ImageIdentification: ObservableObject {
     private var visionModel: VNCoreMLModel!
-    @Published var bndRects = [BoundingRect]()
+    private var bndRects = [BoundingRect]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.bndRectsCopy = self.bndRects // fix for Publishing from Background Thread purple warning
+            }
+        }
+    }
+    @Published var bndRectsCopy = [BoundingRect]()
     
     init() {
         self.visionModel = initVisionModel()
@@ -45,7 +52,7 @@ class ImageIdentification: ObservableObject {
                         
                         let temp = CGRect(x: result.boundingBox.origin.x, y: 1 - result.boundingBox.origin.y, width: result.boundingBox.width, height: result.boundingBox.height)
                         // 389x219 is the size of the Image and ZStack views in CameraTestView with scaledToFit property
-                        self.bndRects.append(BoundingRect(id: self.bndRects.count, rect: VNImageRectForNormalizedRect(temp, 389, 219)))
+                        self.bndRects.append(BoundingRect(id: self.bndRects.count, rect: VNImageRectForNormalizedRect(temp, 389, 288)))
                         
                         print("\(detectedObject) detected with \(detectedObjectConfidence) confidence")
                     }
@@ -75,5 +82,10 @@ class ImageIdentification: ObservableObject {
                 print("Failed to perform the Vision request \(error).")
             }
         }
+    }
+    
+    func clearBndRects() {
+        self.bndRects.removeAll()
+        self.bndRectsCopy.removeAll()
     }
 }

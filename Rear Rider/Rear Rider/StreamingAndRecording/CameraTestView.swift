@@ -13,11 +13,14 @@ struct CameraTestView: View {
     @EnvironmentObject var bleManager: BLEManager
     @ObservedObject private var stream = MjpegStreamingController(url: "http://10.42.0.1:8000/stream.mjpg")
     private var mLModel = ImageIdentification()
+    
+    // declare a timer that will call a function every 0.3 seconds
+    private let timer = Timer.publish(every: 0.3, on: .main, in: .common)
 
     var body: some View {
         VStack {
             ZStack {
-                ForEach (mLModel.bndRects) { rect in
+                ForEach (mLModel.bndRectsCopy) { rect in
                     Rectangle()
                         .frame(width: rect.rect.width, height: rect.rect.height)
                         .border(.yellow, width: 1)
@@ -35,7 +38,7 @@ struct CameraTestView: View {
             RecordingView()
                 
             Button(action: {
-                mLModel.bndRects.removeAll()
+                mLModel.clearBndRects()
                 mLModel.detectObjects(image: stream.uiImage)
             }) {
                 Text("Classify")
@@ -46,6 +49,11 @@ struct CameraTestView: View {
                 bleManager.toggleNotifyCharacteristic(enabled: false)
             }
             stream.play()
+            _ = timer.connect()
+        }
+        .onReceive(timer) { time in
+            mLModel.clearBndRects()
+            mLModel.detectObjects(image: stream.uiImage)
         }
     }
 }
