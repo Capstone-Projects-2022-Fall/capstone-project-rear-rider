@@ -13,18 +13,13 @@ struct RiderView: View {
     
     var body: some View {
         VStack {
-            List(bleManager.messages) { message in
-                HStack {
-                    Text(message.msg)
-                }
-            }
-            .frame(height: 200)
+            Text("Rear Rider")
         }
-        .onAppear() {
-            if bleManager.connected {
-                bleManager.toggleNotifyCharacteristic(enabled: true)
-            }
-        }
+//        .onAppear() {
+//            if bleManager.connected {
+//                bleManager.toggleNotifyCharacteristic(enabled: true)
+//            }
+//        }
     }
 }
 

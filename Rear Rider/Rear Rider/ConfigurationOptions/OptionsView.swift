@@ -44,31 +44,40 @@ struct OptionsView: View {
     var body: some View {
         VStack {
             Text("Options")
-            List {
-                Section {
-                    Picker("Audio Alert", selection: $confAudio.onChange(setAudio), content: {
-                        ForEach(audioFiles, id: \.self) {
-                            audioFile in Text(audioFile.description).tag(audioFile.rawValue)
+            NavigationView {
+                List {
+                    Section {
+                        Picker("Audio Alert", selection: $confAudio.onChange(setAudio), content: {
+                            ForEach(audioFiles, id: \.self) {
+                                audioFile in Text(audioFile.description).tag(audioFile.rawValue)
+                            }
+                        })
+                    } header: {
+                        Text("Audio")
+                    }
+                    Section {
+                        Picker("Pattern", selection: $confLightPattern.onChange(setLights), content: {
+                            ForEach(lightPatterns, id: \.self) {
+                                lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
+                            }
+                        })
+                        Picker("Brightness", selection: $confLightBrightness.onChange(setBrightness), content: {
+                            ForEach(lightBrightness, id: \.self) {
+                                brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
+                            }
+                        })
+                        ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
+                        )
+                    } header: {
+                        Text("Lights")
+                    }
+                    Section {
+                        NavigationLink(destination: RearRiderLogView()) {
+                            Text("View log")
                         }
-                    })
-                } header: {
-                    Text("Audio")
-                }
-                Section {
-                    Picker("Pattern", selection: $confLightPattern.onChange(setLights), content: {
-                        ForEach(lightPatterns, id: \.self) {
-                            lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
-                        }
-                    })
-                    Picker("Brightness", selection: $confLightBrightness.onChange(setBrightness), content: {
-                        ForEach(lightBrightness, id: \.self) {
-                            brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
-                        }
-                    })
-                    ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
-                    )
-                } header: {
-                    Text("Lights")
+                    } header: {
+                        Text("Log")
+                    }
                 }
             }
         }

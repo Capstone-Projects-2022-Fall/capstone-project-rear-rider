@@ -38,14 +38,9 @@ struct HomeView: View {
                     .tabItem {
                         Image(systemName: "camera")
                     }
-                BluetoothView()
-                    .tabItem {
-                        Image(systemName: "wrench.and.screwdriver")
-                    }
                 OptionsView()
                     .tabItem {
-                        Image(systemName:
-                                "gear")
+                        Image(systemName: "gear")
                     }
             }
         }
