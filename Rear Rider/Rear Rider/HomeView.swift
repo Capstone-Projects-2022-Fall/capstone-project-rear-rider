@@ -33,13 +33,13 @@ struct HomeView: View {
                     .foregroundColor(.green)
             }
             
-            Spacer().padding()
+            //Spacer().padding()
             
-            Button {
-                alert.playAudioAlert()
-            } label: {
-                Text("Honk")
-            }.padding()
+//            Button {
+//                alert.playAudioAlert()
+//            } label: {
+//                Text("Honk")
+//            }.padding()
             
             TabView {
                 RiderView()
