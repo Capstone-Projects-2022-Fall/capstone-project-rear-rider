@@ -133,13 +133,13 @@ struct OptionsView: View {
     func setColor(to value: Color) {
         configChanged = true
         conf.lightColor = confLightColor.toRGBString()
-        conf.lColor = confLightColor
     }
     
     /**
      * Saves the user's configuration by calling the config's save
      */
     func saveConf() {
+        conf.colorRGB = confLightColor.cgColor?.components
         do {
             try conf.save()
         } catch let error{

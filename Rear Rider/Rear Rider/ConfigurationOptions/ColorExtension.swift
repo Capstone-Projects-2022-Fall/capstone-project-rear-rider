@@ -73,18 +73,4 @@ extension Color {
             alpha: 1.0
         ))
     }
-    
-    /**
-     * Takes a Color.description string and return an Int array with the values of rgb
-     */
-    static func fromStringToInt(color c: String) -> [Int] {
-        var rgb = [Int]()
-        let token = c.components(separatedBy: " ")
-        
-        rgb.append(Int((Double(token[1]) ?? 0.00) * 255.0))
-        rgb.append(Int((Double(token[2]) ?? 0.0) * 255.0))
-        rgb.append(Int((Double(token[3]) ?? 0.0) * 255.0))
-        
-        return rgb
-    }
 }
