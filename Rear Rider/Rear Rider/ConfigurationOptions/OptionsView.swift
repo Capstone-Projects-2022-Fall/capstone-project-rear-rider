@@ -21,11 +21,13 @@ extension Binding {
 }
 
 struct OptionsView: View {
-    @ObservedObject var conf = UserConfig()
+    @EnvironmentObject var conf: UserConfig
     @State var confAudio: String = ""
-    @State var confLightPattern: String = ""
+    @State var confLightPattern: Int = 1
     @State var confLightBrightness: Int = 1
     @State var confLightColor: Color = .white
+    
+    @State var configChanged = false
     
     let audioFiles: [ConfigOptions.AudioFile] = ConfigOptions.AudioFile.allCases
     let lightPatterns: [ConfigOptions.LightPattern] = ConfigOptions.LightPattern.allCases
@@ -34,12 +36,12 @@ struct OptionsView: View {
     let alert = RearRiderAlerts()
     
     // need to wrap these in this init to get access to self for the conf variable and set these
-    init() {
-        self._confAudio = State(wrappedValue: conf.audioFile)
-        self._confLightPattern = State(wrappedValue: conf.lightPattern)
-        self._confLightBrightness = State(wrappedValue: conf.lightBrightness)
-        self._confLightColor = State(wrappedValue: Color.fromRGBString(rgbString: conf.lightColor))
-    }
+//    init() {
+//        _confAudio = State(wrappedValue: conf.audioFile)
+//        _confLightPattern = State(wrappedValue: conf.lightPattern)
+//        _confLightBrightness = State(wrappedValue: conf.lightBrightness)
+//        _confLightColor = State(wrappedValue: Color.fromRGBString(rgbString: conf.lightColor))
+//    }
     
     var body: some View {
         VStack {
@@ -80,6 +82,18 @@ struct OptionsView: View {
                     }
                 }
             }
+            .frame(maxHeight: 500)
+            
+            Button(action: saveConf) {
+                Text("Save")
+            }
+            .disabled(!configChanged)
+        }
+        .onAppear {
+            confAudio = conf.audioFile
+            confLightBrightness = conf.lightBrightness
+            confLightPattern = conf.lightPattern
+            confLightColor = Color.fromRGBString(rgbString: conf.lightColor)
         }
     }
     
@@ -89,7 +103,7 @@ struct OptionsView: View {
      */
     func setAudio(to value: String) {
         conf.audioFile = confAudio
-        saveConf()
+        configChanged = true
         // play audio sound
         if !conf.audioFile.isEmpty {
             try! alert.loadSoundFile(fileName: conf.audioFile)
@@ -100,25 +114,26 @@ struct OptionsView: View {
     /**
      * Sets the config object's light pattern to the new selection and saves it
      */
-    func setLights(to value: String) {
+    func setLights(to value: Int) {
+        configChanged = true
         conf.lightPattern = confLightPattern
-        saveConf()
     }
     
     /**
      * Sets the config object's light brightness to the new selection and saves it
      */
     func setBrightness(to value: Int) {
+        configChanged = true
         conf.lightBrightness = confLightBrightness
-        saveConf()
     }
     
     /**
      * Sets the config object's light color value to a string RBG representation of the new selection and saves it
      */
     func setColor(to value: Color) {
+        configChanged = true
         conf.lightColor = confLightColor.toRGBString()
-        saveConf()
+        conf.lColor = confLightColor
     }
     
     /**
@@ -130,11 +145,12 @@ struct OptionsView: View {
         } catch let error{
             print(error)
         }
+        configChanged = false
     }
 }
 
 struct OptionsView_Previews: PreviewProvider {
     static var previews: some View {
-        OptionsView()
+        OptionsView().environmentObject(UserConfig())
     }
 }

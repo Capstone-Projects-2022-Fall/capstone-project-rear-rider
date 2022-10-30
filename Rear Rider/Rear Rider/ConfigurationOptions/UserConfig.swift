@@ -13,7 +13,7 @@ import SwiftUI
  */
 struct ConfigData: Codable {
     let audioFile: String
-    let lightPattern: String
+    let lightPattern: Int
     let lightColor: String
     let lightBrightness: Int
 }
@@ -35,10 +35,10 @@ enum ConfigOptions {
             }
         }
     }
-
-    enum LightPattern: String, CaseIterable, Equatable {
-        case strobe = "strobe"
-        case off = ""
+    
+    enum LightPattern: Int, CaseIterable, Equatable {
+        case strobe = 1
+        case off = 0
         
         var description: String {
             switch self {
@@ -85,9 +85,14 @@ class UserConfig: ObservableObject {
     
     // default values. get overwritten on successful load
     var audioFile: String = ConfigOptions.AudioFile.honk.rawValue
-    var lightPattern: String = ConfigOptions.LightPattern.strobe.rawValue
+    var lightPattern: Int = ConfigOptions.LightPattern.strobe.rawValue
     var lightColor: String = "rgb(255,255,255)"
     var lightBrightness: Int = 1
+    
+    var lColor: Color = Color.white
+    
+    private let bleManager = BLEManager.shared
+    private let log = RearRiderLog.shared
 
     init() {
         do {
@@ -112,10 +117,13 @@ class UserConfig: ObservableObject {
                 self.lightBrightness = savedData.lightBrightness
                 
                 print("LOADED: \(savedData)")
+                log.addLog(from: "UserConfig", message: "Loaded configuration")
             } else {
+                log.addLog(from: "UserConfig", message: "Error decoding RearRiderConfig Data!")
                 throw ConfigErrors.loadError("Error decoding RearRiderConfig Data!")
             }
         } else {
+            log.addLog(from: "UserConfig", message: "RearRiderConfig not present!")
             throw ConfigErrors.loadError("RearRiderConfig not present")
         }
     }
@@ -142,8 +150,31 @@ class UserConfig: ObservableObject {
         if let encodedData = try? encoder.encode(data) {
             defaults.set(encodedData, forKey: "RearRiderConfig")
             print("SAVED: \(data)")
-            // TODO send the conf to the device
+            log.addLog(from: "UserConfig", message: "Saved configuration")
         }
+        
+        /* Prepare data to be sent over BT
+         * The format is as follows:
+         * 1st byte - light brightness
+         * 2nd byte - light pattern
+         * 3rd byte - red value
+         * 4th byte - green value
+         * 5th byte - blue value
+         */
+        var bytes = Data()
+        var br: UInt8 = UInt8(lightBrightness)
+        var pat: UInt8 = UInt8(lightPattern)
+        let rgb: [Int] = Color.fromStringToInt(color: lColor.description)
+        var red: UInt8 = UInt8(rgb[0])
+        var green: UInt8 = UInt8(rgb[1])
+        var blue: UInt8 = UInt8(rgb[2])
+        
+        bytes.append(withUnsafeBytes(of: &br) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &pat) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &red) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &green) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &blue) { Data($0) })
+        bleManager.sendConfigToPi(data: bytes)
     }
     
     /**
@@ -152,12 +183,15 @@ class UserConfig: ObservableObject {
      */
     func validate() throws {
         if !ConfigOptions.AudioFile.allCases.contains(where: {$0.rawValue == self.audioFile}) {
+            log.addLog(from: "UserConfig", message: "Unacceptable audio file")
             throw ConfigErrors.validationError("Unacceptable audio file")
         }
         if !ConfigOptions.LightPattern.allCases.contains(where: {$0.rawValue == self.lightPattern}) {
+            log.addLog(from: "UserConfig", message: "Unacceptable light pattern value")
             throw ConfigErrors.validationError("Unacceptable light pattern value")
         }
         if !ConfigOptions.LightBrightness.allCases.contains(where: {$0.rawValue == self.lightBrightness}) {
+            log.addLog(from: "UserConfig", message: "Unacceptable brightness value")
             throw ConfigErrors.validationError("Unacceptable brightness value")
         }
     }

@@ -19,6 +19,7 @@ struct CBUUIDs {
     static let BLEServiceUUID = CBUUID(string: "b4b1a70c-ba22-4e02-aba1-85d7e3171209")
     static let BLECharacteristicUUID = CBUUID(string: "3bd0b2f7-72f8-4497-bbe5-6bc3db448b95")
     static let BLENotifyCharacteristicUUID = CBUUID(string: "9f7bb8c9-4b29-4118-98ac-292557551cdf")
+    static let BLEConfigCharacteristicUUID = CBUUID(string: "3bd0b2f7-72f8-4497-bbe5-6bc3db447b95")
 }
 
 /// The purpose of this class is to set the iPhone as a central manager and connect to the RaspberryPi as a peripheral
@@ -28,7 +29,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private var myPeripheral: CBPeripheral!
     private var reverseCharacteristic: CBCharacteristic!
     private var notifyCharacteristic: CBCharacteristic!
+    private var configCharacteristic: CBCharacteristic!
     
+    static var shared = BLEManager()
     private let log = RearRiderLog.shared
     
     @Published var isSwitchedOn = false
@@ -171,10 +174,16 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 log.addLog(from: "BT", message: "Reverse Characteristic set")
                 connected = true
             }
-            
             else if characteristic.uuid.isEqual(CBUUIDs.BLENotifyCharacteristicUUID) {
                 notifyCharacteristic = characteristic
                 log.addLog(from: "BT", message: "Notify Characteristic set")
+                connected = true
+                
+                //peripheral.setNotifyValue(true, for: notifyCharacteristic)
+            }
+            else if characteristic.uuid.isEqual(CBUUIDs.BLEConfigCharacteristicUUID) {
+                configCharacteristic = characteristic
+                log.addLog(from: "BT", message: "Config Characteristic set")
                 connected = true
                 
                 //peripheral.setNotifyValue(true, for: notifyCharacteristic)
@@ -202,10 +211,30 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         connected = false
-        startScanning()
+        log.addLog(from: "BT", message: "RPi disconnected")
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        if peripheral == myPeripheral {
+            guard peripheral.state == .disconnected else { return }
+            print("RPi disconnected")
+            log.addLog(from: "BT", message: "RPi disconnected")
+            connected = false
+        }
     }
     
     func toggleNotifyCharacteristic(enabled e: Bool) {
         myPeripheral.setNotifyValue(e, for: notifyCharacteristic)
+    }
+    
+    func sendConfigToPi(data bytes: Data) {
+        if connected {
+            myPeripheral.writeValue(bytes, for: configCharacteristic, type: CBCharacteristicWriteType.withResponse)
+            log.addLog(from: "BT", message: "Configuration sent to Pi")
+        }
+        else {
+            print("Cannot send config to Pi. Not connected!")
+            log.addLog(from: "BT", message: "Cannot send config to Pi. Not connected!")
+        }
     }
 }
