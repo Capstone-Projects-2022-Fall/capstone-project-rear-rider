@@ -1,4 +1,23 @@
 from bluez.example_gatt_server import GATT_CHRC_IFACE, Characteristic, Service, GObject, dbus
+import subprocess
+
+WLAN_INTERFACE = 'wlan'
+
+class WifiAccessPoint():
+    def __init__(self):
+        pass
+    
+    def turn_off(self):
+        ret = subprocess.call(['sudo', 'rfkill', 'block', WLAN_INTERFACE])
+        return ret == 0
+    
+    def turn_on(self):
+        ret = subprocess.call(['sudo', 'rfkill', 'unblock', WLAN_INTERFACE])
+        return ret == 0
+    
+    def is_on(self):
+        ret = subprocess.run(['sudo', 'rfkill'], stdout=subprocess.PIPE).stdout.decode('utf-8').split()
+        return ret[8] == 'unblocked'
 
 class HelloWorldService(Service):
     """
@@ -10,9 +29,14 @@ class HelloWorldService(Service):
         Service.__init__(self, bus, index, self.SENSORS_SVC_UUID, True)
         reverse_text_chr = ReverseTextCharacteristic(bus, 0, self)
         append_counter_chr = AppendCounterWithNotificationCharacteristic(bus, 1, self)
+        config_chr = ConfigCharacteristic(bus, 2, self)
+        wifi_chr = WifiCharacteristic(bus, 3, self)
+        
         self.add_characteristic(reverse_text_chr)
         self.add_characteristic(append_counter_chr)
-
+        self.add_characteristic(config_chr)
+        self.add_characteristic(wifi_chr)
+        
         self.reverse_text_chr = reverse_text_chr
 
 class ReverseTextCharacteristic(Characteristic):
@@ -80,3 +104,50 @@ class AppendCounterWithNotificationCharacteristic(Characteristic):
         self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
         self.counter += 1
         return self.notifying
+
+class ConfigCharacteristic(Characteristic):
+    """
+    Configure the LED lights.
+    """
+    TEST_CHRC_UUID = '501beabd-3f66-4cca-ba7a-0fbf4f81870c'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+                self, bus, index,
+                self.TEST_CHRC_UUID,
+                ['write'],
+                service)
+        self.value = []
+
+    def WriteValue(self, value, options):
+        print('ConfigCharacteristic Write: ' + repr(value))
+        self.value = value
+
+class WifiCharacteristic(Characteristic):
+    """
+    Control Wi-Fi on Pi.
+    """
+    TEST_CHRC_UUID = 'cd41b278-6254-4c89-9cd1-fd2578ab8fcc'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+                self, bus, index,
+                self.TEST_CHRC_UUID,
+                ['read', 'write'],
+                service)
+
+    def ReadValue(self, options):
+        wifi = WifiAccessPoint()
+        if wifi.is_on():
+            return dbus.ByteArray('1'.encode('utf8'))
+        else:
+            return dbus.ByteArray('0'.encode('utf8'))
+    
+    def WriteValue(self, value, options):
+        wifi = WifiAccessPoint()
+        # This formats the first byte of the dbus value to an integer.
+        state = int(f'{value[0]}')
+        if state == 0:
+            wifi.turn_off()
+        elif state == 1:
+            wifi.turn_on()
