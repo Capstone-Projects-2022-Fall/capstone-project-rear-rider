@@ -109,7 +109,7 @@ class ConfigCharacteristic(Characteristic):
     """
     Configure the LED lights.
     """
-    TEST_CHRC_UUID = '3bd0b2f7-72f8-4497-bbe5-6bc3db447b95'
+    TEST_CHRC_UUID = '501beabd-3f66-4cca-ba7a-0fbf4f81870c'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
@@ -127,7 +127,7 @@ class WifiCharacteristic(Characteristic):
     """
     Control Wi-Fi on Pi.
     """
-    TEST_CHRC_UUID = '3bd0b2f7-72f8-4497-bbe5-6bc3db450b95'
+    TEST_CHRC_UUID = 'cd41b278-6254-4c89-9cd1-fd2578ab8fcc'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
@@ -145,7 +145,8 @@ class WifiCharacteristic(Characteristic):
     
     def WriteValue(self, value, options):
         wifi = WifiAccessPoint()
-        state = int(value[0])
+        # This formats the first byte of the dbus value to an integer.
+        state = int(f'{value[0]}')
         if state == 0:
             wifi.turn_off()
         elif state == 1:
