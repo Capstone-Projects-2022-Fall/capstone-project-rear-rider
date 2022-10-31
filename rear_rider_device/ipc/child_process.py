@@ -36,7 +36,7 @@ class ChildProcess(Process):
     def __init__(self, program: str):
         self._program = program
         self._stdin = None
-        self._stdout = None
+        self._stdout: Union[asyncio.StreamReader, None] = None
     
     async def readline(self):
         """

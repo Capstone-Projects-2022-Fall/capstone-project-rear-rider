@@ -15,7 +15,7 @@ from rear_rider_bluetooth_server.src.services.characteristics.strobe_light impor
 from rear_rider_bluetooth_server.src.services.sensors import SensorsService
 from ipc.parent_process import ParentProcess
 import rear_rider_bluetooth_server.src.main as bt_server_main
-from rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService
+from rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService, LedConfig
 
 class BluetoothParentProcess(ParentProcess):
     rear_rider_bt: bt_server_main.RearRiderBluetooth
@@ -36,6 +36,9 @@ class BluetoothParentProcess(ParentProcess):
         # self._bluetooth_ready.result() # FOR DEBUGGING ONLY
         # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ####################################################
+        def on_led_config(cfg: LedConfig):
+            self.writeline(f'led_config\n{cfg.pattern} {cfg.brightness} {cfg.color[0]} {cfg.color[1]} {cfg.color[2]}')
+        self.rear_rider_bt.hello_world_svc.config_chr.set_on_led_config(on_led_config)
 
     def pre_done(self):
         pass

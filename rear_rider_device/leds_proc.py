@@ -58,13 +58,19 @@ class LedsParentProcess(ParentProcess):
         """
         self.writeline('strobe_ack\nFormat: [frequency] [duration]')
         params_line = await self.readline()
+        params = params_line.split(' ')
+        frequency = int(params[0])
+        duration = float(params[1])
+        await self._start_strobe_thread(frequency, duration, WHITE)
+
+    async def _start_strobe_thread(self, frequency, duration, color):
         if self._strobe_on:
             self.writeline('strobe_on_busy')
             return
         await self._join_strobe_thread()
         # Race condition on set variable?
         self._strobe_on = True
-        
+    
         def strobe_task():
             """
             @startuml
@@ -75,17 +81,14 @@ class LedsParentProcess(ParentProcess):
             @enduml
             """
             try:
-                params = params_line.split(' ')
-                frequency = int(params[0])
-                duration = float(params[1])
                 sleep_seconds = (1/frequency) / 2
                 num_flashes = int(frequency * duration)
-                self.led_strip.fill(WHITE)
+                self.led_strip.fill(color)
                 i = 0
                 print('test')
                 while self._strobe_on and (duration == 0.0 and frequency > 0) or (i < num_flashes):
                     self.led_strip.blink(sleep_seconds,
-                        open_color=WHITE,
+                        open_color=color,
                         closed_color=OFF_COLOR,
                     )
                     i += 1
@@ -147,6 +150,21 @@ class LedsParentProcess(ParentProcess):
             self.writeline('strobe_task_waiting')
             self._strobe_task_thread.join()
             self._strobe_task_thread = None
+    
+    async def on_discoverable_on(self):
+        pass
+
+    async def on_discoverable_off(self):
+        pass
+    
+    async def on_add_effect(self):
+        params = (await self.readline()).split(' ')
+        pattern = params[0]
+        brightness = params[1]
+        color = (int(params[2]), int(params[3]), int(params[4]))
+        if pattern == '1':
+            self.led_strip.set_brightness(float(brightness))
+            await self._start_strobe_thread(5, 0, color)
 
 help_str_all = ''
 

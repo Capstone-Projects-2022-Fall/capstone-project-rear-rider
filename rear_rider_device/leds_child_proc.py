@@ -34,6 +34,12 @@ class LedsChildProcess(ChildProcess):
     # LED STUFF #
     #############
 
+    async def set_discoverable_effect(self, on: bool):
+        if on:
+            await self.writeline('discoverable_on')
+        else:
+            await self.writeline('discoverable_off')
+
     async def led_strobe_on(self):
         self._print('led_strobe_on()')
         await self.writeline(
@@ -85,6 +91,14 @@ class LedsChildProcess(ChildProcess):
     
     def no_on_handler(self, on_command, err):
         self._print('no_on_handler: {}\n{}'.format(on_command, err))
+    
+    async def add_led_effect(self, effect_string: str):
+        """
+        effect_string: 
+            formatted as:
+                [effect] [brightness] [r] [g] [b]
+        """
+        await self.writeline(f'add_effect\n{effect_string}')
 
 
 class TestParent(ParentProcess):
