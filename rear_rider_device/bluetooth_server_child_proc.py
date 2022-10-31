@@ -88,6 +88,18 @@ class BluetoothServerChildProcess(ChildProcess):
 
     def no_on_handler(self, on_command, err):
         self._print('no on handler s: {}\n,{}'.format(on_command, err))
+    
+    async def on_discoverable(self):
+        """
+        The handler for when bluetooth changes its discoverability to other devices.
+        """
+        line = await self.readline()
+        if line == 'True':
+            self._leds_child_process.set_discoverable_effect(False)
+        elif line == 'False':
+            self._leds_child_process.set_discoverable_effect(False)
+
+
 
 
 if __name__ == '__main__':

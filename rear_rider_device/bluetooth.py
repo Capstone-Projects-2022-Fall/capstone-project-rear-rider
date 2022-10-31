@@ -18,8 +18,7 @@ import rear_rider_bluetooth_server.src.main as bt_server_main
 from rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService
 
 class BluetoothParentProcess(ParentProcess):
-    hello_world_service: Union[None, HelloWorldService]
-    sensors_service: Union[None, SensorsService]
+    rear_rider_bt: bt_server_main.RearRiderBluetooth
     strobe_light: StrobeLight
     _help_message = (
             'help\n'
@@ -37,7 +36,6 @@ class BluetoothParentProcess(ParentProcess):
         # self._bluetooth_ready.result() # FOR DEBUGGING ONLY
         # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ####################################################
-        pass
 
     def pre_done(self):
         pass
@@ -59,7 +57,7 @@ class BluetoothParentProcess(ParentProcess):
             # TODO: Add critical section guard here
             # self.writeline('set_data_ack')
             nums = data.split(',')
-            self.sensors_service.accelerometer_characteristic.vector = (
+            self.rear_rider_bt.sensors_svc.accelerometer_characteristic.vector = (
                 float(nums[0]),float(nums[1]),float(nums[2]))
         else:
             # TODO: Add critical section guard here
@@ -86,6 +84,10 @@ class BluetoothParentProcess(ParentProcess):
         finally:
             # self.writeline('strobe_on_ack')
             pass
+    
+    def discoverable_changed(self, value: str):
+        self.writeline(f'discoverable\n{value}')
+        
 
 
 if __name__ == '__main__':
@@ -112,9 +114,9 @@ if __name__ == '__main__':
             futures.append(executor.submit(asyncio.run, proc.begin()))
 
             async def bt_server_main_task_co():
-                def bluetooth_is_ready(hello_world_service: HelloWorldService, sensors_service: SensorsService):
-                    proc.hello_world_service = hello_world_service
-                    proc.sensors_service = sensors_service
+                def bluetooth_is_ready(rear_rider_bt: bt_server_main.RearRiderBluetooth):
+                    rear_rider_bt.set_on_discoverable_changed(proc.discoverable_changed)
+                    proc.rear_rider_bt = rear_rider_bt
                     print('bluetooth_is_ready')
                     proc._bluetooth_ready.set_result(None)
 
@@ -127,7 +129,7 @@ if __name__ == '__main__':
                 bt_server_main.main(print,
                         on_ready=bluetooth_is_ready,
                         on_read=on_read,
-                        strobe_light=proc.strobe_light
+                        strobe_light=proc.strobe_light,
                 )
 
             futures.append(executor.submit(asyncio.run, bt_server_main_task_co()))

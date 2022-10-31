@@ -21,7 +21,52 @@ AGENT_PATH = '/bluez/simpleagent'
 BLUETOOTH_ALIAS = 'RearRiderPi4'
 
 
-def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsService], None]], on_read: Callable[[], str],
+class RearRiderBluetooth:
+    _discoverable: str
+    """
+    "0" or "1"
+    """
+    _on_discoverable_changed: Union[None, Callable[[str], None]]
+    def __init__(self, bus: dbus.SystemBus, hello_world_svc: HelloWorldService, sensors_svc: SensorsService):
+        self._bus = bus
+        self.hello_world_svc = hello_world_svc
+        self.sensors_svc = sensors_svc
+        self._on_discoverable_changed = None
+
+        # Set up listening to bluetooth property changes such as discoverability.
+        def listen_to_bluetooth_property_changes():
+            def bt_properties_changed(interface, changed, invalidated, path):
+                """
+                Reference: https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/test/monitor-bluetooth
+                """
+                for name, value in changed.items():
+                    if name == 'Discoverable':
+                        self.set_discoverable(str(value))
+            self._bus.add_signal_receiver(bt_properties_changed, bus_name="org.bluez",
+                dbus_interface="org.freedesktop.DBus.Properties",
+                signal_name="PropertiesChanged",
+                path_keyword="path")
+        listen_to_bluetooth_property_changes()
+        
+
+    
+    def set_discoverable(self, value: str):
+        if value != '0' and value != '1':
+            raise Exception('discoverable value must be `0` or `1`')
+        self._discoverable = value
+        if self._on_discoverable_changed is not None:
+            self._on_discoverable_changed(self._discoverable)
+        
+    def set_on_discoverable_changed(self, callback: Callable[[str], None]):
+        """
+        Callback should expect that value be "0" or "1"
+        """
+        self._on_discoverable_changed = callback
+        self._on_discoverable_changed(self._discoverable)
+
+        
+
+def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_read: Callable[[], str],
         strobe_light: StrobeLight):
     """
     """
@@ -69,8 +114,7 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsServic
             adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(1))
 
         def unregister_app_cb():
-            print('RegisterApplication was successful.')
-            adapter_props.Set("org.bluez.Adapter1", "Alias", None)
+            adapter_props.Set("org.bluez.Adapter1", "Alias", '')
             # adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
             adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(0))
 
@@ -83,7 +127,7 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsServic
                                         reply_handler=register_app_cb,
                                         error_handler=register_app_error_cb)
         
-        unregister_app_cb
+        return unregister_app_cb
     
 
     rear_rider_adv = RearRiderAdvertisement(bus, 0)
@@ -98,7 +142,13 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsServic
             print(rear_rider_adv.get_properties())
             # rear_rider_adv.Powe
             if on_ready is not None:
-                on_ready(app.hello_world_service, app.sensors_service)
+                rear_rider_bt = RearRiderBluetooth(bus, app.hello_world_service, app.sensors_service)
+                # Get initial value
+                # discoverable = '0'
+                discoverable = adapter_props.Get("org.bluez.Adapter1", "Discoverable")
+                rear_rider_bt.set_discoverable(str(discoverable))
+                # print(f'Initial "discoverable" value: {discoverable}')
+                on_ready(rear_rider_bt)
             else:
                 stdout.write('ready\n')
                 stdout.flush()
@@ -132,7 +182,7 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsServic
         agent_manager.RequestDefaultAgent(AGENT_PATH)
 
         def unregister_agent():
-            agent_manager.UnregisterDefaultAgent(AGENT_PATH)
+            agent_manager.UnregisterAgent(AGENT_PATH)
         
         return unregister_agent
 
@@ -144,13 +194,14 @@ def main(print, on_ready: Union[None, Callable[[HelloWorldService, SensorsServic
 
     unregister_advertisement = register_advertisement()
 
-    mainloop.run()
+    try:
+        mainloop.run()
+    finally:
+        unregister_advertisement()
 
-    unregister_advertisement()
+        unregister_agent()
 
-    unregister_agent()
-
-    unregister_app()
+        unregister_app()
 
 
 
