@@ -43,15 +43,15 @@ class AccelerometerChildProcess(ChildProcess):
         tapped = await self.readline()
         motion = await self.readline()
         await self.readline()
-        self._print(
-            '{}\n'
-            '\t{}\n'
-            '\t{}'.format(
-                vector,
-                tapped,
-                motion
-            )
-        )
+        # self._print(
+        #     '{}\n'
+        #     '\t{}\n'
+        #     '\t{}'.format(
+        #         vector,
+        #         tapped,
+        #         motion
+        #     )
+        # )
 
         component = vector.split(' ')
         data = (
@@ -66,3 +66,6 @@ class AccelerometerChildProcess(ChildProcess):
             '{},{},{}'.format(data[0], data[1], data[2]))
         await asyncio.sleep(1.0/self.fps)
         await self.writeline('get_data')
+    
+    def _get_name(self) -> str:
+        return 'AccelerometerChildProcess'

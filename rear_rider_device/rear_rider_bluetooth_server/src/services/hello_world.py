@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from typing import Callable, Union
 from bluez.example_gatt_server import GATT_CHRC_IFACE, Characteristic, Service, GObject, dbus
 import subprocess
 
@@ -31,13 +33,14 @@ class HelloWorldService(Service):
         append_counter_chr = AppendCounterWithNotificationCharacteristic(bus, 1, self)
         config_chr = ConfigCharacteristic(bus, 2, self)
         wifi_chr = WifiCharacteristic(bus, 3, self)
-        
+
         self.add_characteristic(reverse_text_chr)
         self.add_characteristic(append_counter_chr)
         self.add_characteristic(config_chr)
         self.add_characteristic(wifi_chr)
         
         self.reverse_text_chr = reverse_text_chr
+        self.config_chr = config_chr
 
 class ReverseTextCharacteristic(Characteristic):
     """
@@ -105,6 +108,23 @@ class AppendCounterWithNotificationCharacteristic(Characteristic):
         self.counter += 1
         return self.notifying
 
+@dataclass
+class LedConfig:
+    pattern: str = '0'
+    """
+    0 - no pattern
+    """
+    brightness: str = '1'
+    """
+    1 - low
+    2 - medium
+    3 - high
+    """
+    color: tuple[str,str,str] = ('255', '255', '255')
+    """
+    (r, g, b)
+    """
+
 class ConfigCharacteristic(Characteristic):
     """
     Configure the LED lights.
@@ -117,11 +137,23 @@ class ConfigCharacteristic(Characteristic):
                 self.TEST_CHRC_UUID,
                 ['write'],
                 service)
-        self.value = []
+        self.value = LedConfig()
+        self._on_led_config: Union[None, Callable[[LedConfig], None]] = None
 
     def WriteValue(self, value, options):
-        print('ConfigCharacteristic Write: ' + repr(value))
-        self.value = value
+        pattern = str(value[0])
+        brightness = str(value[1])
+        r = str(value[2])
+        g = str(value[3])
+        b = str(value[4])
+        # print(f'ConfigCharacteristic Write: {pattern} {brightness} {r} {g} {b}')
+        self.value = LedConfig(pattern, brightness, (r, g, b))
+        if self._on_led_config is not None:
+            self._on_led_config(self.value)
+    
+    def set_on_led_config(self, callback: Callable[[LedConfig], None]):
+        self._on_led_config = callback
+
 
 class WifiCharacteristic(Characteristic):
     """
