@@ -22,6 +22,7 @@
 		48F4415228F62EFD00F7C9AA /* ImageIdentificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4415128F62EFD00F7C9AA /* ImageIdentificationTest.swift */; };
 		C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28828F2731F001D7F1D /* CameraTestView.swift */; };
 		C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */; };
+		C338B28E290F5E94009638F9 /* WifiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338B28D290F5E94009638F9 /* WifiManager.swift */; };
 		C364D8BF290DAB9A00F9EE7C /* RearRiderLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364D8BE290DAB9A00F9EE7C /* RearRiderLog.swift */; };
 		C364D8C1290DAFDD00F9EE7C /* RearRiderLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364D8C0290DAFDD00F9EE7C /* RearRiderLogView.swift */; };
 		C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E328FC80B2001F24A3 /* RecordingView.swift */; };
@@ -61,6 +62,7 @@
 		C307D28828F2731F001D7F1D /* CameraTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTestView.swift; sourceTree = "<group>"; };
 		C307D28A28F2734A001D7F1D /* MJpegStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJpegStreaming.h; sourceTree = "<group>"; };
 		C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MJpegStreamingKit.swift; sourceTree = "<group>"; };
+		C338B28D290F5E94009638F9 /* WifiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiManager.swift; sourceTree = "<group>"; };
 		C364D8BE290DAB9A00F9EE7C /* RearRiderLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RearRiderLog.swift; sourceTree = "<group>"; };
 		C364D8C0290DAFDD00F9EE7C /* RearRiderLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RearRiderLogView.swift; sourceTree = "<group>"; };
 		C36AA2E328FC80B2001F24A3 /* RecordingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */,
 				C36AA2E328FC80B2001F24A3 /* RecordingView.swift */,
 				C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */,
+				C338B28D290F5E94009638F9 /* WifiManager.swift */,
 			);
 			path = StreamingAndRecording;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
 				4845584929089EAA002D81FC /* UserConfig.swift in Sources */,
+				C338B28E290F5E94009638F9 /* WifiManager.swift in Sources */,
 				C364D8C1290DAFDD00F9EE7C /* RearRiderLogView.swift in Sources */,
 				C364D8BF290DAB9A00F9EE7C /* RearRiderLog.swift in Sources */,
 			);

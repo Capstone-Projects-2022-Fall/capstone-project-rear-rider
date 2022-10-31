@@ -15,11 +15,6 @@ struct RiderView: View {
         VStack {
             Text("Rear Rider")
         }
-//        .onAppear() {
-//            if bleManager.connected {
-//                bleManager.toggleNotifyCharacteristic(enabled: true)
-//            }
-//        }
     }
 }
 

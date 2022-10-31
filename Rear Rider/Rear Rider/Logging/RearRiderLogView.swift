@@ -1,9 +1,12 @@
+// RearRider
 //
-//  RearRiderLogView.swift
-//  Rear Rider
+// Calin Pescaru
 //
-//  Created by Lydia Pescaru on 10/29/22.
+// October 2022
 //
+// Bluetooth Manager
+//
+// The view associate with the RearRider logger.
 
 import SwiftUI
 

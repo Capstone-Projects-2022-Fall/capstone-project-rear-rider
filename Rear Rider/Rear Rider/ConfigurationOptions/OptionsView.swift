@@ -35,14 +35,6 @@ struct OptionsView: View {
     
     let alert = RearRiderAlerts()
     
-    // need to wrap these in this init to get access to self for the conf variable and set these
-//    init() {
-//        _confAudio = State(wrappedValue: conf.audioFile)
-//        _confLightPattern = State(wrappedValue: conf.lightPattern)
-//        _confLightBrightness = State(wrappedValue: conf.lightBrightness)
-//        _confLightColor = State(wrappedValue: Color.fromRGBString(rgbString: conf.lightColor))
-//    }
-    
     var body: some View {
         VStack {
             Text("Options")
