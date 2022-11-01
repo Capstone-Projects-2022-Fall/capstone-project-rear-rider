@@ -11,11 +11,13 @@ import AVKit
 
 struct CameraTestView: View {
     @EnvironmentObject var bleManager: BLEManager
+    @EnvironmentObject var wifiManager: WifiManager
     @ObservedObject private var stream = MjpegStreamingController(url: "http://10.42.0.1:8000/stream.mjpg")
     private var mLModel = ImageIdentification()
     
     // declare a timer that will call a function every 0.3 seconds
     private let timer = Timer.publish(every: 0.3, on: .main, in: .common)
+    @State var timer_set = false
 
     var body: some View {
         VStack {
@@ -29,31 +31,60 @@ struct CameraTestView: View {
                         .position(x: rect.rect.minX + rect.rect.width / 2, y: rect.rect.minY - rect.rect.height / 2)
                 }
                 
-                Image(uiImage: stream.uiImage)
-                    .resizable()
-                    .scaledToFit()
+                if wifiManager.wifiOn {
+                    Image(uiImage: stream.uiImage)
+                        .resizable()
+                        .scaledToFit()
+                }
+                else {
+                    Text("Waiting for Wi-Fi to connect...")
+                }
             }
             .scaledToFit()
             
             RecordingView()
+            
+            HStack {
+                Button(action: {
+                    if wifiManager.wifiOn {
+                        stream.play()
+                        if !timer_set {
+                            _ = timer.connect()
+                            timer_set = true
+                        }
+                    }
+                }) {
+                    Text("Play")
+                }
                 
-            Button(action: {
-                mLModel.clearBndRects()
-                mLModel.detectObjects(image: stream.uiImage)
-            }) {
-                Text("Classify")
+                Spacer()
+                
+                Button(action: {
+                    mLModel.clearBndRects()
+                    mLModel.detectObjects(image: stream.uiImage)
+                }) {
+                    Text("Classify")
+                }
             }
         }
         .onAppear() {
             if (bleManager.connected) {
                 bleManager.toggleNotifyCharacteristic(enabled: false)
+                wifiManager.turnWifiOn()
             }
-            stream.play()
-            _ = timer.connect()
         }
         .onReceive(timer) { time in
-            mLModel.clearBndRects()
-            mLModel.detectObjects(image: stream.uiImage)
+            if wifiManager.wifiOn {
+                mLModel.clearBndRects()
+                mLModel.detectObjects(image: stream.uiImage)
+            }
+        }
+        .onDisappear() {
+            if (wifiManager.wifiOn) {
+                wifiManager.turnWifiOff()
+                timer.connect().cancel()
+                timer_set = false
+            }
         }
     }
 }

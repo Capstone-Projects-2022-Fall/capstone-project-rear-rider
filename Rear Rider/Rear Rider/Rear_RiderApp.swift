@@ -13,6 +13,7 @@ struct Rear_RiderApp: App {
     @StateObject var bleManager = BLEManager.shared
     @StateObject var conf = UserConfig()
     @StateObject var log = RearRiderLog.shared
+    @StateObject var wifiManager = WifiManager.shared
     
     var body: some Scene {
         WindowGroup {
@@ -20,6 +21,7 @@ struct Rear_RiderApp: App {
                 .environmentObject(bleManager)
                 .environmentObject(log)
                 .environmentObject(conf)
+                .environmentObject(wifiManager)
         }
     }
 }

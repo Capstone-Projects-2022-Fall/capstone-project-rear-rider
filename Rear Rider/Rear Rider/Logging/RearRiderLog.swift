@@ -1,9 +1,12 @@
+// RearRider
 //
-//  RearRiderLog.swift
-//  Rear Rider
+// Calin Pescaru
 //
-//  Created by Lydia Pescaru on 10/29/22.
+// October 2022
 //
+// Bluetooth Manager
+//
+// A simple logger for the RearRider app.
 
 import Foundation
 
@@ -12,10 +15,16 @@ struct Message: Identifiable {
     let message: String
 }
 
+/// A logger for the RearRider app
+/// The format is "date~time # from - message" where from is the class where the action is happening
 class RearRiderLog: ObservableObject {
     @Published var messages = [Message]()
     static var shared = RearRiderLog()
     
+    /// Add a new log
+    /// - Parameters:
+    ///   - source: The class where the action is happening
+    ///   - msg: The desired message to be logged
     func addLog(from source: String, message msg: String) {
         var log = ""
         let date = Date()

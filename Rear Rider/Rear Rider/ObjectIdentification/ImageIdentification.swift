@@ -16,6 +16,7 @@ struct BoundingRect: Identifiable {
     var rect: CGRect
 }
 
+/// A class for detecting object using a Core ML model
 class ImageIdentification: ObservableObject {
     private var visionModel: VNCoreMLModel!
     private var bndRects = [BoundingRect]() {
@@ -31,6 +32,8 @@ class ImageIdentification: ObservableObject {
         self.visionModel = initVisionModel()
     }
     
+    /// Initializes a VNCoreMLModel from a Yolov5 model
+    /// - Returns: a VNCoreMLModel object
     func initVisionModel() -> VNCoreMLModel {
         do {
             let model = try? yolov5m(configuration: MLModelConfiguration()).model
@@ -40,6 +43,8 @@ class ImageIdentification: ObservableObject {
         }
     }
     
+    /// The workhorse of the detection process
+    /// - Returns: a VNCoreMLRequest object
     func visionRequest() -> VNCoreMLRequest {
         let requestCompletionHandler: VNRequestCompletionHandler = { request, error in
             if let results = request.results as? [VNRecognizedObjectObservation] {
@@ -51,7 +56,7 @@ class ImageIdentification: ObservableObject {
                         let detectedObjectConfidence = result.labels.first?.confidence ?? 0
                         
                         let temp = CGRect(x: result.boundingBox.origin.x, y: 1 - result.boundingBox.origin.y, width: result.boundingBox.width, height: result.boundingBox.height)
-                        // 389x219 is the size of the Image and ZStack views in CameraTestView with scaledToFit property
+                        // 389x288 is the size of the Image and ZStack views in CameraTestView with scaledToFit property
                         self.bndRects.append(BoundingRect(id: self.bndRects.count, rect: VNImageRectForNormalizedRect(temp, 389, 288)))
                         
                         print("\(detectedObject) detected with \(detectedObjectConfidence) confidence")
@@ -68,6 +73,8 @@ class ImageIdentification: ObservableObject {
         return request
     }
     
+    /// This is where image detection starts
+    /// - Parameter img: a UIImage object
     func detectObjects(image img: UIImage) {
         // process prediction in background
         DispatchQueue.global().async {
@@ -84,6 +91,7 @@ class ImageIdentification: ObservableObject {
         }
     }
     
+    /// Clear all bouding rects
     func clearBndRects() {
         self.bndRects.removeAll()
         self.bndRectsCopy.removeAll()
