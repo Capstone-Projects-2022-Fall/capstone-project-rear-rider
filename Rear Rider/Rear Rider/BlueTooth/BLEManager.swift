@@ -180,8 +180,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 notifyCharacteristic = characteristic
                 log.addLog(from: "BT", message: "Notify Characteristic set")
                 connected = true
-                
-                //peripheral.setNotifyValue(true, for: notifyCharacteristic)
             }
             else if characteristic.uuid.isEqual(CBUUIDs.BLEConfigCharacteristicUUID) {
                 configCharacteristic = characteristic
