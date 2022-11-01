@@ -19,6 +19,12 @@ from rearrider_app import RearRiderApplication
 AGENT_MANAGER_IFACE = 'org.bluez.AgentManager1'
 AGENT_PATH = '/bluez/simpleagent'
 BLUETOOTH_ALIAS = 'RearRiderPi4'
+DISCOVERABLE = 1
+"""
+0 = False
+1 = True
+"""
+DISCOVERABLE_TIMEOUT = 180
 
 
 class RearRiderBluetooth:
@@ -29,6 +35,9 @@ class RearRiderBluetooth:
     _on_discoverable_changed: Union[None, Callable[[str], None]]
     def __init__(self, bus: dbus.SystemBus, hello_world_svc: HelloWorldService, sensors_svc: SensorsService):
         self._bus = bus
+        self._adapter = find_adapter(self._bus)
+        self._adapter_props = dbus.Interface(self._bus.get_object(BLUEZ_SERVICE_NAME, self._adapter),
+            'org.freedesktop.DBus.Properties')
         self.hello_world_svc = hello_world_svc
         self.sensors_svc = sensors_svc
         self._on_discoverable_changed = None
@@ -63,6 +72,10 @@ class RearRiderBluetooth:
         """
         self._on_discoverable_changed = callback
         self._on_discoverable_changed(self._discoverable)
+    
+    def get_discoverable_timeout(self):
+        return int(self._adapter_props.Get('org.bluez.Adapter1',
+                      'DiscoverableTimeout'))
 
         
 
@@ -111,7 +124,8 @@ def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_
             print('RegisterApplication was successful.')
             adapter_props.Set("org.bluez.Adapter1", "Alias", BLUETOOTH_ALIAS)
             adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
-            adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(1))
+            adapter_props.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(DISCOVERABLE))
+            adapter_props.Set("org.bluez.Adapter1", "DiscoverableTimeout", dbus.UInt32(DISCOVERABLE_TIMEOUT))
 
         def unregister_app_cb():
             adapter_props.Set("org.bluez.Adapter1", "Alias", '')

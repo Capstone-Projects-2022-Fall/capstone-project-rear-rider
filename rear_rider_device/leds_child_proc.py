@@ -35,11 +35,12 @@ class LedsChildProcess(ChildProcess):
     #############
 
     async def set_discoverable_effect(self, on: bool):
+        self._print('set_discoverable_effect()')
         if on:
             await self.writeline('discoverable_on')
         else:
             await self.writeline('discoverable_off')
-
+        
     async def led_strobe_on(self):
         self._print('led_strobe_on()')
         await self.writeline(
@@ -79,16 +80,6 @@ class LedsChildProcess(ChildProcess):
         # to be formatted.
         await self.readline()
     
-    async def on_strobe_task_waiting(self):
-        self._print('on_strobe_task_waiting')
-        # Do nothing
-        pass
-
-    async def on_strobe_on_busy(self):
-        self._print('on_strobe_on_busy')
-        # Do nothing
-        pass
-    
     def no_on_handler(self, on_command, err):
         self._print('no_on_handler: {}\n{}'.format(on_command, err))
     
@@ -98,7 +89,7 @@ class LedsChildProcess(ChildProcess):
             formatted as:
                 [effect] [brightness] [r] [g] [b]
         """
-        await self.writeline(f'add_effect\n{effect_string}')
+        await self.writeline(f'set_effect\n{effect_string}')
 
 
 class TestParent(ParentProcess):
@@ -112,6 +103,16 @@ class TestParent(ParentProcess):
     async def on_led_strobe_off(self):
         self.writeline('on_led_strobe_off')
         await self.leds_proc.led_strobe_off()
+    
+    async def on_discoverable(self):
+        """
+        The handler for when bluetooth changes its discoverability to other devices.
+        """
+        line = await self.readline()
+        if line == '1':
+            await self.leds_proc.set_discoverable_effect(True)
+        elif line == '0':
+            await self.leds_proc.set_discoverable_effect(False)
     
 
 # Run to test.

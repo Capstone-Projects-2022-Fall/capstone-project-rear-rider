@@ -49,6 +49,7 @@ class ParentProcess(Process):
 
         self.writeline('ready')
         
+        await self.pre_loop()
         # ack = await self.readline()
         # if ack == 'ready_ack':
         i = 0
@@ -75,6 +76,12 @@ class ParentProcess(Process):
     async def pre_ready(self):
         """
         An inheriting class can override this method to customize what happens before the child process sends a "ready" signal to the parent process.
+        """
+        pass
+
+    async def pre_loop(self):
+        """
+        An inheriting class can override this method to customize what happens before the child process enters its "while True" loop.
         """
         pass
 

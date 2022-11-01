@@ -1,10 +1,11 @@
 from dataclasses import dataclass
+from threading import Condition
 import time
 import board
 import neopixel
 GPIO_PIN = board.D18
 NUM_PIXELS = 16
-INIT_BRIGHTNESS = 0.008
+INIT_BRIGHTNESS = 0.1
 
 OFF_COLOR = (0,0,0)
 WHITE = (255,255,255)
@@ -104,7 +105,7 @@ class LedStripFrame():
     A from of the led strip at one point in time.
     """
     fps: int
-    frame_num: int = 0
+    frame_num: int = -1
     start_time: int = 0
     end_time: int = 0
     time_elapsed: int = 0
@@ -130,42 +131,106 @@ class StrobeEffect(LedStripEffect):
     """
     Blinks at a frequency matching the frame's fps.
     """
+    def __init__(self, color: tuple[int, int, int] = WHITE):
+        self._color = color
+
     def affect(self, frame: LedStripFrame, led_strip_con: LedStripController):
-        led_strip.fill(self._color)
-        
+        led_strip_con.fill(self._curr_color)
+
     def new_frame(self, frame: LedStripFrame):
         if frame.frame_num % 2 == 0:
-            self._color = WHITE
+            self._curr_color = self._color
         else:
-            self._color = OFF_COLOR
+            self._curr_color = OFF_COLOR
 
 
-def enter_leds_effects_loop(effects: list[LedStripEffect], fps):
-    frame = LedStripFrame(fps)
+class LedsEffectsLoopContext:
+    def __init__(self, led_strip_ctrl: LedStripController, frame: LedStripFrame):
+        self._effects: list[LedStripEffect] = []
+        self._frame = frame
+        self._led_strip_ctrl = led_strip_ctrl
+        self._loop = True
+        """
+        Used by a while loop to determine if the loop should continue to the next iteration.
+        """
+        self._play = False
+        self.play_condition = Condition()
+    
+    def get_loop_vars(self):
+        return (self._led_strip_ctrl, self._effects, self._frame)
+    
+    def update_elapsed_time(self):
+        self._frame.time_elapsed = self._frame.end_time - self._frame.start_time
+
+    def set_effects(self, effects: list[LedStripEffect]):
+        with self.play_condition:
+            self._effects = effects
+            self.play_condition.notify()
+    
+    ###
+    # Control the loop.
+    ###
+
+    def continue_loop(self):
+        return self._loop
+    
+    def should_play(self):
+        """
+        Determine if the the effects should be playing.
+        """
+        return self._play and len(self._effects) > 0
+    
+    def play(self):
+        """
+        Play the effects.
+        """
+        self._play = True
+
+    def pause(self):
+        """
+        Pause the effects.
+        """
+        self._play = False
+
+    def stop(self):
+        """
+        Stop the effects by marking the loop as done.
+        """
+        with self.play_condition:
+            self._loop = False
+            self._play = False
+            self.play_condition.notify()
+
+
+def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):
     def effects_too_slow():
         # print('!!! The effects are too slow for the framerate !!!')
         pass
     def update_elapsed_time():
-        frame.time_elapsed = frame.end_time - frame.start_time
-    frame_duration = 1.0/frame.fps
-    frame.start_time = time.time_ns()
-    while True:
-        for effect in effects:
+        loop_ctx.update_elapsed_time()
+        
+    while loop_ctx.continue_loop():
+        with loop_ctx.play_condition:
+            while (loop_ctx.should_play() is False) and (loop_ctx.continue_loop() is True):
+                loop_ctx.play_condition.wait()
+            if loop_ctx.continue_loop() is False:
+                break
+            led_strip, effects, frame = loop_ctx.get_loop_vars()
+            frame.frame_num += 1
+            frame.start_time = time.time_ns()
+            for effect in effects:
+                effect.new_frame(frame)
+            for effect in effects:
+                effect.affect(frame, led_strip_con=led_strip)
+            frame.end_time = time.time_ns()
             update_elapsed_time()
-            effect.new_frame(frame)
-        for effect in effects:
-            update_elapsed_time()
-            effect.affect(frame, led_strip_con=led_strip)
-        frame.end_time = time.time_ns()
-        update_elapsed_time()
-        time_to_sleep = frame_duration - frame.time_elapsed / 1_000_000_000.0
-        if time_to_sleep < 0:
-            effects_too_slow()
-            continue
+            frame_duration = 1.0/frame.fps
+            time_to_sleep = frame_duration - frame.time_elapsed / 1_000_000_000.0
+            if time_to_sleep < 0:
+                effects_too_slow()
+                continue
         time.sleep(time_to_sleep)
         led_strip.show()
-        frame.start_time = time.time_ns()
-        frame.frame_num += 1
         # print('slept for {} second(s).'.format(time_to_sleep))
 
 
@@ -174,11 +239,12 @@ if __name__ == '__main__':
     led_strip = LedStripController(pixels)
     # TODO add an Effect that selects leds in a group to apply an effect to. Effect mask?
     try:
-        effects: list[LedStripEffect] = [
-            StrobeEffect()
-        ]
-        enter_leds_effects_loop(effects=effects, fps=DEFAULT_FPS)
-    except Exception as e:
+        loop_ctx = LedsEffectsLoopContext(
+            led_strip_ctrl=led_strip,
+            frame=LedStripFrame(fps=DEFAULT_FPS))
+        loop_ctx.set_effects([StrobeEffect()])
+        enter_leds_effects_loop(loop_ctx)
+    finally:
         print('turning off')
         led_strip.turn_off()
         pixels.deinit()

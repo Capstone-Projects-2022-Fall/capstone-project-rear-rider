@@ -16,12 +16,12 @@ def main():
             leds_child_process=leds_child_proc)
     accelerometer_proc = AccelerometerChildProcess(buf_size=32, fps=1,
         bt_server_proc=bt_server_process)
-    camera_proc = CameraChildProcess(bt_server_proc=bt_server_process)
+    # camera_proc = CameraChildProcess(bt_server_proc=bt_server_process)
     child_processes: list[Process] = [
         leds_child_proc,
         accelerometer_proc,
         bt_server_process,
-        camera_proc
+        # camera_proc
     ]
     futures = []
     with concurrent.futures.ThreadPoolExecutor() as executor:

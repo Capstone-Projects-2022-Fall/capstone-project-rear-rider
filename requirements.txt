@@ -87,6 +87,7 @@ pyzmq==24.0.1
 requests==2.25.1
 rpi-ws281x==4.3.4
 RPi.GPIO==0.7.1
+SCons==4.0.1
 Send2Trash==1.8.0
 simplejpeg==1.6.5
 six==1.16.0

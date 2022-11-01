@@ -14,7 +14,6 @@ class BluetoothServerChildProcess(ChildProcess):
     def __init__(self, leds_child_process: LedsChildProcess):
         super().__init__("python {}/bluetooth.py".format(dir_path))
         self._leds_child_process = leds_child_process
-        self._print_header('test')
     
     def _get_name(self) -> str:
         return 'BluetoothServerChildProcess'
@@ -93,10 +92,12 @@ class BluetoothServerChildProcess(ChildProcess):
         """
         The handler for when bluetooth changes its discoverability to other devices.
         """
-        line = await self.readline()
-        if line == '1':
-            await self._leds_child_process.set_discoverable_effect(False)
-        elif line == '0':
+        vals = (await self.readline()).split(' ')
+        discoverable = vals[0]
+        self._print(f'Discoverable: {discoverable} ; Timeout: {vals[1]}')
+        if discoverable == '1':
+            await self._leds_child_process.set_discoverable_effect(True)
+        elif discoverable == '0':
             await self._leds_child_process.set_discoverable_effect(False)
     
     async def on_led_config(self):
@@ -104,7 +105,6 @@ class BluetoothServerChildProcess(ChildProcess):
         split = line.split(' ')
         self._print(f'led_config: {line}')
         await self._leds_child_process.add_led_effect(line)
-
 
 
 

@@ -113,6 +113,7 @@ class LedConfig:
     pattern: str = '0'
     """
     0 - no pattern
+    1 - strobe
     """
     brightness: str = '1'
     """
@@ -120,7 +121,7 @@ class LedConfig:
     2 - medium
     3 - high
     """
-    color: tuple[str,str,str] = ('255', '255', '255')
+    color: tuple[int,int,int] = (255, 255, 255)
     """
     (r, g, b)
     """
@@ -143,16 +144,16 @@ class ConfigCharacteristic(Characteristic):
     def WriteValue(self, value, options):
         pattern = str(value[0])
         brightness = str(value[1])
-        r = str(value[2])
-        g = str(value[3])
-        b = str(value[4])
-        # print(f'ConfigCharacteristic Write: {pattern} {brightness} {r} {g} {b}')
+        r = int(value[2])
+        g = int(value[3])
+        b = int(value[4])
         self.value = LedConfig(pattern, brightness, (r, g, b))
         if self._on_led_config is not None:
             self._on_led_config(self.value)
     
     def set_on_led_config(self, callback: Callable[[LedConfig], None]):
         self._on_led_config = callback
+        self._on_led_config(self.value)
 
 
 class WifiCharacteristic(Characteristic):
