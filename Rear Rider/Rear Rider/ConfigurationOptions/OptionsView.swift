@@ -21,9 +21,9 @@ extension Binding {
 }
 
 struct OptionsView: View {
-    @ObservedObject var conf = UserConfig()
+    @EnvironmentObject var conf: UserConfig
     @State var confAudio: String = ""
-    @State var confLightPattern: String = ""
+    @State var confLightPattern: Int = 1
     @State var confLightBrightness: Int = 1
     @State var confLightColor: Color = .white
     
@@ -33,44 +33,52 @@ struct OptionsView: View {
     
     let alert = RearRiderAlerts()
     
-    // need to wrap these in this init to get access to self for the conf variable and set these
-    init() {
-        self._confAudio = State(wrappedValue: conf.audioFile)
-        self._confLightPattern = State(wrappedValue: conf.lightPattern)
-        self._confLightBrightness = State(wrappedValue: conf.lightBrightness)
-        self._confLightColor = State(wrappedValue: Color.fromRGBString(rgbString: conf.lightColor))
-    }
-    
     var body: some View {
         VStack {
             Text("Options")
-            List {
-                Section {
-                    Picker("Audio Alert", selection: $confAudio.onChange(setAudio), content: {
-                        ForEach(audioFiles, id: \.self) {
-                            audioFile in Text(audioFile.description).tag(audioFile.rawValue)
+            NavigationView {
+                List {
+                    Section {
+                        Picker("Audio Alert", selection: $confAudio.onChange(setAudio), content: {
+                            ForEach(audioFiles, id: \.self) {
+                                audioFile in Text(audioFile.description).tag(audioFile.rawValue)
+                            }
+                        })
+                    } header: {
+                        Text("Audio")
+                    }
+                    Section {
+                        Picker("Pattern", selection: $confLightPattern.onChange(setLights), content: {
+                            ForEach(lightPatterns, id: \.self) {
+                                lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
+                            }
+                        })
+                        Picker("Brightness", selection: $confLightBrightness.onChange(setBrightness), content: {
+                            ForEach(lightBrightness, id: \.self) {
+                                brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
+                            }
+                        })
+                        ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
+                        )
+                    } header: {
+                        Text("Lights")
+                    }
+                    Section {
+                        NavigationLink(destination: RearRiderLogView()) {
+                            Text("View log")
                         }
-                    })
-                } header: {
-                    Text("Audio")
-                }
-                Section {
-                    Picker("Pattern", selection: $confLightPattern.onChange(setLights), content: {
-                        ForEach(lightPatterns, id: \.self) {
-                            lightPattern in Text(lightPattern.description).tag(lightPattern.rawValue)
-                        }
-                    })
-                    Picker("Brightness", selection: $confLightBrightness.onChange(setBrightness), content: {
-                        ForEach(lightBrightness, id: \.self) {
-                            brightnessLevel in Text(brightnessLevel.description).tag(brightnessLevel.rawValue)
-                        }
-                    })
-                    ColorPicker("Color", selection: $confLightColor.onChange(setColor), supportsOpacity: false
-                    )
-                } header: {
-                    Text("Lights")
+                    } header: {
+                        Text("Log")
+                    }
                 }
             }
+            .frame(maxHeight: 500)
+        }
+        .onAppear {
+            confAudio = conf.audioFile
+            confLightBrightness = conf.lightBrightness
+            confLightPattern = conf.lightPattern
+            confLightColor = Color.fromRGBString(rgbString: conf.lightColor)
         }
     }
     
@@ -91,7 +99,7 @@ struct OptionsView: View {
     /**
      * Sets the config object's light pattern to the new selection and saves it
      */
-    func setLights(to value: String) {
+    func setLights(to value: Int) {
         conf.lightPattern = confLightPattern
         saveConf()
     }
@@ -116,6 +124,7 @@ struct OptionsView: View {
      * Saves the user's configuration by calling the config's save
      */
     func saveConf() {
+        conf.colorRGB = confLightColor.cgColor?.components
         do {
             try conf.save()
         } catch let error{
@@ -126,6 +135,6 @@ struct OptionsView: View {
 
 struct OptionsView_Previews: PreviewProvider {
     static var previews: some View {
-        OptionsView()
+        OptionsView().environmentObject(UserConfig())
     }
 }
