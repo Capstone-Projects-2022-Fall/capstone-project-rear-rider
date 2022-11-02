@@ -9,6 +9,7 @@ from bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE
 from bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE
 from gi.repository import GLib
 from agent.simple import Agent
+from bluetooth_device import BluetoothDevice
 
 from services.hello_world import HelloWorldService
 from services.characteristics.strobe_light import StrobeLight
@@ -19,13 +20,26 @@ from rearrider_app import RearRiderApplication
 AGENT_MANAGER_IFACE = 'org.bluez.AgentManager1'
 AGENT_PATH = '/bluez/simpleagent'
 BLUETOOTH_ALIAS = 'RearRiderPi4'
+BLUEZ_DEVICE_1 = 'org.bluez.Device1'
+DBUS_PROPS_IFACE = 'org.freedesktop.DBus.Properties'
 DISCOVERABLE = 1
 """
 0 = False
 1 = True
 """
-DISCOVERABLE_TIMEOUT = 180
+DISCOVERABLE_TIMEOUT = 0
+"""
+0 timeout means the device will stay in discoverable mode.
+Ideally we should have the timeout be some finite duration, but we do not
+have any way to turn the discovery back on after it times out. If we add a
+push button to the device, we can have that trigger discovery mode.
+"""
 
+def get_object_interface_getter(bus: dbus.Bus, adapter):
+    def get_object_interface(INTERFACE: Literal):
+        return dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
+            INTERFACE)
+    return get_object_interface
 
 class RearRiderBluetooth:
     _discoverable: str
@@ -36,8 +50,9 @@ class RearRiderBluetooth:
     def __init__(self, bus: dbus.SystemBus, hello_world_svc: HelloWorldService, sensors_svc: SensorsService):
         self._bus = bus
         self._adapter = find_adapter(self._bus)
-        self._adapter_props = dbus.Interface(self._bus.get_object(BLUEZ_SERVICE_NAME, self._adapter),
-            'org.freedesktop.DBus.Properties')
+        get_object_interface = get_object_interface_getter(bus, self._adapter)
+        self._adapter_props = get_object_interface(DBUS_PROPS_IFACE)
+        self._connected_device: Union[None, BluetoothDevice] = None
         self.hello_world_svc = hello_world_svc
         self.sensors_svc = sensors_svc
         self._on_discoverable_changed = None
@@ -48,16 +63,23 @@ class RearRiderBluetooth:
                 """
                 Reference: https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/test/monitor-bluetooth
                 """
-                for name, value in changed.items():
-                    if name == 'Discoverable':
-                        self.set_discoverable(str(value))
+                changed_props = changed.keys()
+                if 'Discoverable' in changed_props:
+                    self.set_discoverable(str(changed.get('Discoverable')))
+                if 'Connected' in changed_props:
+                    self._on_device_connection_change(
+                        bool(changed.get('Connected')),
+                        device_path=str(path)
+                    )
             self._bus.add_signal_receiver(bt_properties_changed, bus_name="org.bluez",
                 dbus_interface="org.freedesktop.DBus.Properties",
                 signal_name="PropertiesChanged",
                 path_keyword="path")
         listen_to_bluetooth_property_changes()
         
-
+    ##
+    # Discovery
+    ##
     
     def set_discoverable(self, value: str):
         if value != '0' and value != '1':
@@ -77,6 +99,38 @@ class RearRiderBluetooth:
         return int(self._adapter_props.Get('org.bluez.Adapter1',
                       'DiscoverableTimeout'))
 
+    ##
+    # Pairing
+    ##
+
+    def _set_pairable(self, value: bool):
+        self._adapter_props.Set('org.bluez.Adapter1', 'Pairable', dbus.Boolean(value))
+    
+    def _on_device_connection_change(self, connected: bool, device_path: str):
+        if connected:
+            device = BluetoothDevice(self._bus, device_path)
+            if self._connected_device is not None:
+                device.disconnect()
+                raise Exception('We only want one device at a time to be connected.')
+            # Disable pairing since we only want one device at a time to be connected.
+            self._set_pairable(False)
+            # Turn off discoverability
+            self.set_discoverable('0')
+            self._connected_device = device
+            return
+        # connect == False, therefore this device was just disconnected.
+        if (self._connected_device is not None and
+            self._connected_device.get_object_path() != device_path):
+            # Since we only expect one device to be connected, we do not expect to reach this. 
+            raise Exception(
+                'Expected _connected_device to be not None and the object paths to be the same.\n'
+                f'{self._connected_device.get_object_path()} {device_path}')
+        self._connected_device = None
+        self._set_pairable(True)
+        self.set_discoverable('1')
+    
+    def has_connected_device(self):
+        return self._connected_device is not None
         
 
 def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_read: Callable[[], str],
@@ -102,11 +156,9 @@ def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_
         print('GattManager1 interface not found')
         return
 
-    def get_object_interface(INTERFACE: Literal):
-        return dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
-            INTERFACE)
+    get_object_interface = get_object_interface_getter(bus, adapter)
 
-    adapter_props = get_object_interface('org.freedesktop.DBus.Properties')
+    adapter_props = get_object_interface(DBUS_PROPS_IFACE)
     adapter_props.Set('org.bluez.Adapter1',
                       'Powered', dbus.Boolean(1))
 
