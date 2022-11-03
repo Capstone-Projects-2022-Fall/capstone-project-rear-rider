@@ -29,8 +29,8 @@ class CameraChildProcess(ChildProcess):
             # await self.writeline('ready_ack')
         try:
             await self.writeline('get_stream')
-        except:
-            pass
+        except Exception as e:
+            self._print(f'Error in on_ready:{e.message}')
         self.ready.set_result(None)
         self._print('after_on_ready') 
 
