@@ -48,6 +48,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
             except Exception as e:
+                print(f'Error in do_GET: {e.message}')
                 logging.warning(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
@@ -71,5 +72,7 @@ def begin_stream(pi_camera: Picamera2, on_stream_server: Callable[[StreamingServ
         stream_server = StreamingServer(address, get_streaming_handler)
         on_stream_server(stream_server)
         stream_server.serve_forever()
+    except Exception as e:
+        print(f'Error starting stream: {e.message}')
     finally:
         pi_camera.stop_recording()
