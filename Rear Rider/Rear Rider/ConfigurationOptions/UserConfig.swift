@@ -13,9 +13,9 @@ import SwiftUI
  */
 struct ConfigData: Codable {
     let audioFile: String
-    let lightPattern: String
-    let lightColor: String
+    let lightPattern: Int
     let lightBrightness: Int
+    let lightColor: String
 }
 
 /**
@@ -35,10 +35,10 @@ enum ConfigOptions {
             }
         }
     }
-
-    enum LightPattern: String, CaseIterable, Equatable {
-        case strobe = "strobe"
-        case off = ""
+    
+    enum LightPattern: Int, CaseIterable, Equatable {
+        case strobe = 1
+        case off = 0
         
         var description: String {
             switch self {
@@ -85,9 +85,14 @@ class UserConfig: ObservableObject {
     
     // default values. get overwritten on successful load
     var audioFile: String = ConfigOptions.AudioFile.honk.rawValue
-    var lightPattern: String = ConfigOptions.LightPattern.strobe.rawValue
+    var lightPattern: Int = ConfigOptions.LightPattern.strobe.rawValue
     var lightColor: String = "rgb(255,255,255)"
     var lightBrightness: Int = 1
+    
+    var colorRGB: [CGFloat]? // use this for sending rgb values to RPi
+    
+    private let bleManager = BLEManager.shared
+    private let log = RearRiderLog.shared
 
     init() {
         do {
@@ -108,14 +113,17 @@ class UserConfig: ObservableObject {
                 // TODO make this a loop
                 self.audioFile = savedData.audioFile
                 self.lightPattern = savedData.lightPattern
-                self.lightColor = savedData.lightColor
                 self.lightBrightness = savedData.lightBrightness
+                self.lightColor = savedData.lightColor
                 
                 print("LOADED: \(savedData)")
+                log.addLog(from: "UserConfig", message: "Loaded config: \(savedData)")
             } else {
+                log.addLog(from: "UserConfig", message: "Error decoding RearRiderConfig Data!")
                 throw ConfigErrors.loadError("Error decoding RearRiderConfig Data!")
             }
         } else {
+            log.addLog(from: "UserConfig", message: "RearRiderConfig not present!")
             throw ConfigErrors.loadError("RearRiderConfig not present")
         }
     }
@@ -135,15 +143,38 @@ class UserConfig: ObservableObject {
         let data = ConfigData(
             audioFile: audioFile,
             lightPattern: lightPattern,
-            lightColor: lightColor,
-            lightBrightness: lightBrightness
+            lightBrightness: lightBrightness,
+            lightColor: lightColor
         )
         let encoder = JSONEncoder()
         if let encodedData = try? encoder.encode(data) {
             defaults.set(encodedData, forKey: "RearRiderConfig")
             print("SAVED: \(data)")
-            // TODO send the conf to the device
+            log.addLog(from: "UserConfig", message: "Saved config: \(data)")
         }
+        
+        /* Prepare data to be sent over BT
+         * The format is as follows:
+         * 1st byte - light pattern
+         * 2nd byte - light brightness
+         * 3rd byte - red value
+         * 4th byte - green value
+         * 5th byte - blue value
+         */
+        guard let colorRGB = colorRGB else { return }
+        var bytes = Data()
+        var pat: UInt8 = UInt8(lightPattern)
+        var br: UInt8 = UInt8(lightBrightness)
+        var red: UInt8 = UInt8(colorRGB[0] * 255)
+        var green: UInt8 = UInt8(colorRGB[1] * 255)
+        var blue: UInt8 = UInt8(colorRGB[2] * 255)
+        
+        bytes.append(withUnsafeBytes(of: &br) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &pat) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &red) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &green) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &blue) { Data($0) })
+        bleManager.sendConfigToPi(data: bytes)
     }
     
     /**
@@ -152,12 +183,15 @@ class UserConfig: ObservableObject {
      */
     func validate() throws {
         if !ConfigOptions.AudioFile.allCases.contains(where: {$0.rawValue == self.audioFile}) {
+            log.addLog(from: "UserConfig", message: "Unacceptable audio file")
             throw ConfigErrors.validationError("Unacceptable audio file")
         }
         if !ConfigOptions.LightPattern.allCases.contains(where: {$0.rawValue == self.lightPattern}) {
+            log.addLog(from: "UserConfig", message: "Unacceptable light pattern value")
             throw ConfigErrors.validationError("Unacceptable light pattern value")
         }
         if !ConfigOptions.LightBrightness.allCases.contains(where: {$0.rawValue == self.lightBrightness}) {
+            log.addLog(from: "UserConfig", message: "Unacceptable brightness value")
             throw ConfigErrors.validationError("Unacceptable brightness value")
         }
     }
