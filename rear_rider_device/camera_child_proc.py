@@ -2,15 +2,12 @@ import asyncio
 import os 
 from datetime import datetime
 from ipc.child_process import ChildProcess
-from typing import Deque
-
-from bluetooth_server_child_proc import BluetoothServerChildProcess
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 class CameraChildProcess(ChildProcess):
-    def __init__(self, bt_server_proc: BluetoothServerChildProcess):
-        super().__init__(f'python {dir_path}/camera_child_proc.py')
+    def __init__(self):
+        super().__init__(f'python {dir_path}/camera_proc.py')
         self.ready = asyncio.Future()
         #self.bt_server_proc = bt_server_proc
 
