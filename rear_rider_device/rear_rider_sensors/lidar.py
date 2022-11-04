@@ -22,7 +22,7 @@ class Lidar():
                     distance = recv[2] + recv[3] * 256
                     strength = recv[4] + recv[5] * 256
                     # print('(', distance, ',', strength, ')')
-                    print("Distatnce: %3.2fm Signal Strength: %d"%((distance * 0.01), strength))
+                    # print("Distatnce: %3.2fm Signal Strength: %d"%((distance * 0.01), strength))
                     ser.reset_input_buffer()
                     return distance, strength
                     
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     try:
         if ser.is_open == False:
             ser.open()
-        lidar.getTFminiData()
+        print('%d %d'%lidar.getTFminiData())
     except KeyboardInterrupt:   # Ctrl+C
         if ser != None:
             ser.close()
