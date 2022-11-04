@@ -24,6 +24,7 @@ class Lidar():
                     # print('(', distance, ',', strength, ')')
                     print("Distatnce: %3.2fm Signal Strength: %d"%((distance * 0.01), strength))
                     ser.reset_input_buffer()
+                    return distance, strength
                     
                 if recv[0] == 'Y' and recv[1] == 'Y':     #python2
                     lowD = int(recv[2].encode('hex'), 16)      
