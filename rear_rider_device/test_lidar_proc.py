@@ -1,13 +1,12 @@
 import asyncio
 from pkgutil import get_data
-import readline
 from sys import stdout
 from ipc.parent_process import ParentProcess
-import rear_rider_sensors.lidar as lidar
+# import rear_rider_sensors.lidar as lidar
 
 class LidarParentProcess(ParentProcess):
-    def __init__(self, lidar: lidar.Lidar):
-        self.lidar = lidar
+    def __init__(self):
+        pass
 
     async def pre_ready(self):
         pass
@@ -22,13 +21,11 @@ class LidarParentProcess(ParentProcess):
         pass
 
     async def on_get_data(self):
-        lidar = self.lidar
-        distance , strength = lidar.getTFminiData()
-        data = ("data\n" f"{distance} {strength}")
+        data = ("data\n" f"{14} {100}")
         self.writeline(data)
 
 if __name__ == '__main__':
-    lidar = lidar.Lidar()
-    lidar_parent_proc = LidarParentProcess(lidar=lidar)
+    # lidar = lidar.Lidar()
+    lidar_parent_proc = LidarParentProcess()
     # Begin session with the parent process. The parent process is collecting the data.
     asyncio.run(lidar_parent_proc.begin())
