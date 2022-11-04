@@ -26,14 +26,14 @@ class Lidar():
                     ser.reset_input_buffer()
                     return distance, strength
                     
-                if recv[0] == 'Y' and recv[1] == 'Y':     #python2
-                    lowD = int(recv[2].encode('hex'), 16)      
-                    highD = int(recv[3].encode('hex'), 16)
-                    lowS = int(recv[4].encode('hex'), 16)      
-                    highS = int(recv[5].encode('hex'), 16)
-                    distance = lowD + highD * 256
-                    strength = lowS + highS * 256
-                    print(distance, strength)
+                # if recv[0] == 'Y' and recv[1] == 'Y':     #python2
+                #     lowD = int(recv[2].encode('hex'), 16)      
+                #     highD = int(recv[3].encode('hex'), 16)
+                #     lowS = int(recv[4].encode('hex'), 16)      
+                #     highS = int(recv[5].encode('hex'), 16)
+                #     distance = lowD + highD * 256
+                #     strength = lowS + highS * 256
+                #     print(distance, strength)
                 
                 # you can also distinguish python2 and python3: 
                 #import sys

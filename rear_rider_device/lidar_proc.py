@@ -23,7 +23,7 @@ class LidarParentProcess(ParentProcess):
 
     async def on_get_data(self):
         lidar = self.lidar
-        data = ("data\n %f %d"%lidar.getTFminiData() + "\n")
+        data = ("data\n" "%f %d"%lidar.getTFminiData() + "\n")
         self.writeline(data)
 
 if __name__ == '__main__':
