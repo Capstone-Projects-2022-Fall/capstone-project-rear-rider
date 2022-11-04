@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from sys import stdin, stdout
 from ipc.i_process import Process
 
@@ -9,6 +10,13 @@ class ParentProcess(Process):
         pass
     
     async def readline(self):
+        """
+        Read a line from stdin.
+        Raises EOFError when EOF has been reached.
+        """
+        return self.readline_sync()
+    
+    def readline_sync(self):
         """
         Read a line from stdin.
         Raises EOFError when EOF has been reached.
@@ -34,8 +42,14 @@ class ParentProcess(Process):
         has been reached.
         """
         await self.pre_ready()
+
+        def done():
+            self.pre_done()
+            self.writeline('done')
+
         self.writeline('ready')
         
+        await self.pre_loop()
         # ack = await self.readline()
         # if ack == 'ready_ack':
         i = 0
@@ -43,13 +57,16 @@ class ParentProcess(Process):
             try:
                 command = await self.readline()
             except EOFError:
+                done()
+                break
+            except KeyboardInterrupt:
+                done()
                 break
             if len(command) == 0:
                 # empty message
                 continue
             if command == 'exit':
-                self.pre_done()
-                self.writeline('done')
+                done()
                 break
             else:
                 await self._on_command(command)
@@ -62,6 +79,12 @@ class ParentProcess(Process):
         """
         pass
 
+    async def pre_loop(self):
+        """
+        An inheriting class can override this method to customize what happens before the child process enters its "while True" loop.
+        """
+        pass
+
     def pre_done(self):
         """
         An inheriting class can override this method to customize what happens before the child process sends a "done" signal to the parent process.
@@ -71,8 +94,33 @@ class ParentProcess(Process):
     def no_ack():
         pass
 
-    def no_on_handler(on_command: str, err: Exception):
+    async def _wait_ack(self, command_to_ack: str) -> None:
+        """
+        Wait on an acknowledgment for a command.
+
+        command_to_ack: str
+            The exact string to acknowledge, excluding any new line characters.
+        """
+        line = await self.readline()
+        if command_to_ack == 'debug_ack':
+            return
+        if line != command_to_ack:
+            raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
+        return
+
+    def _wait_ack_sync(self, command_to_ack: str):
+        line = self.readline_sync()
+        if command_to_ack == 'debug_ack':
+            return
+        if line != command_to_ack:
+            raise Exception('This needs a proper Exception: The command was not acknowledged correctly.')
+        return
+
+    def no_on_handler(self, on_command: str, err: Exception):
         pass
+    
+    # async def _log(self, message: str):
+    #     print('{} message'.format(datetime()))
 
     async def _on_command(self, command):
         on_command = 'on_{}'.format(command)

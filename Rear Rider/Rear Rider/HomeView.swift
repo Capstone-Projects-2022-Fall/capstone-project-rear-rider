@@ -9,9 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var bleManager: BLEManager
-    let alert = try! RearRiderAlerts(
-        fileName: "vehicleAlert"
-    )
+    @EnvironmentObject var wifiManager: WifiManager
     
     var body: some View {
         VStack {
@@ -29,18 +27,15 @@ struct HomeView: View {
                     }
                 }
 
-                Image(systemName: "wifi.circle")
-                    .foregroundColor(.green)
+                if wifiManager.wifiOn {
+                    Image(systemName: "wifi.circle")
+                        .foregroundColor(.green)
+                }
+                else {
+                    Image(systemName: "wifi.circle")
+                        .foregroundColor(.red)
+                }
             }
-            
-            Spacer().padding()
-            
-            Button {
-                alert.playAudioAlert()
-            } label: {
-                Text("Honk")
-            }.padding()
-            
             TabView {
                 RiderView()
                     .tabItem {
@@ -50,9 +45,9 @@ struct HomeView: View {
                     .tabItem {
                         Image(systemName: "camera")
                     }
-                BluetoothView()
+                OptionsView()
                     .tabItem {
-                        Image(systemName: "wrench.and.screwdriver")
+                        Image(systemName: "gear")
                     }
             }
         }
@@ -61,6 +56,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView().environmentObject(BLEManager())
+            .environmentObject(WifiManager())
     }
 }

@@ -16,13 +16,18 @@ Rear Rider is an alert system to notify cyclists of approaching objects and vehi
 ## Running main Rear Rider backend application.
 
 ```bash
+sudo apt-get install python3-libcamera libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev python3-venv gir1.2-gtk-3.0 libglib2.0-dev
 # Create a virtual environment in python if not done so yet.
 python -m venv .venv
+```
 
+```conf
 # Edit .venv/pyenv.cfg to allow the virtual environment access to python packages downloaded from `apt-get install`.
 # Add the following line to the aforementioned file:
-# include-system-site-packages = true
+include-system-site-packages = true
+```
 
+```bash
 # Activate the virtual environment.
 source .venv/bin/activate
 # Install the required python packages from pip.
@@ -68,3 +73,13 @@ Now the Bluetooth server starts when the Pi boots. Also, Bluetooth has to be in 
 9. Now launch the Rear Rider app.
 
 The application has three tabs. The first tab is the main view. Here the rider can see alerts when an object is approaching (TBD). The next view is the Live Streaming. The app will connect to the Pi over Wi-Fi and stream a live feed from the camera. The user has the option to record the streaming and to use ML to detect the objects in the feed. The last tab is the settings tab (TBD). At the top of the screen there are two icons that show if the Bluetooth and Wi-Fi connections are available by turning green.
+
+## Contributing
+
+### Updating requirements.txt
+
+```bash
+pip freeze --local > requirements.txt
+```
+
+`include-system-site-packages = true` in `.venv/pyenv.cfg` gives python access to all packages, especially those installed through `apt`. When a regular `pip freeze > requirements.txt` is called, all system packages are recorded in the `requirements.txt` file. The `--local` flag is needed in order to ensure that only the packages installed in the virtual enviroment are included! This issue was learned the hard way so be sure to remember this to not cause others problems.
