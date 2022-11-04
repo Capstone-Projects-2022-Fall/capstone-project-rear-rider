@@ -14,7 +14,7 @@ class LidarChildProcess(ChildProcess):
         Default `buf_size` of 64 frame datapoints at 60 `fps`.
         """
         super().__init__('python {}/lidar_proc.py'.format(dir_path))
-        self.cyclic_buff = Deque[tuple[float, float, float]](maxlen=buf_size)
+        self.cyclic_buff = Deque[tuple[float, float]](maxlen=buf_size)
         self.fps = fps
         self.ready = asyncio.Future()
         self.bt_server_proc = bt_server_proc
