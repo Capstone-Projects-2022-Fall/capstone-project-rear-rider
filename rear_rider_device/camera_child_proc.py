@@ -56,6 +56,6 @@ class CameraChildProcess(ChildProcess):
         An empty function.
 
         An inheriting class can override this method to customize what happens when the
-        child process is done communicating with the parent process.
+        child process does not have a handler for a specified message (on_command) type.
         """
         pass
