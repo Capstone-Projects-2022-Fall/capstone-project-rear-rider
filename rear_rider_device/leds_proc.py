@@ -136,11 +136,11 @@ class LedsParentProcess(ParentProcess):
         3 - high
         """
         color = (int(params[2]), int(params[3]), int(params[4]))
-        if pattern == '1':
-            self.led_strip.set_brightness(1.0 / (4 - int(brightness)))
-            self._set_strobe_effect(5, color)
-        else:
+        if pattern != '1':
+            # Since '1' defines the only pattern implemented we should return early if pattern is not '1'
             return
+        self.led_strip.set_brightness(1.0 / (4 - int(brightness)))
+        self._set_strobe_effect(5, color)
         self._leds_effects_loop_ctx.play()
     
     def _set_strobe_effect(self, frequency, color):
