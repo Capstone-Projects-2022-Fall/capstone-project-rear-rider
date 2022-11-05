@@ -81,6 +81,9 @@ class ChildProcess(Process):
 
             if ready_signal != EXPECTED_READY_SIGNAL:
                 self._print(ready_signal)
+                if ready_signal == 'exception':
+                    await self.on_exception()
+                    return
                 # `ready` was the expected first line read, but it was not received.
                 raise Exception("Expected the child process\'s ready signal to be `{expected_ready_signal}` not `{ready_signal}`"
                         .format(expected_ready_signal=EXPECTED_READY_SIGNAL, ready_signal=ready_signal))
@@ -108,12 +111,12 @@ class ChildProcess(Process):
                         "\tThe child process exited with an error code of {}\n"
                         .format(proc_return_code))
 
-            self.on_done()
-        
         try:
             await _begin()
         except Exception as err:
             self._print('Exception on childprocess.\n{}'.format(err))
+        finally:
+            self.on_done()
     
     async def on_wait_ready(self):
         """
@@ -166,3 +169,9 @@ class ChildProcess(Process):
 
     def _get_name(self) -> str:
         return 'ChildProcess'
+
+    async def on_exception(self):
+        """
+        Override this method to add custom functionality
+        """
+        self._print('Exception on child process')

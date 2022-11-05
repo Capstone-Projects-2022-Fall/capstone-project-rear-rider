@@ -3,12 +3,13 @@ from sys import path
 from threading import Thread
 from typing import Union
 from ipc.parent_process import ParentProcess
-from actuators.led_strip import LedStripController, create_neopixel
+from actuators.led_strip import LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
 
 path.append("rear_rider_bluetooth_server/src/")
 
 WHITE = (255, 255, 255)
 OFF_COLOR = (0,0,0)
+DISCOVERABLE_EFFECT_COLOR = (0, 128, 255)
 STROBE_TASK_FUTURE_WAIT_TIME = 0.1
 """
 In seconds
@@ -18,11 +19,12 @@ class LedsParentProcess(ParentProcess):
     """
     The parent process of the leds process.
     """
-    _strobe_task_thread: Union[None, Thread]
+    _leds_effects_loop_thread: Union[None, Thread]
     def __init__(self, led_strip: LedStripController):
         self.led_strip = led_strip
         self._strobe_on = False
-        self._strobe_task_thread = None
+        self._leds_effects_loop_thread = None
+        self._leds_effects_loop_ctx = LedsEffectsLoopContext(self.led_strip, frame=LedStripFrame(5))
     
     async def on_turn_on(self):
         """
@@ -61,44 +63,17 @@ class LedsParentProcess(ParentProcess):
         params = params_line.split(' ')
         frequency = int(params[0])
         duration = float(params[1])
-        await self._start_strobe_thread(frequency, duration, WHITE)
+        self._set_strobe_effect(frequency, WHITE)
 
-    async def _start_strobe_thread(self, frequency, duration, color):
-        if self._strobe_on:
-            self.writeline('strobe_on_busy')
-            return
-        await self._join_strobe_thread()
-        # Race condition on set variable?
-        self._strobe_on = True
-    
-        def strobe_task():
-            """
-            @startuml
-            participant MainThread as main_thread
-            participant StrobeTaskThread as strobe_thread
-
-            main_thread -> strobe_thread: run
-            @enduml
-            """
-            try:
-                sleep_seconds = (1/frequency) / 2
-                num_flashes = int(frequency * duration)
-                self.led_strip.fill(color)
-                i = 0
-                print('test')
-                while self._strobe_on and (duration == 0.0 and frequency > 0) or (i < num_flashes):
-                    self.led_strip.blink(sleep_seconds,
-                        open_color=color,
-                        closed_color=OFF_COLOR,
-                    )
-                    i += 1
-            except Exception as e:
-                self.writeline('strobe_error\n{}'.format(e))
-                pass
-            finally:
-                self._strobe_on = False
-        self._strobe_task_thread = Thread(target=strobe_task, name='strobe_task')
-        self._strobe_task_thread.start()
+    async def pre_ready(self):
+        if self._leds_effects_loop_thread is not None:
+            raise Exception('_strobe_task_thread should be `None`')
+        self._leds_effects_loop_thread = Thread(
+            target=enter_leds_effects_loop,
+            name='leds_effects_loop',
+            args=(self._leds_effects_loop_ctx,))
+        self._leds_effects_loop_thread.start()
+        self._leds_effects_loop_ctx.play()
     
     async def on_set_brightness(self):
         """
@@ -119,6 +94,7 @@ class LedsParentProcess(ParentProcess):
         self.writeline(help_str_all)
     
     def pre_done(self):
+        self._join_leds_thread()
         self.led_strip.turn_off()
     
     def no_on_handler(self, on_command: str, err: Exception):
@@ -134,37 +110,50 @@ class LedsParentProcess(ParentProcess):
         )
     
     async def on_strobe_off(self):
-        # self.writeline(
-        #     'strobe_off_ack'
-        # )
-        await self._join_strobe_thread()
-        # self.writeline(
-        #     'strobe_off_ok'
-        # )
+        self._leds_effects_loop_ctx.set_effects([])
     
-    async def _join_strobe_thread(self):
-        # Set _strobe_on to False to tell the thread to stop
-        self._strobe_on = False
-
-        if self._strobe_task_thread is not None:
-            self.writeline('strobe_task_waiting')
-            self._strobe_task_thread.join()
-            self._strobe_task_thread = None
+    def _join_leds_thread(self):
+        if self._leds_effects_loop_thread is not None:
+            self._leds_effects_loop_ctx.stop()
+            self._leds_effects_loop_thread.join()
+            self._leds_effects_loop_thread = None
     
     async def on_discoverable_on(self):
-        pass
+        self.led_strip.set_brightness(0.25)
+        self._set_strobe_effect(1, DISCOVERABLE_EFFECT_COLOR)
 
     async def on_discoverable_off(self):
-        pass
+        self._leds_effects_loop_ctx.set_effects([])
+        self.led_strip.turn_off()
     
-    async def on_add_effect(self):
+    async def on_set_effect(self):
         params = (await self.readline()).split(' ')
         pattern = params[0]
         brightness = params[1]
+        """brightness
+        1 - low
+        2 - medium
+        3 - high
+        """
         color = (int(params[2]), int(params[3]), int(params[4]))
-        if pattern == '1':
-            self.led_strip.set_brightness(float(brightness))
-            await self._start_strobe_thread(5, 0, color)
+        if pattern != '1':
+            # Since '1' defines the only pattern implemented we should return early if pattern is not '1'
+            return
+        self.led_strip.set_brightness(1.0 / (4 - int(brightness)))
+        self._set_strobe_effect(5, color)
+        self._leds_effects_loop_ctx.play()
+    
+    def _set_strobe_effect(self, frequency, color):
+        self._leds_effects_loop_ctx._frame.fps = frequency
+        self._leds_effects_loop_ctx.set_effects([StrobeEffect(color=color)])
+    
+    async def on_effects_pause(self):
+        self._leds_effects_loop_ctx.pause()
+    
+    async def on_effects_play(self):
+        with self._leds_effects_loop_ctx.play_condition:
+            self._leds_effects_loop_ctx.play()
+            self._leds_effects_loop_ctx.play_condition.notify()
 
 help_str_all = ''
 
@@ -227,6 +216,7 @@ if __name__ == '__main__':
             await leds_parent_process.begin()
         except:
             print('unexpected error')
+        finally:
+            pixels.deinit()
         
     asyncio.run(main())
-    pixels.deinit()

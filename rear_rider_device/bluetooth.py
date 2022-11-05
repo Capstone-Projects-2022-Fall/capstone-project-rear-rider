@@ -39,6 +39,10 @@ class BluetoothParentProcess(ParentProcess):
         def on_led_config(cfg: LedConfig):
             self.writeline(f'led_config\n{cfg.pattern} {cfg.brightness} {cfg.color[0]} {cfg.color[1]} {cfg.color[2]}')
         self.rear_rider_bt.hello_world_svc.config_chr.set_on_led_config(on_led_config)
+        self.writeline('bluetooth_is_ready')
+    
+    async def pre_loop(self):
+        self.rear_rider_bt.set_on_discoverable_changed(self.discoverable_changed)
 
     def pre_done(self):
         pass
@@ -80,16 +84,13 @@ class BluetoothParentProcess(ParentProcess):
         self.writeline('led_strobe_off')
     
     def is_strobe_on(self):
-        try:
-            # TODO: Add critical section guard in this block
-            self.writeline('is_strobe_on')
-            return bool(self.readline_sync())
-        finally:
-            # self.writeline('strobe_on_ack')
-            pass
+        # TODO: Add critical section guard in this block
+        self.writeline('is_strobe_on')
+        return bool(self.readline_sync())
     
     def discoverable_changed(self, value: str):
-        self.writeline(f'discoverable\n{value}')
+        timeout = self.rear_rider_bt.get_discoverable_timeout()
+        self.writeline(f'discoverable\n{value} {timeout}')
         
 
 
@@ -118,9 +119,7 @@ if __name__ == '__main__':
 
             async def bt_server_main_task_co():
                 def bluetooth_is_ready(rear_rider_bt: bt_server_main.RearRiderBluetooth):
-                    rear_rider_bt.set_on_discoverable_changed(proc.discoverable_changed)
                     proc.rear_rider_bt = rear_rider_bt
-                    print('bluetooth_is_ready')
                     proc._bluetooth_ready.set_result(None)
 
                 x=0

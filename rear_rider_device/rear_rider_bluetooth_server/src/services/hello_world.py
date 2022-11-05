@@ -110,17 +110,17 @@ class AppendCounterWithNotificationCharacteristic(Characteristic):
 
 @dataclass
 class LedConfig:
-    pattern: str = '0'
+    pattern: int = 0
     """
     0 - no pattern
     """
-    brightness: str = '1'
+    brightness: int = 0
     """
     1 - low
     2 - medium
     3 - high
     """
-    color: tuple[str,str,str] = ('255', '255', '255')
+    color: tuple[int,int,int] = (255, 255, 255)
     """
     (r, g, b)
     """
@@ -141,11 +141,11 @@ class ConfigCharacteristic(Characteristic):
         self._on_led_config: Union[None, Callable[[LedConfig], None]] = None
 
     def WriteValue(self, value, options):
-        pattern = str(value[0])
-        brightness = str(value[1])
-        r = str(value[2])
-        g = str(value[3])
-        b = str(value[4])
+        pattern = int(value[0])
+        brightness = int(value[1])
+        r = int(value[2])
+        g = int(value[3])
+        b = int(value[4])
         # print(f'ConfigCharacteristic Write: {pattern} {brightness} {r} {g} {b}')
         self.value = LedConfig(pattern, brightness, (r, g, b))
         if self._on_led_config is not None:
