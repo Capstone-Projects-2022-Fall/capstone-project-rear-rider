@@ -145,6 +145,9 @@ class LedsParentProcess(ParentProcess):
         if pattern == '1':
             self.led_strip.set_brightness(1.0 / (4 - int(brightness)))
             self._set_strobe_effect(5, color)
+        else:
+            return
+        self._leds_effects_loop_ctx.play()
     
     def _set_strobe_effect(self, frequency, color):
         self._leds_effects_loop_ctx._frame.fps = frequency

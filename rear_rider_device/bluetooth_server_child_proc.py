@@ -102,7 +102,6 @@ class BluetoothServerChildProcess(ChildProcess):
     
     async def on_led_config(self):
         line = await self.readline()
-        split = line.split(' ')
         self._print(f'led_config: {line}')
         await self._leds_child_process.add_led_effect(line)
 
