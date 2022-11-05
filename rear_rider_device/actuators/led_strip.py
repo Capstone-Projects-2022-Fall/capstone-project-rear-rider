@@ -203,9 +203,6 @@ class LedsEffectsLoopContext:
 
 
 def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):
-    def effects_too_slow():
-        # print('!!! The effects are too slow for the framerate !!!')
-        pass
     def update_elapsed_time():
         loop_ctx.update_elapsed_time()
         
@@ -227,7 +224,7 @@ def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):
             frame_duration = 1.0/frame.fps
             time_to_sleep = frame_duration - frame.time_elapsed / 1_000_000_000.0
             if time_to_sleep < 0:
-                effects_too_slow()
+                # The effects are too slow for the framerate!
                 continue
         time.sleep(time_to_sleep)
         led_strip.show()
@@ -244,6 +241,8 @@ if __name__ == '__main__':
             frame=LedStripFrame(fps=DEFAULT_FPS))
         loop_ctx.set_effects([StrobeEffect()])
         enter_leds_effects_loop(loop_ctx)
+    except Exception as e:
+        print(e)
     finally:
         print('turning off')
         led_strip.turn_off()

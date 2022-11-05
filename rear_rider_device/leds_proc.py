@@ -110,13 +110,7 @@ class LedsParentProcess(ParentProcess):
         )
     
     async def on_strobe_off(self):
-        # self.writeline(
-        #     'strobe_off_ack'
-        # )
         self._leds_effects_loop_ctx.set_effects([])
-        # self.writeline(
-        #     'strobe_off_ok'
-        # )
     
     def _join_leds_thread(self):
         if self._leds_effects_loop_thread is not None:

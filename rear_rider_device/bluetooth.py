@@ -84,20 +84,13 @@ class BluetoothParentProcess(ParentProcess):
         self.writeline('led_strobe_off')
     
     def is_strobe_on(self):
-        try:
-            # TODO: Add critical section guard in this block
-            self.writeline('is_strobe_on')
-            return bool(self.readline_sync())
-        finally:
-            # self.writeline('strobe_on_ack')
-            pass
+        # TODO: Add critical section guard in this block
+        self.writeline('is_strobe_on')
+        return bool(self.readline_sync())
     
     def discoverable_changed(self, value: str):
-        try:
-            timeout = self.rear_rider_bt.get_discoverable_timeout()
-            self.writeline(f'discoverable\n{value} {timeout}')
-        finally:
-            pass
+        timeout = self.rear_rider_bt.get_discoverable_timeout()
+        self.writeline(f'discoverable\n{value} {timeout}')
         
 
 
