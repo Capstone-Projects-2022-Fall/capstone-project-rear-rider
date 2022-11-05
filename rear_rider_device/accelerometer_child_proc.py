@@ -69,3 +69,7 @@ class AccelerometerChildProcess(ChildProcess):
     
     def _get_name(self) -> str:
         return 'AccelerometerChildProcess'
+    
+    async def on_exception(self):
+        line = await self.readline()
+        self._print(f'Exception: {line}')
