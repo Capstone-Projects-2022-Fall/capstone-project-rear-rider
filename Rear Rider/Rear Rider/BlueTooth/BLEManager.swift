@@ -19,8 +19,8 @@ struct CBUUIDs {
     static let BLEServiceUUID = CBUUID(string: "b4b1a70c-ba22-4e02-aba1-85d7e3171209")
     static let BLECharacteristicUUID = CBUUID(string: "3bd0b2f7-72f8-4497-bbe5-6bc3db448b95")
     static let BLENotifyCharacteristicUUID = CBUUID(string: "9f7bb8c9-4b29-4118-98ac-292557551cdf")
-    static let BLEConfigCharacteristicUUID = CBUUID(string: "3bd0b2f7-72f8-4497-bbe5-6bc3db447b95")
-    static let BLEWifiCharacteristicUUID = CBUUID(string: "3bd0b2f7-72f8-4497-bbe5-6bc3db450b95")
+    static let BLEConfigCharacteristicUUID = CBUUID(string: "501beabd-3f66-4cca-ba7a-0fbf4f81870c")
+    static let BLEWifiCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8fcc")
 }
 
 /// The purpose of this class is to set the iPhone as a central manager and connect to the RaspberryPi as a peripheral
@@ -32,6 +32,19 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private var notifyCharacteristic: CBCharacteristic!
     private var configCharacteristic: CBCharacteristic!
     private var wifiCharacteristic: CBCharacteristic!
+    
+    //mostly for testing purposes
+    var ConfigCharacteristic: CBCharacteristic {
+        get {
+            return configCharacteristic
+        }
+    }
+    
+    var WiFiCharacteristic: CBCharacteristic {
+        get {
+            return wifiCharacteristic
+        }
+    }
     
     static var shared = BLEManager()
     private let log = RearRiderLog.shared
@@ -120,6 +133,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             print("Disconnecting...")
             myCentral?.cancelPeripheralConnection(myPeripheral!)
             log.addLog(from: "BT", message: "Disconnected")
+            connected = false
         }
     }
     
@@ -217,10 +231,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             print("Value received \(ASCIIString! as String).")
             log.addLog(from: "BT", message: "Recv(wifi): \(ASCIIString! as String).")
             if ASCIIString!.contains("1") {
-                WifiManager.shared.wifiOn = true
+                WifiManager.shared.setWifi(isOn: true)
             }
             else {
-                WifiManager.shared.wifiOn = false
+                WifiManager.shared.setWifi(isOn: false)
             }
         }
     }

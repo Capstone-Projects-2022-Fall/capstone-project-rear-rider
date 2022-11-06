@@ -19,7 +19,6 @@
 		48CB852F2902EF5200283DBD /* vehicleAlert.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */; };
 		48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4414128F6258C00F7C9AA /* ImageIdentification.swift */; };
 		48F4414B28F62E7C00F7C9AA /* Rear_RiderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4414A28F62E7C00F7C9AA /* Rear_RiderTests.swift */; };
-		48F4415228F62EFD00F7C9AA /* ImageIdentificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4415128F62EFD00F7C9AA /* ImageIdentificationTest.swift */; };
 		C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28828F2731F001D7F1D /* CameraTestView.swift */; };
 		C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */; };
 		C338B28E290F5E94009638F9 /* WifiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338B28D290F5E94009638F9 /* WifiManager.swift */; };
@@ -29,6 +28,7 @@
 		C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */; };
 		C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */; };
 		C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2EB28FC8278001F24A3 /* RiderView.swift */; };
+		C3A64EB329172F2A0067FDF0 /* BLETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A64EB229172F2A0067FDF0 /* BLETests.swift */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */; };
 /* End PBXBuildFile section */
@@ -58,7 +58,6 @@
 		48F4414128F6258C00F7C9AA /* ImageIdentification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentification.swift; sourceTree = "<group>"; };
 		48F4414828F62E7C00F7C9AA /* Rear RiderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Rear RiderTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48F4414A28F62E7C00F7C9AA /* Rear_RiderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rear_RiderTests.swift; sourceTree = "<group>"; };
-		48F4415128F62EFD00F7C9AA /* ImageIdentificationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentificationTest.swift; sourceTree = "<group>"; };
 		C307D28828F2731F001D7F1D /* CameraTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTestView.swift; sourceTree = "<group>"; };
 		C307D28A28F2734A001D7F1D /* MJpegStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJpegStreaming.h; sourceTree = "<group>"; };
 		C307D28B28F2734B001D7F1D /* MJpegStreamingKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MJpegStreamingKit.swift; sourceTree = "<group>"; };
@@ -69,6 +68,7 @@
 		C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingExtension.swift; sourceTree = "<group>"; };
 		C36AA2EB28FC8278001F24A3 /* RiderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderView.swift; sourceTree = "<group>"; };
+		C3A64EB229172F2A0067FDF0 /* BLETests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLETests.swift; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5m.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -189,8 +189,8 @@
 		48F4414928F62E7C00F7C9AA /* Rear RiderTests */ = {
 			isa = PBXGroup;
 			children = (
+				C3A64EB229172F2A0067FDF0 /* BLETests.swift */,
 				48F4414A28F62E7C00F7C9AA /* Rear_RiderTests.swift */,
-				48F4415128F62EFD00F7C9AA /* ImageIdentificationTest.swift */,
 			);
 			path = "Rear RiderTests";
 			sourceTree = "<group>";
@@ -331,8 +331,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3A64EB329172F2A0067FDF0 /* BLETests.swift in Sources */,
 				48F4414B28F62E7C00F7C9AA /* Rear_RiderTests.swift in Sources */,
-				48F4415228F62EFD00F7C9AA /* ImageIdentificationTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,7 +483,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -513,7 +513,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -530,7 +530,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T53AYVVL5N;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "RearRider.Rear-RiderTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -550,7 +550,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T53AYVVL5N;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "RearRider.Rear-RiderTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

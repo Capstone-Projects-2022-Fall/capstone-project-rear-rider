@@ -168,9 +168,9 @@ class UserConfig: ObservableObject {
         var red: UInt8 = UInt8(colorRGB[0] * 255)
         var green: UInt8 = UInt8(colorRGB[1] * 255)
         var blue: UInt8 = UInt8(colorRGB[2] * 255)
-        
-        bytes.append(withUnsafeBytes(of: &br) { Data($0) })
+
         bytes.append(withUnsafeBytes(of: &pat) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &br) { Data($0) })
         bytes.append(withUnsafeBytes(of: &red) { Data($0) })
         bytes.append(withUnsafeBytes(of: &green) { Data($0) })
         bytes.append(withUnsafeBytes(of: &blue) { Data($0) })

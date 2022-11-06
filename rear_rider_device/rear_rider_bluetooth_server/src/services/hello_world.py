@@ -178,7 +178,7 @@ class WifiCharacteristic(Characteristic):
     def WriteValue(self, value, options):
         wifi = WifiAccessPoint()
         # This formats the first byte of the dbus value to an integer.
-        state = int(f'{value[0]}')
+        state = int(value[0])
         if state == 0:
             wifi.turn_off()
         elif state == 1:

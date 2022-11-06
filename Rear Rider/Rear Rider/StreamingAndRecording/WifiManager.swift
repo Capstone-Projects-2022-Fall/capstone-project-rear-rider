@@ -28,4 +28,6 @@ class WifiManager: ObservableObject {
         bleManager.turnWifiOff()
         RearRiderLog.shared.addLog(from: "WiFi", message: "Command to turn Wi-Fi off sent")
     }
+    
+    func setWifi(isOn on: Bool) { wifiOn = on }
 }
