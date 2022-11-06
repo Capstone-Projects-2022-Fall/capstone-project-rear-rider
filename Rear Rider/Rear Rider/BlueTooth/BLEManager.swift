@@ -33,6 +33,19 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private var configCharacteristic: CBCharacteristic!
     private var wifiCharacteristic: CBCharacteristic!
     
+    //mostly for testing purposes
+    var ConfigCharacteristic: CBCharacteristic {
+        get {
+            return configCharacteristic
+        }
+    }
+    
+    var WiFiCharacteristic: CBCharacteristic {
+        get {
+            return wifiCharacteristic
+        }
+    }
+    
     static var shared = BLEManager()
     private let log = RearRiderLog.shared
     
@@ -120,6 +133,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             print("Disconnecting...")
             myCentral?.cancelPeripheralConnection(myPeripheral!)
             log.addLog(from: "BT", message: "Disconnected")
+            connected = false
         }
     }
     
