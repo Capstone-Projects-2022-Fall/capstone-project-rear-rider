@@ -12,7 +12,7 @@ import AVKit
 struct CameraTestView: View {
     @EnvironmentObject var bleManager: BLEManager
     @EnvironmentObject var wifiManager: WifiManager
-    @ObservedObject private var stream = MjpegStreamingController(url: "http://10.42.0.1:8000/stream.mjpg")
+    @ObservedObject private var stream = MjpegStreamingController(url: "http://raspberrypi.local:8000/stream.mjpg")
     private var mLModel = ImageIdentification()
     
     // declare a timer that will call a function every 0.3 seconds

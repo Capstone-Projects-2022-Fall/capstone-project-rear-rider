@@ -17,24 +17,12 @@ struct HomeView: View {
                 Button {
                     bleManager.startScanning()
                 } label: {
-                    if bleManager.connected {
-                        Image(systemName: "b.circle")
-                            .foregroundColor(.green)
-                    }
-                    else {
-                        Image(systemName: "b.circle")
-                            .foregroundColor(.red)
-                    }
+                    Image(systemName: "b.circle")
+                        .foregroundColor(bleManager.connected ? .green : .red)
                 }
 
-                if wifiManager.wifiOn {
-                    Image(systemName: "wifi.circle")
-                        .foregroundColor(.green)
-                }
-                else {
-                    Image(systemName: "wifi.circle")
-                        .foregroundColor(.red)
-                }
+                Image(systemName: "wifi.circle")
+                    .foregroundColor(wifiManager.wifiOn ? .green : .red)
             }
             TabView {
                 RiderView()
