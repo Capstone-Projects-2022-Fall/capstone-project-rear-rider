@@ -21,6 +21,7 @@ struct CBUUIDs {
     static let BLENotifyCharacteristicUUID = CBUUID(string: "9f7bb8c9-4b29-4118-98ac-292557551cdf")
     static let BLEConfigCharacteristicUUID = CBUUID(string: "501beabd-3f66-4cca-ba7a-0fbf4f81870c")
     static let BLEWifiCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8fcc")
+    static let BLEPictureCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8abb")
 }
 
 /// The purpose of this class is to set the iPhone as a central manager and connect to the RaspberryPi as a peripheral
@@ -32,6 +33,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private var notifyCharacteristic: CBCharacteristic!
     private var configCharacteristic: CBCharacteristic!
     private var wifiCharacteristic: CBCharacteristic!
+    private var picCharacteristic: CBCharacteristic!
     
     //mostly for testing purposes
     var ConfigCharacteristic: CBCharacteristic {
@@ -207,6 +209,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 peripheral.setNotifyValue(true, for: wifiCharacteristic)
                 isWifiOn()
             }
+            else if characteristic.uuid.isEqual(CBUUIDs.BLEPictureCharacteristicUUID) {
+                picCharacteristic = characteristic
+                log.addLog(from: "BT", message: "Picture Characteristic set")
+                connected = true
+            }
         }
     }
     
@@ -236,6 +243,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             else {
                 WifiManager.shared.setWifi(isOn: false)
             }
+        }
+        else if characteristic == picCharacteristic {
+            let ASCIIString = NSString(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8.rawValue)
+            log.addLog(from: "BT", message: "Recv(pic): \(ASCIIString! as String)")
+            RearRiderAlerts.shared.setPic(from: characteristic.value)
+            print("Received from Pi.")
+            //log.addLog(from: "BT", message: "Recv(pic): Received.")
         }
     }
     
@@ -307,6 +321,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             data.append(withUnsafeBytes(of: &off) { Data($0) })
             myPeripheral.writeValue(data, for: wifiCharacteristic, type: CBCharacteristicWriteType.withResponse)
             isWifiOn()
+        }
+    }
+    
+    func getPicFromPi() {
+        if connected {
+            myPeripheral.readValue(for: picCharacteristic)
         }
     }
 }

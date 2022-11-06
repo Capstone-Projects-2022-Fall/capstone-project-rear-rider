@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 enum AlertErrors: Error {
     case fileNotFound(String)
@@ -16,10 +17,13 @@ enum AlertErrors: Error {
 /**
  * Class for managing any audio and visual alerts for the rider
  */
-class RearRiderAlerts {
+class RearRiderAlerts: ObservableObject {
     
     var player: AVAudioPlayer!
     var soundFile: URL! = nil
+    
+    @Published var frame: UIImage = UIImage()
+    static var shared = RearRiderAlerts()
         
     /**
      * Takes the name of a sound file without the extension and attemts to create a player for it.
@@ -58,5 +62,14 @@ class RearRiderAlerts {
         } catch let error {
             print(error)
         }
+    }
+    
+    func askForPic() {
+        BLEManager.shared.getPicFromPi()
+    }
+    
+    func setPic(from data: Data?) {
+        guard let data = data else { return }
+        frame = UIImage(data: data.advanced(by: 2)) ?? UIImage()
     }
 }
