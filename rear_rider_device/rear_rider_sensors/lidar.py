@@ -8,6 +8,7 @@ class Lidar():
     def __init__(self) -> None:
         pass
 
+    @staticmethod
     def getTFminiData():
         while True:
             #time.sleep(0.1)
