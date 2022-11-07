@@ -55,5 +55,5 @@ class test_lidar_proc(LidarChildProcess):
         self._program = 'python {}/test_lidar_proc.py'.format(dir_path)
 
 if(__name__ == "__main__"):
-    myTest=test_lidar_proc()
-    asyncio.run(myTest.begin())
+    LidarChildProcess = LidarChildProcess()
+    asyncio.run(LidarChildProcess.begin())
