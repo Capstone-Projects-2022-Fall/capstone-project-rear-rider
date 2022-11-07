@@ -11,8 +11,8 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 class LidarChildProcess(ChildProcess):
 
-    lidar_distance = 0
-    lidar_strength = 0
+    lidar_distance = 0 # default unit is cm
+    signal_strength = 0 # signal unreliable under 100 
 
     def __init__(self, led_child_proc: LedsChildProcess):
         """
@@ -38,12 +38,11 @@ class LidarChildProcess(ChildProcess):
     async def on_data(self):
         lidar_data = (await self.readline()).split(' ')
         lidar_distance = lidar_data[0]
-        strength = lidar_data[1]
-        self._print('lidar_distance:{}\n\tSignalStrength:{}\n'.format(lidar_distance, strength))
+        signal_strength = lidar_data[1]
+        self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
         
-        # send led notification
-        unsafe_lidar_ = 300 # default unit is cm
-        if lidar_distance < unsafe_lidar_:
+        unsafe_distance = 300 
+        if lidar_distance < unsafe_distance:
             await self.led_child_proc.led_strobe_on()
         
         await asyncio.sleep(1.0/100)
