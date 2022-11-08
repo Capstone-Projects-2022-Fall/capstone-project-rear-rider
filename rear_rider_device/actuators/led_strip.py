@@ -143,6 +143,12 @@ class StrobeEffect(LedStripEffect):
         else:
             self._curr_color = OFF_COLOR
 
+class BlankEffect(LedStripEffect):
+    def affect(self, frame: LedStripFrame, led_strip_con: LedStripController):
+        led_strip_con.fill(OFF_COLOR)
+    
+    def new_frame(self, frame: LedStripFrame):
+        pass
 
 class LedsEffectsLoopContext:
     def __init__(self, led_strip_ctrl: LedStripController, frame: LedStripFrame):
@@ -164,7 +170,8 @@ class LedsEffectsLoopContext:
 
     def set_effects(self, effects: list[LedStripEffect]):
         with self.play_condition:
-            self._effects = effects
+            self._effects.clear()
+            self._effects.append(effects[0])
             self.play_condition.notify()
     
     ###
@@ -178,7 +185,7 @@ class LedsEffectsLoopContext:
         """
         Determine if the the effects should be playing.
         """
-        return self._play and len(self._effects) > 0
+        return self._play
     
     def play(self):
         """
@@ -212,13 +219,13 @@ def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):
                 loop_ctx.play_condition.wait()
             if loop_ctx.continue_loop() is False:
                 break
-            led_strip, effects, frame = loop_ctx.get_loop_vars()
+            led_strip_con, effects, frame = loop_ctx.get_loop_vars()
             frame.frame_num += 1
             frame.start_time = time.time_ns()
             for effect in effects:
                 effect.new_frame(frame)
             for effect in effects:
-                effect.affect(frame, led_strip_con=led_strip)
+                effect.affect(frame, led_strip_con=led_strip_con)
             frame.end_time = time.time_ns()
             update_elapsed_time()
             frame_duration = 1.0/frame.fps
@@ -227,7 +234,7 @@ def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):
                 # The effects are too slow for the framerate!
                 continue
         time.sleep(time_to_sleep)
-        led_strip.show()
+        led_strip_con.show()
         # print('slept for {} second(s).'.format(time_to_sleep))
 
 
