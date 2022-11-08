@@ -3,7 +3,7 @@ from sys import path
 from threading import Thread
 from typing import Union
 from ipc.parent_process import ParentProcess
-from actuators.led_strip import LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
+from actuators.led_strip import BlankEffect, LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
 
 path.append("rear_rider_bluetooth_server/src/")
 
@@ -62,7 +62,7 @@ class LedsParentProcess(ParentProcess):
         params_line = await self.readline()
         params = params_line.split(' ')
         frequency = int(params[0])
-        duration = float(params[1])
+        # duration = float(params[1])
         self._set_strobe_effect(frequency, WHITE)
 
     async def pre_ready(self):
@@ -110,7 +110,8 @@ class LedsParentProcess(ParentProcess):
         )
     
     async def on_strobe_off(self):
-        self._leds_effects_loop_ctx.set_effects([])
+        self._leds_effects_loop_ctx.set_effects([BlankEffect()])
+        self._leds_effects_loop_ctx.play()
     
     def _join_leds_thread(self):
         if self._leds_effects_loop_thread is not None:
