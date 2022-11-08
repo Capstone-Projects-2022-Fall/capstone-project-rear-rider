@@ -1,21 +1,27 @@
 from ast import main
 import asyncio
 from datetime import datetime
-from turtle import distance
+from turtle import lidar_distance
 from ipc.child_process import ChildProcess
 from typing import Deque
-from bluetooth_server_child_proc import BluetoothServerChildProcess
+from leds_child_proc import LedsChildProcess
 import os 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 class LidarChildProcess(ChildProcess):
-    def __init__(self):
+
+    lidar_distance = 0 # default unit is cm
+    signal_strength = 0 # signal unreliable under 100 
+
+    def __init__(self, led_child_proc: LedsChildProcess):
         """
         Default `buf_size` of 64 frame datapoints at 60 `fps`.
         """
         super().__init__('python {}/lidar_proc.py'.format(dir_path))
         self.ready = asyncio.Future()
+        self.led_child_proc = led_child_proc
+        
     
     async def on_ready(self):
         self.start_time = datetime.now()
@@ -31,21 +37,14 @@ class LidarChildProcess(ChildProcess):
 
     async def on_data(self):
         lidar_data = (await self.readline()).split(' ')
-        self._print(
-            '{}\n'
-            '\t{}\n'.format(
-                lidar_data[0],
-                lidar_data[1]
-            )
-        )
+        lidar_distance = lidar_data[0]
+        signal_strength = lidar_data[1]
+        self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
         
-        # Needs to send led notification
-        # await self.bt_server_proc.writeline(
-            # if lidar_data < some distance:
-            #     self.led_child_proc
-        #     'set_data\n'
-        #     'lidar\n'
-        #     '{},{}'.format(data[0], data[1]))
+        unsafe_distance = 300 
+        if lidar_distance < unsafe_distance:
+            await self.led_child_proc.led_strobe_on()
+        
         await asyncio.sleep(1.0/100)
         await self.writeline('get_data')
 
@@ -55,5 +54,5 @@ class test_lidar_proc(LidarChildProcess):
         self._program = 'python {}/test_lidar_proc.py'.format(dir_path)
 
 if(__name__ == "__main__"):
-    myTest=test_lidar_proc()
-    asyncio.run(myTest.begin())
+    LidarChildProcess = LidarChildProcess()
+    asyncio.run(LidarChildProcess.begin())
