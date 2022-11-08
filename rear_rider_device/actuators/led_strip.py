@@ -3,7 +3,7 @@ from threading import Condition
 import time
 import board
 import neopixel
-GPIO_PIN = board.D18
+GPIO_PIN = board.D21
 NUM_PIXELS = 16
 INIT_BRIGHTNESS = 0.1
 
