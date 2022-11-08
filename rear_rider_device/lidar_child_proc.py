@@ -47,7 +47,7 @@ class LidarChildProcess(ChildProcess):
         else:
             await self.led_child_proc.led_strobe_off()
         
-        await asyncio.sleep(1.0/2)
+        await asyncio.sleep(1.0/100)
         await self.writeline('get_data')
     
     def no_on_handler(self, on_command, err):
