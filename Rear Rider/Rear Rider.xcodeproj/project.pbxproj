@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */; };
+		483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */; };
+		483E42B9291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		483E42BB291BE82200B9A3C3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BA291BE82200B9A3C3 /* FirebaseAuth */; };
+		483E42BD291BE82200B9A3C3 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BC291BE82200B9A3C3 /* FirebaseCrashlytics */; };
+		483E42BF291BE82200B9A3C3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BE291BE82200B9A3C3 /* FirebaseDatabase */; };
+		483E42C1291BE82200B9A3C3 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42C0291BE82200B9A3C3 /* FirebaseDatabaseSwift */; };
 		20B1A1BF291C04FC0023B920 /* MetricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1BE291C04FC0023B920 /* MetricsView.swift */; };
 		20B1A1C1291C060F0023B920 /* RideHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1C0291C060E0023B920 /* RideHistoryView.swift */; };
 		484558412908941B002D81FC /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484558402908941B002D81FC /* OptionsView.swift */; };
@@ -46,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		20B1A1BE291C04FC0023B920 /* MetricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsView.swift; sourceTree = "<group>"; };
 		20B1A1C0291C060E0023B920 /* RideHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistoryView.swift; sourceTree = "<group>"; };
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
@@ -82,6 +90,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				483E42C1291BE82200B9A3C3 /* FirebaseDatabaseSwift in Frameworks */,
+				483E42BF291BE82200B9A3C3 /* FirebaseDatabase in Frameworks */,
+				483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */,
+				483E42BD291BE82200B9A3C3 /* FirebaseCrashlytics in Frameworks */,
+				483E42BB291BE82200B9A3C3 /* FirebaseAuth in Frameworks */,
+				483E42B9291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +189,7 @@
 		4851CE0728E49485003B5B76 /* Rear Rider */ = {
 			isa = PBXGroup;
 			children = (
+				483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */,
 				20B1A1BD291C04E40023B920 /* Metrics */,
 				C364D8BD290DAB5900F9EE7C /* Logging */,
 				4845584729089E87002D81FC /* ConfigurationOptions */,
@@ -234,6 +249,14 @@
 			dependencies = (
 			);
 			name = "Rear Rider";
+			packageProductDependencies = (
+				483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */,
+				483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				483E42BA291BE82200B9A3C3 /* FirebaseAuth */,
+				483E42BC291BE82200B9A3C3 /* FirebaseCrashlytics */,
+				483E42BE291BE82200B9A3C3 /* FirebaseDatabase */,
+				483E42C0291BE82200B9A3C3 /* FirebaseDatabaseSwift */,
+			);
 			productName = "Rear Rider";
 			productReference = 4851CE0528E49485003B5B76 /* Rear Rider.app */;
 			productType = "com.apple.product-type.application";
@@ -284,6 +307,9 @@
 				Base,
 			);
 			mainGroup = 4851CDFC28E49484003B5B76;
+			packageReferences = (
+				483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 4851CE0628E49485003B5B76 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -300,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4851CE1028E49485003B5B76 /* Preview Assets.xcassets in Resources */,
+				483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */,
 				4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */,
 				48CB852F2902EF5200283DBD /* vehicleAlert.mp3 in Resources */,
 			);
@@ -485,7 +512,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = 5KVT845VZL;
+				DEVELOPMENT_TEAM = GSVBY5A2AP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -499,7 +526,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Calin.RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -515,7 +542,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = 5KVT845VZL;
+				DEVELOPMENT_TEAM = GSVBY5A2AP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -529,7 +556,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Calin.RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -608,6 +635,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		483E42BA291BE82200B9A3C3 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		483E42BC291BE82200B9A3C3 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		483E42BE291BE82200B9A3C3 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		483E42C0291BE82200B9A3C3 /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 483E42B5291BE82200B9A3C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4851CDFD28E49484003B5B76 /* Project object */;
 }
