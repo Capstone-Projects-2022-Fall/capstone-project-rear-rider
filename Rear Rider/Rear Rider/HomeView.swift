@@ -37,6 +37,10 @@ struct HomeView: View {
                     .tabItem {
                         Image(systemName: "gear")
                     }
+                RideHistoryView()
+                    .tabItem {
+                        Image(systemName: "chart.bar.xaxis")
+                    }
             }
         }
     }
