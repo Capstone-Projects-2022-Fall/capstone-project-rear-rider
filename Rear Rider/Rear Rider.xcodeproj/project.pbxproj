@@ -14,6 +14,8 @@
 		483E42BD291BE82200B9A3C3 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BC291BE82200B9A3C3 /* FirebaseCrashlytics */; };
 		483E42BF291BE82200B9A3C3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BE291BE82200B9A3C3 /* FirebaseDatabase */; };
 		483E42C1291BE82200B9A3C3 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42C0291BE82200B9A3C3 /* FirebaseDatabaseSwift */; };
+		20B1A1BF291C04FC0023B920 /* MetricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1BE291C04FC0023B920 /* MetricsView.swift */; };
+		20B1A1C1291C060F0023B920 /* RideHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1C0291C060E0023B920 /* RideHistoryView.swift */; };
 		484558412908941B002D81FC /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484558402908941B002D81FC /* OptionsView.swift */; };
 		4845584929089EAA002D81FC /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584829089EAA002D81FC /* UserConfig.swift */; };
 		4845584B2909768E002D81FC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584A2909768E002D81FC /* ColorExtension.swift */; };
@@ -52,6 +54,8 @@
 
 /* Begin PBXFileReference section */
 		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		20B1A1BE291C04FC0023B920 /* MetricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsView.swift; sourceTree = "<group>"; };
+		20B1A1C0291C060E0023B920 /* RideHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistoryView.swift; sourceTree = "<group>"; };
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
 		4845584A2909768E002D81FC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -105,6 +109,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		20B1A1BD291C04E40023B920 /* Metrics */ = {
+			isa = PBXGroup;
+			children = (
+				20B1A1BE291C04FC0023B920 /* MetricsView.swift */,
+				20B1A1C0291C060E0023B920 /* RideHistoryView.swift */,
+			);
+			path = Metrics;
+			sourceTree = "<group>";
+		};
 		484558422908942F002D81FC /* StreamingAndRecording */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */,
+				20B1A1BD291C04E40023B920 /* Metrics */,
 				C364D8BD290DAB5900F9EE7C /* Logging */,
 				4845584729089E87002D81FC /* ConfigurationOptions */,
 				4845584629089503002D81FC /* ObjectIdentification */,
@@ -338,11 +352,13 @@
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,
 				C307D28C28F2734B001D7F1D /* MJpegStreamingKit.swift in Sources */,
+				20B1A1BF291C04FC0023B920 /* MetricsView.swift in Sources */,
 				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
 				C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */,
 				C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */,
 				C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */,
 				C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */,
+				20B1A1C1291C060F0023B920 /* RideHistoryView.swift in Sources */,
 				4851CE0928E49485003B5B76 /* Rear_RiderApp.swift in Sources */,
 				487C63AE28E4F8700022F0A7 /* HomeView.swift in Sources */,
 				C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */,
