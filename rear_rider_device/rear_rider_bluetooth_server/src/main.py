@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-import signal
 from sys import stdout
 from typing import Callable, Literal, Union
 
-from advertisement.rear_rider_adv import RearRiderAdvertisement
+from rear_rider_device.rear_rider_bluetooth_server.src.advertisement.rear_rider_adv import RearRiderAdvertisement
 
-from bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE
-from bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_advertisement import LE_ADVERTISING_MANAGER_IFACE
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_gatt_server import find_adapter, dbus, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE
 from gi.repository import GLib
-from agent.simple import Agent
-from bluetooth_device import BluetoothDevice
+from rear_rider_device.rear_rider_bluetooth_server.src.agent.simple import Agent
+from rear_rider_device.rear_rider_bluetooth_server.src.bluetooth_device import BluetoothDevice
 
-from services.hello_world import HelloWorldService
-from services.characteristics.strobe_light import StrobeLight
-from services.sensors import SensorsService
+from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService
+from rear_rider_device.rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLight
+from rear_rider_device.rear_rider_bluetooth_server.src.services.sensors import SensorsService
 
-from rearrider_app import RearRiderApplication
+from rear_rider_device.rear_rider_bluetooth_server.src.rearrider_app import RearRiderApplication
 
 AGENT_MANAGER_IFACE = 'org.bluez.AgentManager1'
 AGENT_PATH = '/bluez/simpleagent'

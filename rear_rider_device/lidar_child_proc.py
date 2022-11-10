@@ -2,9 +2,8 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
 from datetime import datetime
-from ipc.child_process import ChildProcess
-# from typing import Deque
-from leds_child_proc import LedsChildProcess
+from rear_rider_device.ipc.child_process import ChildProcess
+from rear_rider_device.leds_child_proc import LedsChildProcess
 import os 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))

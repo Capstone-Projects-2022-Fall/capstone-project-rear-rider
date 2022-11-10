@@ -1,5 +1,5 @@
-from bluez.example_gatt_server import Service
-from services.characteristics.strobe_light import StrobeLightCharacteristic, StrobeLight
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_gatt_server import Service
+from rear_rider_device.rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLightCharacteristic, StrobeLight
 
 
 class ActuatorsService(Service):

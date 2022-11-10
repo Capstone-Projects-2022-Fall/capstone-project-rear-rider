@@ -1,9 +1,18 @@
+import sys
+import os
+PROJECT_ROOT = os.path.abspath(os.path.join(
+                os.path.dirname(__file__),
+                # This file should be in `rear_rider_device/` so we need to travel up one directory.
+                f'{os.pardir}')
+)
+sys.path.append(PROJECT_ROOT)
+
 import asyncio
-from ipc.parent_process import ParentProcess
-import rear_rider_sensors.accelerometer as accelerometer
+from rear_rider_device.ipc.parent_process import ParentProcess
+from rear_rider_device.rear_rider_sensors.accelerometer import Accelerometer
 
 class AccelerometerParentProcess(ParentProcess):
-    def __init__(self, accelerometer: accelerometer.Accelerometer):
+    def __init__(self, accelerometer: Accelerometer):
         self.accelerometer = accelerometer
 
     async def pre_ready(self):
@@ -29,7 +38,7 @@ class AccelerometerParentProcess(ParentProcess):
 
 if __name__ == '__main__':
     try:
-        accelerometer = accelerometer.Accelerometer()
+        accelerometer = Accelerometer()
     except ValueError as e:
         print(f'exception\n{e}')
         exit()

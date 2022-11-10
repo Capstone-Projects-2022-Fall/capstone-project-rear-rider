@@ -1,5 +1,4 @@
-from bluez.example_advertisement import Advertisement
-
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_advertisement import Advertisement
 
 class RearRiderAdvertisement(Advertisement):
     

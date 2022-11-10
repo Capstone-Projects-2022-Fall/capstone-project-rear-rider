@@ -1,6 +1,6 @@
 from sys import stdin, stdout
 from typing import Callable
-from bluez.example_gatt_server import dbus, GATT_CHRC_IFACE, Characteristic, Service, GObject
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_gatt_server import dbus, GATT_CHRC_IFACE, Characteristic, Service, GObject
 
 class SensorsService(Service):
     """
@@ -47,6 +47,7 @@ class AccelerometerCharacteristic(Characteristic):
         self.notifying = False
 
     def ReadValue(self, options):
+        # TODO: Move this into a callback function.
         line = 'accelerometer'
         if line != 'accelerometer':
             return

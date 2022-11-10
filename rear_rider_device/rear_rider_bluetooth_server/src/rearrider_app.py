@@ -1,8 +1,8 @@
-from bluez.example_gatt_server import Service, dbus, DBUS_OM_IFACE
-from services.sensors import SensorsService
-from services.hello_world import HelloWorldService
-from services.actuators import ActuatorsService
-from services.characteristics.strobe_light import StrobeLight
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_gatt_server import Service, dbus, DBUS_OM_IFACE
+from rear_rider_device.rear_rider_bluetooth_server.src.services.sensors import SensorsService
+from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService
+from rear_rider_device.rear_rider_bluetooth_server.src.services.actuators import ActuatorsService
+from rear_rider_device.rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLight
 
 class RearRiderApplication(dbus.service.Object):
     """

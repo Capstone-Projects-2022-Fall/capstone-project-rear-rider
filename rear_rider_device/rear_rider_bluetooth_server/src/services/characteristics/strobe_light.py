@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Callable
-from bluez.example_gatt_server import Characteristic, Descriptor, dbus
+from rear_rider_device.rear_rider_bluetooth_server.src.bluez.example_gatt_server import Characteristic, Descriptor, dbus
 
 @dataclass
 class StrobeLight:

@@ -1,11 +1,17 @@
+import sys
+import os
+PROJECT_ROOT = os.path.abspath(os.path.join(
+                os.path.dirname(__file__),
+                # This file should be in `rear_rider_device/` so we need to travel up one directory.
+                f'{os.pardir}')
+)
+sys.path.append(PROJECT_ROOT)
+
 import asyncio
-from sys import path
 from threading import Thread
 from typing import Union
-from ipc.parent_process import ParentProcess
-from actuators.led_strip import BlankEffect, LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
-
-path.append("rear_rider_bluetooth_server/src/")
+from rear_rider_device.ipc.parent_process import ParentProcess
+from rear_rider_device.actuators.led_strip import BlankEffect, LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
 
 WHITE = (255, 255, 255)
 OFF_COLOR = (0,0,0)
