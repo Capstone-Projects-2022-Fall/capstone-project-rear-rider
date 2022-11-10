@@ -17,7 +17,7 @@ class LidarChildProcess(ChildProcess):
         """
         Default `buf_size` of 64 frame datapoints at 60 `fps`.
         """
-        super().__init__('sudo python {}/lidar_proc.py'.format(dir_path))
+        super().__init__('python {}/lidar_proc.py'.format(dir_path))
         self.ready = asyncio.Future()
         self.led_child_proc = led_child_proc
         
