@@ -1,9 +1,15 @@
 import asyncio
-from pkgutil import get_data
-import readline
-from sys import stdout
-from ipc.parent_process import ParentProcess
-import rear_rider_sensors.lidar as lidar
+import sys
+import os
+PROJECT_ROOT = os.path.abspath(os.path.join(
+                os.path.dirname(__file__),
+                # This file should be in `rear_rider_device/` so we need to travel up one directory.
+                f'{os.pardir}')
+)
+sys.path.append(PROJECT_ROOT)
+
+from rear_rider_device.ipc.parent_process import ParentProcess
+import rear_rider_device.rear_rider_sensors.lidar as lidar
 
 class LidarParentProcess(ParentProcess):
     def __init__(self, lidar: lidar.Lidar):

@@ -1,11 +1,11 @@
 import asyncio
 import concurrent.futures
-from ipc.child_process import ChildProcess
-from ipc.parent_process import ParentProcess
+from rear_rider_device.ipc.child_process import ChildProcess
+from rear_rider_device.ipc.parent_process import ParentProcess
 
 import os
 
-from leds_child_proc import LedsChildProcess
+from rear_rider_device.leds_child_proc import LedsChildProcess
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 

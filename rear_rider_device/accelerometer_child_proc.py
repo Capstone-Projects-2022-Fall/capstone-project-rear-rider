@@ -1,9 +1,9 @@
 import asyncio
 from datetime import datetime
-from ipc.child_process import ChildProcess
+from rear_rider_device.ipc.child_process import ChildProcess
 from typing import Deque
 
-from bluetooth_server_child_proc import BluetoothServerChildProcess
+from rear_rider_device.bluetooth_server_child_proc import BluetoothServerChildProcess
 
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))

@@ -1,10 +1,10 @@
 import asyncio
 import concurrent.futures
-from ipc.child_process import ChildProcess
+from rear_rider_device.ipc.child_process import ChildProcess
 
 import os
 
-from ipc.parent_process import ParentProcess 
+from rear_rider_device.ipc.parent_process import ParentProcess 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 DEFAULT_STROBE_VALUE = '5 0'

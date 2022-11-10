@@ -1,21 +1,21 @@
+import sys
+import os
+PROJECT_ROOT = os.path.abspath(os.path.join(
+                os.path.dirname(__file__),
+                # This file should be in `rear_rider_device/` so we need to travel up one directory.
+                f'{os.pardir}')
+)
+sys.path.append(PROJECT_ROOT)
+
 import asyncio
 import concurrent.futures
 from concurrent.futures import Future, ThreadPoolExecutor
-from pkgutil import get_data
-import readline
-from sys import stdout, path
-from typing import Any, Callable, Union
+from typing import Any, Callable
 
-
-path.append("rear_rider_bluetooth_server/src/")
-path.append("rear_rider_bluetooth_server/src/services")
-path.append("rear_rider_bluetooth_server/src/services/characteristics")
-
-from rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLight
-from rear_rider_bluetooth_server.src.services.sensors import SensorsService
-from ipc.parent_process import ParentProcess
-import rear_rider_bluetooth_server.src.main as bt_server_main
-from rear_rider_bluetooth_server.src.services.hello_world import HelloWorldService, LedConfig
+from rear_rider_device.ipc.parent_process import ParentProcess
+from rear_rider_device.rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLight
+import rear_rider_device.rear_rider_bluetooth_server.src.main as bt_server_main
+from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import LedConfig
 
 class BluetoothParentProcess(ParentProcess):
     rear_rider_bt: bt_server_main.RearRiderBluetooth

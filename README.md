@@ -34,9 +34,7 @@ include-system-site-packages = true
 source .venv/bin/activate
 # Install the required python packages from pip.
 pip install -r ./requirements.txt
-# Change the working directory to the rear rider device directory.
-cd ./rear_rider_device
-python ./main.py
+python ./rear_rider_device/main.py
 ```
 
 ## Creating a systemd service

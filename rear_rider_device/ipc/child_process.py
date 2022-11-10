@@ -1,7 +1,7 @@
 import asyncio
 import threading
 from typing import Union
-from ipc.i_process import Process
+from rear_rider_device.ipc.i_process import Process
 
 class ChildProcess(Process):
     """

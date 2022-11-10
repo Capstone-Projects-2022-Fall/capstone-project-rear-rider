@@ -1,5 +1,5 @@
 import asyncio
-from parent_process import ParentProcess
+from rear_rider_device.ipc.parent_process import ParentProcess
 
 
 class TestParentProcess(ParentProcess):
