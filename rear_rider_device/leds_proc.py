@@ -11,7 +11,7 @@ import asyncio
 from threading import Thread
 from typing import Union
 from rear_rider_device.ipc.parent_process import ParentProcess
-from rear_rider_device.actuators.led_strip import BlankEffect, LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
+from rear_rider_device.actuators.led_strip import LedStripController, LedStripFrame, LedsEffectsLoopContext, StrobeEffect, create_neopixel, enter_leds_effects_loop
 
 WHITE = (255, 255, 255)
 OFF_COLOR = (0,0,0)
@@ -28,7 +28,6 @@ class LedsParentProcess(ParentProcess):
     _leds_effects_loop_thread: Union[None, Thread]
     def __init__(self, led_strip: LedStripController):
         self.led_strip = led_strip
-        self._strobe_on = False
         self._leds_effects_loop_thread = None
         self._leds_effects_loop_ctx = LedsEffectsLoopContext(self.led_strip, frame=LedStripFrame(5))
     
@@ -110,13 +109,16 @@ class LedsParentProcess(ParentProcess):
         )
     
     async def on_is_strobe_on(self):
+        def is_strobe_on():
+            with self._leds_effects_loop_ctx.play_condition:
+                return self._leds_effects_loop_ctx.has_effect(StrobeEffect)
         self.writeline(
             'strobe_on\n'
-            '{}'.format(self._strobe_on)
+            '{}'.format(int(is_strobe_on()))
         )
     
     async def on_strobe_off(self):
-        self._leds_effects_loop_ctx.set_effects([BlankEffect()])
+        self._leds_effects_loop_ctx.set_effects([])
         self._leds_effects_loop_ctx.play()
     
     def _join_leds_thread(self):
@@ -131,7 +133,6 @@ class LedsParentProcess(ParentProcess):
 
     async def on_discoverable_off(self):
         self._leds_effects_loop_ctx.set_effects([])
-        self.led_strip.turn_off()
     
     async def on_set_effect(self):
         params = (await self.readline()).split(' ')

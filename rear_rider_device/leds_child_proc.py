@@ -1,8 +1,10 @@
 import asyncio
 import concurrent.futures
+from typing import Union
 from rear_rider_device.ipc.child_process import ChildProcess
 
 import os
+import threading
 
 from rear_rider_device.ipc.parent_process import ParentProcess 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -17,6 +19,11 @@ DEFAULT_STROBE_VALUE = '5 0'
 class LedsChildProcess(ChildProcess):
     def __init__(self):
         super().__init__("sudo python {}/leds_proc.py".format(dir_path))
+        self._ready = False
+        self._ready_cond = threading.Condition()
+        self._strobe_on_lock = threading.Lock()
+        self._strobe_on_future: Union[None, concurrent.futures.Future[bool]] = None
+
 
     def _get_name(self) -> str:
         return 'LedsChildProcess'
@@ -25,7 +32,18 @@ class LedsChildProcess(ChildProcess):
         return super()._print('==== Leds Process ====\n{}'.format(message))
 
     async def on_ready(self):
-        self._print('==== Leds Process: on_ready ====')
+        with self._ready_cond:
+            self._print('==== Leds Process: on_ready ====')
+            self._ready = True
+            self._ready_cond.notify_all()
+    
+    def wait_ready(self):
+        """
+        Wait until the leds child process is ready.
+        """
+        with self._ready_cond:
+            while not self._ready:
+                self._ready_cond.wait()
 
     def on_done(self):
         self._print('==== Leds : on_done')
@@ -55,19 +73,30 @@ class LedsChildProcess(ChildProcess):
         # await self._wait_ack('strobe_off_ok')
     
     async def is_strobe_on(self):
+        """
+        Waits for a result from `on_strobe_on()`
+        """
         self._print('is_strobe_on')
-        await self.writeline('is_strobe_on')
-
+        with self._strobe_on_lock:
+            self._strobe_on_future = concurrent.futures.Future[bool]()
+            await self.writeline('is_strobe_on')
+            strobe_on = self._strobe_on_future.result()
+            self._strobe_on_future = None
+            return strobe_on
     
     async def on_strobe_on(self):
         """
+        Notifies the waiter in `is_strobe_on()`
         """
-        raise NotImplementedError()
-        await self.writeline(
-            'strobe_on\n'
-            '{}'.format(strobe_on))
-        
-        # await self._wait_ack('strobe_on')
+        if self._strobe_on_future is None:
+            # is_strobe_on() is not waiting for the value so discard it.
+            return
+        try:
+            strobe_on = bool(int(await self.readline()))
+            self._print(f'strobe_on: {strobe_on}')
+            self._strobe_on_future.set_result(strobe_on)
+        except Exception as e:
+            self._strobe_on_future.set_exception(e)
     
     async def on_no_on_handler(self):
         line = await self.readline()
