@@ -18,7 +18,7 @@ class RRCamera:
     current_time = str(now.strftime("%H:%M:%S"))
     current_date = str(today.strftime('%Y-%m-%d'))
 
-    DEF_VLEN = 15
+    DEF_VID_LEN = 15
     def __init__(self):
         self.pc = Picamera2()
         self.media_loc = os.path.dirname(__file__) + "/../media_storage/"
@@ -27,13 +27,13 @@ class RRCamera:
 
     def takePhoto(self, photoName = "image_at_"    + current_time + "_on_" + current_date):
         photoLocation = self.media_loc + photoName + ".jpg"
-        self.pc.start() 
+        self.pc.start()
         self.pc.capture_file(photoLocation)
         self.pc.stop();
 
-    def startRec(self, videoName = "video_at_" + current_time + "_on_" + current_date):  # I had to change the spaces to _ because of ffmjepg using spaces as delimters and 
+    def startRec(self, videoName = "video_at_" + current_time + "_on_" + current_date, vidLen = DEF_VID_LEN):  # I had to change the spaces to _ because of ffmjepg using spaces as delimters and 
         videoLocation = self.media_loc + videoName + ".mp4"                              # that made the conversion of the file to bug and break.
-        self.pc.start_and_record_video(output = videoLocation, duration = self.DEF_VLEN)
+        self.pc.start_and_record_video(output = videoLocation, duration = vidLen)
 
     def beginStream(self):
         def on_stream_server(stream_server: StreamingServer):

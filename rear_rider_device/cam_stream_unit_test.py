@@ -9,6 +9,8 @@ class AsyncCameraUnitTest(IsolatedAsyncioTestCase):
     cam : camera.RRCamera = None
 
     async def test_beginstream(self):
+        '''Tests beginStream() by starting stream and asserting 
+        that there is port 8000 in use.'''
         port = 8000
         self.cam.beginStream()
         sleep(5) #needed to let the stream boot up
@@ -17,6 +19,8 @@ class AsyncCameraUnitTest(IsolatedAsyncioTestCase):
         self.cam.endStream() #need to manually end the stream
 
     async def test_endstream(self):
+        '''Tests endStream() by starting a stream on port 8000 and then 
+        ending it and asserting that there is no use on the port'''
         port = 8000
         self.cam.beginStream()
         sleep(5) #needed to let the stream boot up
