@@ -3,6 +3,10 @@ from typing import Callable, Union
 from bluez.example_gatt_server import GATT_CHRC_IFACE, Characteristic, Service, GObject, dbus
 import subprocess
 
+from picamera2 import Picamera2
+import io
+import math
+
 WLAN_INTERFACE = 'wlan'
 
 class WifiAccessPoint():
@@ -33,11 +37,13 @@ class HelloWorldService(Service):
         append_counter_chr = AppendCounterWithNotificationCharacteristic(bus, 1, self)
         config_chr = ConfigCharacteristic(bus, 2, self)
         wifi_chr = WifiCharacteristic(bus, 3, self)
+        pic_chr = PictureCharacteristic(bus, 4, self)
 
         self.add_characteristic(reverse_text_chr)
         self.add_characteristic(append_counter_chr)
         self.add_characteristic(config_chr)
         self.add_characteristic(wifi_chr)
+        self.add_characteristic(pic_chr)
         
         self.reverse_text_chr = reverse_text_chr
         self.config_chr = config_chr
@@ -183,3 +189,86 @@ class WifiCharacteristic(Characteristic):
             wifi.turn_off()
         elif state == 1:
             wifi.turn_on()
+
+class PictureCharacteristic(Characteristic):
+    """
+    Send one frame from the camera.
+    """
+    TEST_CHRC_UUID = 'cd41b278-6254-4c89-9cd1-fd2578ab8abb'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+                self, bus, index,
+                self.TEST_CHRC_UUID,
+                ['read', 'write'],
+                service)
+        
+        self.first_time = True # first time send the size of pic and the number of packets
+        self.packets = 0
+        self.packet_size = 512
+        self.buff_size = 0
+        self.data = io.BytesIO()
+        self.dataList = [] # convert data into a list of packets each of packet_size size
+        #self.f = open('/home/pi/log.txt', 'a') # for debugging
+        self.value = 0 # the index in dataList
+    
+    """
+    Write log for debugging
+    """
+    def write_log(self, s):
+        self.f.write(s)
+        self.f.write('\n')
+        self.f.flush()
+
+    def ReadValue(self, options):
+        if self.packets == 0:
+            #self.write_log('Picture sent')
+            
+            # reset
+            self.first_time = True
+            self.dataList = []
+            self.data = io.BytesIO()
+            
+            # take picture
+            cam = Picamera2()
+            cam.configure(cam.create_preview_configuration())
+            cam.start()
+            cam.capture_file(self.data, format='jpeg')
+            #cam.capture_file('/home/pi/calin.jpg', format='jpeg') # for debugging
+            cam.close()
+            
+            self.buff_size = len(self.data.getvalue())
+            self.packets = math.floor(self.buff_size / self.packet_size)
+            if self.packets % self.buff_size != 0: # if the division has remainder add one more packet
+                self.packets = self.packets + 1
+            
+            #self.write_log('Size: ' + str(self.buff_size))
+            #self.write_log('Packets: ' + str(self.packets))
+            
+            #b = open('/home/pi/data', 'wb') # for debugging
+            start = 0
+            end = self.packet_size
+            
+            # split self.data into a list
+            for i in range(0, self.packets):
+                self.dataList.append(self.data.getvalue()[start:end])
+                #b.write(self.dataList[i])
+                start = start + self.packet_size
+                end = end + self.packet_size # if it doesn't work change the last packet to buff_size - start
+            
+            #b.close()
+            #self.write_log('List size: ' + str(len(self.dataList)))
+        
+        if self.first_time:
+            self.first_time = False
+            msg = str(self.buff_size) + '-' + str(self.packets)
+            return dbus.Array(msg.encode('utf8'))
+        else:
+            self.packets = self.packets - 1
+            #self.write_log('Packets left: ' + str(self.packets))
+            #self.write_log('Packet ' + str(self.value) + ' sent')
+            return dbus.Array(self.dataList[self.value], signature='y')
+    
+    def WriteValue(self, value, options):
+        self.value = int(value[0])
+        #self.write_log('Index received: ' + str(self.value))

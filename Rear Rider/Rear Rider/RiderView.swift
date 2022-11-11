@@ -10,10 +10,18 @@ import SwiftUI
 
 struct RiderView: View {
     @EnvironmentObject var bleManager: BLEManager
+    @ObservedObject var alert = RearRiderAlerts.shared
     
     var body: some View {
         VStack {
-            Text("Rear Rider")
+            Image(uiImage: alert.frame)
+            
+            // temporary
+            Button {
+                alert.askForPic()
+            } label: {
+                Text("Get")
+            }
         }
     }
 }

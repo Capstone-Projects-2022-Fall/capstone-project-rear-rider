@@ -10,6 +10,8 @@
 
 import Foundation
 import CoreBluetooth
+import UIKit
+import SwiftUI
 
 
 let piName = "RearRiderPi4"
@@ -50,6 +52,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     static var shared = BLEManager()
     private let log = RearRiderLog.shared
+    private var pic_index: UInt8 = 0; // current index of the picture packet transfer
     
     @Published var isSwitchedOn = false
     @Published var connected = false
@@ -245,11 +248,24 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             }
         }
         else if characteristic == picCharacteristic {
-            let ASCIIString = NSString(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8.rawValue)
-            log.addLog(from: "BT", message: "Recv(pic): \(ASCIIString! as String)")
-            RearRiderAlerts.shared.setPic(from: characteristic.value)
-            print("Received from Pi.")
-            //log.addLog(from: "BT", message: "Recv(pic): Received.")
+            if RearRiderAlerts.shared.pic_first_time {
+                pic_index = 0
+                let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
+                if d!.count > 0 {
+                    RearRiderAlerts.shared.pic_first_time = false
+                    let components = d?.components(separatedBy: "-")
+                    RearRiderAlerts.shared.pic_size = Int(components![0]) ?? 0
+                    RearRiderAlerts.shared.pic_packets = Int(components![1]) ?? 0
+                }
+            }
+            else {
+                let d: Data = characteristic.value ?? Data()
+                if d.count > 0 {
+                    RearRiderAlerts.shared.picData.append(d)
+                    RearRiderAlerts.shared.packet_recv = pic_index + 1
+                    pic_index += 1
+                }
+            }
         }
     }
     
@@ -324,8 +340,21 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
     }
     
-    func getPicFromPi() {
+    /// Initiates the picture transfer. First piece of data received will be the size and the number of packets
+    func getPicInfo() {
         if connected {
+            myPeripheral.readValue(for: picCharacteristic)
+        }
+    }
+    
+    /// Sends command over BT to ask for a packet to be transferred
+    /// - Parameter i: a UInt8 describing the index of the packet to retrieve
+    func getPicPacket(index i: UInt8) {
+        if connected {
+            var data = Data()
+            var index: UInt8 = i // due to the function below does not accepting the constant i
+            data.append(withUnsafeBytes(of: &index) { Data($0) })
+            myPeripheral.writeValue(data, for: picCharacteristic, type: CBCharacteristicWriteType.withResponse)
             myPeripheral.readValue(for: picCharacteristic)
         }
     }

@@ -24,6 +24,33 @@ class RearRiderAlerts: ObservableObject {
     
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()
+    
+    var picData = NSMutableData()
+    var pic_size:Int = 0
+    var pic_first_time:Bool = true
+    
+    
+    /// When this is set, the transfer of the packets will commence
+    var pic_packets:Int = 0 {
+        didSet {
+            RearRiderLog.shared.addLog(from: "Alerts", message: "Pic size: \(pic_size); Packets: \(pic_packets)")
+            BLEManager.shared.getPicPacket(index: 0)
+        }
+    }
+    
+    /// This is set every time a new packet arrives; then a new packet will be requested
+    var packet_recv: UInt8 = 0 {
+        didSet {
+            if packet_recv == pic_packets {
+                pic_first_time = true
+                frame = UIImage(data: picData as Data) ?? UIImage()
+                picData = NSMutableData()
+            }
+            else {
+                BLEManager.shared.getPicPacket(index: packet_recv)
+            }
+        }
+    }
         
     /**
      * Takes the name of a sound file without the extension and attemts to create a player for it.
@@ -64,12 +91,8 @@ class RearRiderAlerts: ObservableObject {
         }
     }
     
+    /// Asks the RPi for the picture's metadata (size and number of packets)
     func askForPic() {
-        BLEManager.shared.getPicFromPi()
-    }
-    
-    func setPic(from data: Data?) {
-        guard let data = data else { return }
-        frame = UIImage(data: data.advanced(by: 2)) ?? UIImage()
+        BLEManager.shared.getPicInfo()
     }
 }
