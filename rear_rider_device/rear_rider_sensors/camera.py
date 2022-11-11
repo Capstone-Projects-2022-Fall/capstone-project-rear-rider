@@ -12,7 +12,8 @@ class RRMedia:
         self.media_id
 
 class RRCamera:
-
+    #promises and futures event driven python
+    #possible camera safety (taking photo when stream thread using cam)
     now = datetime.now()
     today = date.today()
     current_time = str(now.strftime("%H:%M:%S"))
@@ -30,7 +31,7 @@ class RRCamera:
         self.pc.start()
         self.pc.capture_file(photoLocation)
         self.pc.stop();
-
+        
     def startRec(self, videoName = "video_at_" + current_time + "_on_" + current_date, vidLen = DEF_VID_LEN):  # I had to change the spaces to _ because of ffmjepg using spaces as delimters and 
         videoLocation = self.media_loc + videoName + ".mp4"                              # that made the conversion of the file to bug and break.
         self.pc.start_and_record_video(output = videoLocation, duration = vidLen)
