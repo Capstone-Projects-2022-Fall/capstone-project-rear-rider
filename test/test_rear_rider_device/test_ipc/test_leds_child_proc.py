@@ -3,10 +3,6 @@ import unittest
 import threading
 import asyncio
 
-def type_y_to_confirm(prompt):
-    res = input(prompt)
-    return res.lower() == 'y', '"Y" was not input.'
-
 class ManualTestLedsChildProcess(unittest.IsolatedAsyncioTestCase):
     """
     Perform a manual test on the `LedsChildProcess` class.
@@ -28,18 +24,24 @@ class ManualTestLedsChildProcess(unittest.IsolatedAsyncioTestCase):
 
     def tearDown(self) -> None:
         self._leds_thread.join()
+    
+    def assertTypeYToPass(self, prompt: str):
+        '''
+        Assert if "Y" or "y" are not provided as input.
+        '''
+        res = input(f'{prompt}\n\nType "Y" to confirm> ')
+        self.assertEqual('y', res.lower(),
+            msg='"Y" or "y" was not input. Assuming the test case failed.')
 
     async def test_set_discoverable_effect(self):
         '''
         Set the discoverable effect on, then turn it off.
         '''
         await self._leds_child_process.set_discoverable_effect(True)
-        self.assertTrue(*type_y_to_confirm(
-            'Is the discoverable effect on?\nType "Y" to confirm> '))
+        self.assertTypeYToPass('Is the discoverable effect on?')
 
         await self._leds_child_process.set_discoverable_effect(False)
-        self.assertTrue(*type_y_to_confirm(
-            'Is the discoverable effect off?\nType "Y" to confirm> '))
+        self.assertTypeYToPass('Is the discoverable effect off?')
     
     async def test_is_strobe_on(self):
         '''
@@ -47,13 +49,11 @@ class ManualTestLedsChildProcess(unittest.IsolatedAsyncioTestCase):
         '''
         await self._leds_child_process.led_strobe_on()
         await self._leds_child_process.is_strobe_on()
-        self.assertTrue(*type_y_to_confirm(
-            'Is the strobe light on and does the line above read "True"?\nType "Y" to confirm> '))
+        self.assertTypeYToPass('Is the strobe light on and does the line above read "True"?')
 
         await self._leds_child_process.led_strobe_off()
         await self._leds_child_process.is_strobe_on()
-        self.assertTrue(*type_y_to_confirm(
-            'Is the strobe light off and does the line above read "False"?\nType "Y" to confirm> '))
+        self.assertTypeYToPass('Is the strobe light off and does the line above read "False"?')
 
     def test_add_led_effect(self):
         '''
