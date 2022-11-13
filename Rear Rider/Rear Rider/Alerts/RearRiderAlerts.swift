@@ -18,7 +18,7 @@ enum AlertErrors: Error {
  * Class for managing any audio and visual alerts for the rider
  */
 class RearRiderAlerts: ObservableObject {
-    
+    var mLModel = ImageIdentification()
     var player: AVAudioPlayer!
     var soundFile: URL! = nil
     
@@ -42,9 +42,11 @@ class RearRiderAlerts: ObservableObject {
     var packet_recv: UInt8 = 0 {
         didSet {
             if packet_recv == pic_packets {
-                pic_first_time = true
                 frame = UIImage(data: picData as Data) ?? UIImage()
+                mLModel.detectObjects(image: frame)
+                pic_first_time = true
                 picData = NSMutableData()
+                if mLModel.detected_objs.isEmpty { askForPic() } // if no objects detect ask for another pic
             }
             else {
                 BLEManager.shared.getPicPacket(index: packet_recv)
@@ -93,6 +95,8 @@ class RearRiderAlerts: ObservableObject {
     
     /// Asks the RPi for the picture's metadata (size and number of packets)
     func askForPic() {
+        mLModel.detected_objs.removeAll()
+        mLModel.clearBndRects()
         BLEManager.shared.getPicInfo()
     }
 }

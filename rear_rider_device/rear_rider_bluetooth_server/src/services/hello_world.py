@@ -6,6 +6,7 @@ import subprocess
 from picamera2 import Picamera2
 import io
 import math
+from PIL import Image
 
 WLAN_INTERFACE = 'wlan'
 
@@ -205,11 +206,10 @@ class PictureCharacteristic(Characteristic):
         
         self.first_time = True # first time send the size of pic and the number of packets
         self.packets = 0
-        self.packet_size = 512
+        self.packet_size = 512 # number of bytes in one packet
         self.buff_size = 0
         self.data = io.BytesIO()
         self.dataList = [] # convert data into a list of packets each of packet_size size
-        #self.f = open('/home/pi/log.txt', 'a') # for debugging
         self.value = 0 # the index in dataList
     
     """
@@ -222,8 +222,6 @@ class PictureCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         if self.packets == 0:
-            #self.write_log('Picture sent')
-            
             # reset
             self.first_time = True
             self.dataList = []
@@ -231,33 +229,30 @@ class PictureCharacteristic(Characteristic):
             
             # take picture
             cam = Picamera2()
-            cam.configure(cam.create_preview_configuration())
+            config = cam.create_preview_configuration(main={"size": (320, 240)})
+            cam.configure(config)
             cam.start()
             cam.capture_file(self.data, format='jpeg')
-            #cam.capture_file('/home/pi/calin.jpg', format='jpeg') # for debugging
             cam.close()
+            
+            # compress image
+            img = Image.open(self.data)
+            self.data = io.BytesIO() # have to reset data; otherwise the next function doesn't replace the contents of data
+            img.save(self.data, 'JPEG', quality=50)
             
             self.buff_size = len(self.data.getvalue())
             self.packets = math.floor(self.buff_size / self.packet_size)
-            if self.packets % self.buff_size != 0: # if the division has remainder add one more packet
+            if self.packets % self.buff_size: # if the division has remainder add one more packet
                 self.packets = self.packets + 1
             
-            #self.write_log('Size: ' + str(self.buff_size))
-            #self.write_log('Packets: ' + str(self.packets))
-            
-            #b = open('/home/pi/data', 'wb') # for debugging
             start = 0
             end = self.packet_size
             
             # split self.data into a list
             for i in range(0, self.packets):
                 self.dataList.append(self.data.getvalue()[start:end])
-                #b.write(self.dataList[i])
                 start = start + self.packet_size
                 end = end + self.packet_size # if it doesn't work change the last packet to buff_size - start
-            
-            #b.close()
-            #self.write_log('List size: ' + str(len(self.dataList)))
         
         if self.first_time:
             self.first_time = False
@@ -265,10 +260,7 @@ class PictureCharacteristic(Characteristic):
             return dbus.Array(msg.encode('utf8'))
         else:
             self.packets = self.packets - 1
-            #self.write_log('Packets left: ' + str(self.packets))
-            #self.write_log('Packet ' + str(self.value) + ' sent')
             return dbus.Array(self.dataList[self.value], signature='y')
     
     def WriteValue(self, value, options):
         self.value = int(value[0])
-        #self.write_log('Index received: ' + str(self.value))

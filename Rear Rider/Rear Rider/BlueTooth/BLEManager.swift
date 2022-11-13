@@ -251,7 +251,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             if RearRiderAlerts.shared.pic_first_time {
                 pic_index = 0
                 let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
-                if d!.count > 0 {
+                if d?.count ?? 0 > 0 {
                     RearRiderAlerts.shared.pic_first_time = false
                     let components = d?.components(separatedBy: "-")
                     RearRiderAlerts.shared.pic_size = Int(components![0]) ?? 0

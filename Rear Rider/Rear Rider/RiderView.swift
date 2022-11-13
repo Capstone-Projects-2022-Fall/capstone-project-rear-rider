@@ -14,13 +14,29 @@ struct RiderView: View {
     
     var body: some View {
         VStack {
-            Image(uiImage: alert.frame)
+            ZStack {
+                ForEach (RearRiderAlerts.shared.mLModel.bndRectsCopy) { rect in
+                    Rectangle()
+                        .frame(width: rect.rect.width, height: rect.rect.height)
+                        .border(.yellow, width: 1)
+                        .zIndex(20)
+                        .foregroundColor(.clear)
+                        .position(x: rect.rect.minX + rect.rect.width / 2, y: rect.rect.minY - rect.rect.height / 2)
+                }
+                
+                Image(uiImage: alert.frame)
+                    .resizable()
+                    .scaledToFit()
+            }
+            .scaledToFit()
             
             // temporary
-            Button {
-                alert.askForPic()
-            } label: {
-                Text("Get")
+            HStack {
+                Button {
+                    alert.askForPic()
+                } label: {
+                    Text("Get")
+                }
             }
         }
     }
