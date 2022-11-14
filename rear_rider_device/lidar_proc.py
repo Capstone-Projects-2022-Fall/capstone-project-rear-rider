@@ -33,7 +33,7 @@ class LidarParentProcess(ParentProcess):
         data = ("data\n" f"{distance} {strength}")
         self.writeline(data)
     
-    async def on_send_picture_signal(self):
+    async def send_picture_signal(self):
         # not sure what to do here
         picture_signal = 'picture_signal'
         self.writeline(picture_signal)
