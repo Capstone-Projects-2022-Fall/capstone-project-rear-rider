@@ -12,33 +12,29 @@ class RRMedia:
         self.media_id
 
 class RRCamera:
-
+    #promises and futures event driven python
+    #possible camera safety (taking photo when stream thread using cam)
     now = datetime.now()
     today = date.today()
     current_time = str(now.strftime("%H:%M:%S"))
     current_date = str(today.strftime('%Y-%m-%d'))
 
-    defaultPhotoName = "image at "    + current_time + " on " + current_date + ".jpg"
-    defaultVideoName = "orig vid at " + current_time + " on " + current_date + ".h264"
-
-    def __init__(self, storage_path = os.path.dirname(__file__) + "/", name = defaultPhotoName):
+    DEF_VID_LEN = 15
+    def __init__(self):
         self.pc = Picamera2()
-        self.media_loc = storage_path + name
-        self.def_vid_len = 10
-        self.def_loc = storage_path
+        self.media_loc = os.path.dirname(__file__) + "/../media_storage/"
         self._stream_thread: Union[None, Thread] = None
         self._stream_server: Union[None, StreamingServer] = None
 
-    def takePhoto(self, photoName):
-        photoLocation = self.def_loc + photoName
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", photoLocation)
-        self.pc.start() 
+    def takePhoto(self, photoName = "image_at_"    + current_time + "_on_" + current_date):
+        photoLocation = self.media_loc + photoName + ".jpg"
+        self.pc.start()
         self.pc.capture_file(photoLocation)
         self.pc.stop();
-
-    def startRec(self, videoName, videoLen):
-        videoLocation = self.def_loc + videoName
-        self.pc.start_and_record_video(videoLocation, duration = videoLen)
+        
+    def startRec(self, videoName = "video_at_" + current_time + "_on_" + current_date, vidLen = DEF_VID_LEN):  # I had to change the spaces to _ because of ffmjepg using spaces as delimters and 
+        videoLocation = self.media_loc + videoName + ".mp4"                              # that made the conversion of the file to bug and break.
+        self.pc.start_and_record_video(output = videoLocation, duration = vidLen)
 
     def beginStream(self):
         def on_stream_server(stream_server: StreamingServer):
@@ -63,14 +59,3 @@ class RRCamera:
     
     def _is_streaming(self):
         return self._stream_thread is not None
-
-    def DefMediaName(media_type : str):
-        now = datetime.now()
-        today = date.today()
-        current_time = str(now.strftime("%H:%M:%S"))
-        current_date = str(today.strftime('%Y-%m-%d'))
-        name = str(datetime.now().strftime("%H:%M:%S")) + " on " + str(date.today().strftime('%Y-%m-%d'))
-        if media_type == 'vid':
-            return "vid at " + current_time + " on " + current_date + ".h264"
-        elif media_type == 'pic':
-            return "image at "    + current_time + " on " + current_date + ".jpg"
