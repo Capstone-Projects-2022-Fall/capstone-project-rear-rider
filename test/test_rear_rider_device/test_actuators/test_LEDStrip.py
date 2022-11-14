@@ -2,8 +2,9 @@ import math
 import time
 import unittest
 from unittest import IsolatedAsyncioTestCase
-import sys
+import sys, os
 sys.path.append("../rear_rider_device")
+
 from actuators.led_strip import LedStripController, create_neopixel
 
 
@@ -53,7 +54,7 @@ class TestLEDStrip(unittest.IsolatedAsyncioTestCase):
     
     async def test_turn_off(self):
         '''
-        turn_off sets the brightness of the strip to zero so this test 
+        turn_off() sets the brightness of the strip to zero so this test 
         checks the value of the strip's _pixles.brighness value and if it matches zero
         '''
         self.led_strip.turn_off()
