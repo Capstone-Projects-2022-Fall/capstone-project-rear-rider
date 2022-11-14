@@ -10,7 +10,6 @@ sys.path.append(PROJECT_ROOT)
 import test_bluetooth
 import test_ipc
 import unittest
-
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()
     suite = unittest.TestSuite()
