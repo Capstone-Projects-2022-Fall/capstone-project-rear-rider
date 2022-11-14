@@ -2,8 +2,8 @@ import asyncio
 from pkgutil import get_data
 import readline
 from sys import stdout
-from rear_rider_device.ipc.parent_process import ParentProcess
-import rear_rider_device.rear_rider_sensors.camera as camera
+from ipc.parent_process import ParentProcess
+import rear_rider_sensors.camera as camera
 import sys
 import os
 from datetime import datetime

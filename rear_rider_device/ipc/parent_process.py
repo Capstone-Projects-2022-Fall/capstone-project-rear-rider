@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from sys import stdin, stdout
-from rear_rider_device.ipc.i_process import Process
+from ipc.i_process import Process
 
 class ParentProcess(Process):
     """
