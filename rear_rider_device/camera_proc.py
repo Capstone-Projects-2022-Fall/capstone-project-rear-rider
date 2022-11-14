@@ -23,7 +23,7 @@ class CameraParentProcess(ParentProcess):
 
     async def on_get_picture(self, name = str(datetime.now().strftime("%H:%M:%S")) + " on " + str(date.today().strftime('%Y-%m-%d'))):
         self.camera.takePhoto(name + ".jpg")
-        #await self.writeline('on_picture')
+        await self.writeline('picture')
     async def on_get_stream(self):
         self.camera.beginStream()
     async def on_get_recording(self):
