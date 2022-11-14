@@ -126,6 +126,12 @@ class LedStripEffect():
         An inheriting class should do any calculations here for the `affect` phase.
         """
         raise NotImplementedError('')
+    
+    def remove(self, led_strip_con: LedStripController):
+        """
+        An inheriting class can override this to do something when this effect is removed.
+        """
+        pass
 
 class StrobeEffect(LedStripEffect):
     """
@@ -142,13 +148,9 @@ class StrobeEffect(LedStripEffect):
             self._curr_color = self._color
         else:
             self._curr_color = OFF_COLOR
-
-class BlankEffect(LedStripEffect):
-    def affect(self, frame: LedStripFrame, led_strip_con: LedStripController):
-        led_strip_con.fill(OFF_COLOR)
     
-    def new_frame(self, frame: LedStripFrame):
-        pass
+    def remove(self, led_strip_con):
+        led_strip_con.fill(OFF_COLOR)
 
 class LedsEffectsLoopContext:
     def __init__(self, led_strip_ctrl: LedStripController, frame: LedStripFrame):
@@ -170,8 +172,10 @@ class LedsEffectsLoopContext:
 
     def set_effects(self, effects: list[LedStripEffect]):
         with self.play_condition:
+            for effect in self._effects:
+                effect.remove(self._led_strip_ctrl)
             self._effects.clear()
-            self._effects.append(effects[0])
+            self._effects.extend(effects)
             self.play_condition.notify()
     
     ###
@@ -207,6 +211,15 @@ class LedsEffectsLoopContext:
             self._loop = False
             self._play = False
             self.play_condition.notify()
+    
+    def has_effect(self, effect_type: type[LedStripEffect]):
+        """
+        Return True if the following effect_type is present.
+        """
+        for effect in self._effects:
+            if isinstance(effect, effect_type):
+                return True
+        return False
 
 
 def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):

@@ -175,3 +175,6 @@ class ChildProcess(Process):
         Override this method to add custom functionality
         """
         self._print('Exception on child process')
+    
+    async def exit(self):
+        await self.writeline('exit')

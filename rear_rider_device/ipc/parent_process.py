@@ -1,4 +1,3 @@
-from datetime import date, datetime
 from sys import stdin, stdout
 from rear_rider_device.ipc.i_process import Process
 
@@ -6,8 +5,8 @@ class ParentProcess(Process):
     """
     Allows a process, a child process, to communicate with its parent.
     """
-    def __init__():
-        pass
+    def __init__(self):
+        super().__init__()
     
     async def readline(self):
         """
@@ -70,8 +69,6 @@ class ParentProcess(Process):
                 break
             else:
                 await self._on_command(command)
-        else:
-            self.no_ack()
     
     async def pre_ready(self):
         """
