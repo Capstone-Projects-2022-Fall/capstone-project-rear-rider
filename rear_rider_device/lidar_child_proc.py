@@ -54,7 +54,7 @@ class LidarChildProcess(ChildProcess):
         await self.writeline('get_data')
 
     async def on_picture_signal(self):
-        await self.camera_child_proc.on_picture()
+        await self.camera_child_proc.get_picture()
         # after picture is taken signal bluetooth?
 
     def no_on_handler(self, on_command, err):
