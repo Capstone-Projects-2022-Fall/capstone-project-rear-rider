@@ -33,6 +33,7 @@ class CameraChildProcess(ChildProcess):
         self._print('after_on_ready')
 
     async def get_picture(self):
+        self._print('get_picture')
         # picture = (await self.readline())
         # do somthing with picture ??
         await self.writeline('get_picture')

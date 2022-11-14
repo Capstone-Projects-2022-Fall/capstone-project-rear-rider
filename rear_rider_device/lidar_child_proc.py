@@ -54,6 +54,7 @@ class LidarChildProcess(ChildProcess):
         await self.writeline('get_data')
 
     async def on_picture_signal(self):
+        self._print('on_picture_signal')
         await self.camera_child_proc.get_picture()
         # after picture is taken signal bluetooth?
 
