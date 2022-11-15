@@ -10,6 +10,8 @@
 
 import Foundation
 import CoreBluetooth
+import UIKit
+import SwiftUI
 
 
 let piName = "RearRiderPi4"
@@ -21,6 +23,7 @@ struct CBUUIDs {
     static let BLENotifyCharacteristicUUID = CBUUID(string: "9f7bb8c9-4b29-4118-98ac-292557551cdf")
     static let BLEConfigCharacteristicUUID = CBUUID(string: "501beabd-3f66-4cca-ba7a-0fbf4f81870c")
     static let BLEWifiCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8fcc")
+    static let BLEPictureCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8abb")
 }
 
 /// The purpose of this class is to set the iPhone as a central manager and connect to the RaspberryPi as a peripheral
@@ -32,6 +35,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private var notifyCharacteristic: CBCharacteristic!
     private var configCharacteristic: CBCharacteristic!
     private var wifiCharacteristic: CBCharacteristic!
+    private var picCharacteristic: CBCharacteristic!
     
     //mostly for testing purposes
     var ConfigCharacteristic: CBCharacteristic {
@@ -48,6 +52,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     static var shared = BLEManager()
     private let log = RearRiderLog.shared
+    private var pic_index: UInt8 = 0; // current index of the picture packet transfer
     
     @Published var isSwitchedOn = false
     @Published var connected = false
@@ -207,6 +212,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 peripheral.setNotifyValue(true, for: wifiCharacteristic)
                 isWifiOn()
             }
+            else if characteristic.uuid.isEqual(CBUUIDs.BLEPictureCharacteristicUUID) {
+                picCharacteristic = characteristic
+                log.addLog(from: "BT", message: "Picture Characteristic set")
+                connected = true
+            }
         }
     }
     
@@ -235,6 +245,26 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             }
             else {
                 WifiManager.shared.setWifi(isOn: false)
+            }
+        }
+        else if characteristic == picCharacteristic {
+            if RearRiderAlerts.shared.pic_first_time {
+                pic_index = 0
+                let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
+                if d?.count ?? 0 > 0 {
+                    RearRiderAlerts.shared.pic_first_time = false
+                    let components = d?.components(separatedBy: "-")
+                    RearRiderAlerts.shared.pic_size = Int(components![0]) ?? 0
+                    RearRiderAlerts.shared.pic_packets = Int(components![1]) ?? 0
+                }
+            }
+            else {
+                let d: Data = characteristic.value ?? Data()
+                if d.count > 0 {
+                    RearRiderAlerts.shared.picData.append(d)
+                    RearRiderAlerts.shared.packet_recv = pic_index + 1
+                    pic_index += 1
+                }
             }
         }
     }
@@ -307,6 +337,25 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             data.append(withUnsafeBytes(of: &off) { Data($0) })
             myPeripheral.writeValue(data, for: wifiCharacteristic, type: CBCharacteristicWriteType.withResponse)
             isWifiOn()
+        }
+    }
+    
+    /// Initiates the picture transfer. First piece of data received will be the size and the number of packets
+    func getPicInfo() {
+        if connected {
+            myPeripheral.readValue(for: picCharacteristic)
+        }
+    }
+    
+    /// Sends command over BT to ask for a packet to be transferred
+    /// - Parameter i: a UInt8 describing the index of the packet to retrieve
+    func getPicPacket(index i: UInt8) {
+        if connected {
+            var data = Data()
+            var index: UInt8 = i // due to the function below does not accepting the constant i
+            data.append(withUnsafeBytes(of: &index) { Data($0) })
+            myPeripheral.writeValue(data, for: picCharacteristic, type: CBCharacteristicWriteType.withResponse)
+            myPeripheral.readValue(for: picCharacteristic)
         }
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 enum AlertErrors: Error {
     case fileNotFound(String)
@@ -16,10 +17,42 @@ enum AlertErrors: Error {
 /**
  * Class for managing any audio and visual alerts for the rider
  */
-class RearRiderAlerts {
-    
+class RearRiderAlerts: ObservableObject {
+    var mLModel = ImageIdentification()
     var player: AVAudioPlayer!
     var soundFile: URL! = nil
+    
+    @Published var frame: UIImage = UIImage()
+    static var shared = RearRiderAlerts()
+    
+    var picData = NSMutableData()
+    var pic_size:Int = 0
+    var pic_first_time:Bool = true
+    
+    
+    /// When this is set, the transfer of the packets will commence
+    var pic_packets:Int = 0 {
+        didSet {
+            RearRiderLog.shared.addLog(from: "Alerts", message: "Pic size: \(pic_size); Packets: \(pic_packets)")
+            BLEManager.shared.getPicPacket(index: 0)
+        }
+    }
+    
+    /// This is set every time a new packet arrives; then a new packet will be requested
+    var packet_recv: UInt8 = 0 {
+        didSet {
+            if packet_recv == pic_packets {
+                frame = UIImage(data: picData as Data) ?? UIImage()
+                mLModel.detectObjects(image: frame)
+                pic_first_time = true
+                picData = NSMutableData()
+                if mLModel.detected_objs.isEmpty { askForPic() } // if no objects detect ask for another pic
+            }
+            else {
+                BLEManager.shared.getPicPacket(index: packet_recv)
+            }
+        }
+    }
         
     /**
      * Takes the name of a sound file without the extension and attemts to create a player for it.
@@ -58,5 +91,12 @@ class RearRiderAlerts {
         } catch let error {
             print(error)
         }
+    }
+    
+    /// Asks the RPi for the picture's metadata (size and number of packets)
+    func askForPic() {
+        mLModel.detected_objs.removeAll()
+        mLModel.clearBndRects()
+        BLEManager.shared.getPicInfo()
     }
 }

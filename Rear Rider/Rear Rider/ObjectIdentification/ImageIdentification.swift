@@ -27,6 +27,7 @@ class ImageIdentification: ObservableObject {
         }
     }
     @Published var bndRectsCopy = [BoundingRect]()
+    var detected_objs = [String]()
     
     init() {
         self.visionModel = initVisionModel()
@@ -54,6 +55,8 @@ class ImageIdentification: ObservableObject {
                     if resultDetectionConfidence >= detectionConfidenceThreshold {
                         let detectedObject = result.labels.first?.identifier ?? "Nothing"
                         let detectedObjectConfidence = result.labels.first?.confidence ?? 0
+                        
+                        self.detected_objs.append(detectedObject)
                         
                         let temp = CGRect(x: result.boundingBox.origin.x, y: 1 - result.boundingBox.origin.y, width: result.boundingBox.width, height: result.boundingBox.height)
                         // 389x288 is the size of the Image and ZStack views in CameraTestView with scaledToFit property
