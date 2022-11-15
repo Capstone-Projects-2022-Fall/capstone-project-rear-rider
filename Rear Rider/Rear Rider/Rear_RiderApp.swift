@@ -25,18 +25,24 @@ struct Rear_RiderApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
+    @StateObject var viewRouter = ViewRouter()
     @StateObject var bleManager = BLEManager.shared
     @StateObject var conf = UserConfig()
     @StateObject var log = RearRiderLog.shared
     @StateObject var wifiManager = WifiManager.shared
+    @StateObject var auth = AuthModel()
+    @StateObject var db = FirestoreModel()
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ViewController()
                 .environmentObject(bleManager)
                 .environmentObject(log)
                 .environmentObject(conf)
                 .environmentObject(wifiManager)
+                .environmentObject(viewRouter)
+                .environmentObject(auth)
+                .environmentObject(db)
         }
     }
 }
