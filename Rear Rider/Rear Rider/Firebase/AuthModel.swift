@@ -26,17 +26,6 @@ class AuthModel: ObservableObject {
         var message: String?
     }
     
-    func signOutUser() -> AuthResult {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            return AuthResult(res: .success)
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
-            return AuthResult(res: .failure, message: signOutError.localizedDescription)
-        }
-    }
-    
     func signUpUser(userEmail: String, userPassword: String) async -> AuthResult {
         authLoading = true
         do {
@@ -59,6 +48,26 @@ class AuthModel: ObservableObject {
             try await auth.signIn(withEmail: userEmail, password: userPassword)
             authLoading = false
             return AuthResult(res: .success, message: "Success signing in")
+        } catch {
+            authLoading = false
+            return AuthResult(res: .failure, message: error.localizedDescription)
+        }
+    }
+    
+    func signOutUser() -> AuthResult {
+        do {
+            try auth.signOut()
+            return AuthResult(res: .success)
+        } catch let signOutError as NSError {
+            return AuthResult(res: .failure, message: signOutError.localizedDescription)
+        }
+    }
+    
+    func resetPassword(userEmail: String) async -> AuthResult {
+        do {
+            try await auth.sendPasswordReset(withEmail: userEmail)
+            authLoading = false
+            return AuthResult(res: .success, message: "Password reset email sent to: \(userEmail)")
         } catch {
             authLoading = false
             return AuthResult(res: .failure, message: error.localizedDescription)
