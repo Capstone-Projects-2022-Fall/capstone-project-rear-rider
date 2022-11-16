@@ -77,17 +77,6 @@ struct SignUpView_Previews: PreviewProvider {
     }
 }
 
-struct LogoView: View {
-    @Environment(\.colorScheme) var colorScheme
-    var body: some View {
-        Image(colorScheme == .light ? "LightLogo" : "DarkLogo")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 300, height: 150)
-            .padding(.top, 70)
-    }
-}
-
 struct SignUpCredentialFields: View {
     
     @Binding var email: String
