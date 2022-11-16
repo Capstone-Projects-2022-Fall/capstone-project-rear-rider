@@ -15,8 +15,6 @@ DEFAULT_FPS = 5
 10 frames per second is good for a strobe light with 5 blinks per second.
 """
 
-MAX_BRIGHTNESS = 0.1
-
 
 class LedStripController():
     def __init__(self, pixels: neopixel.NeoPixel):
@@ -83,9 +81,9 @@ class LedStripController():
     
     def set_brightness(self, value: float):
         """
-        0.0 - 1.0, but is limited to MAX_BRIGHTNESS which scales the brightness additionaly from 0.0 - 1.0
+        0.0 - 1.0
         """
-        self._pixels.brightness = self._brightness_value = value * MAX_BRIGHTNESS
+        self._pixels.brightness = self._brightness_value = value
         self._pixels.show()
     
     def show(self):
@@ -221,6 +219,15 @@ class LedsEffectsLoopContext:
                 return True
         return False
 
+class SequentialLight(LedStripEffect):
+    def affect(self, frame: LedStripFrame, led_strip_con: LedStripController):
+        i = frame.frame_num % led_strip_con._pixels.n
+        led_strip_con.fill(OFF_COLOR)
+        led_strip_con.set(i, WHITE)
+    
+    def new_frame(self, frame: LedStripFrame):
+        pass
+
 
 def enter_leds_effects_loop(loop_ctx: LedsEffectsLoopContext):
     def update_elapsed_time():
@@ -259,7 +266,8 @@ if __name__ == '__main__':
         loop_ctx = LedsEffectsLoopContext(
             led_strip_ctrl=led_strip,
             frame=LedStripFrame(fps=DEFAULT_FPS))
-        loop_ctx.set_effects([StrobeEffect()])
+        loop_ctx.set_effects([SequentialLight()])
+        loop_ctx.play()
         enter_leds_effects_loop(loop_ctx)
     except Exception as e:
         print(e)

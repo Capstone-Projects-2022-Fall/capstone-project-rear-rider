@@ -39,7 +39,7 @@ class LedsParentProcess(ParentProcess):
         """
         color_value_line = await self.readline()
         color_value_split = color_value_line.split(' ')
-        if len(color_value_split) > 0:
+        if len(color_value_split) > 1:
             if len(color_value_split) != 3:
                 raise Exception('Color value was not 3 values long.')
             self.color = (int(color_value_split[0]),
