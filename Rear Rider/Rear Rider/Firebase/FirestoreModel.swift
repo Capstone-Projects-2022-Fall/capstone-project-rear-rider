@@ -39,8 +39,10 @@ class FirestoreModel: ObservableObject {
         firestoreLoading = true
         do {
             try db.collection("users").document(userId!).collection("rides").document().setData(from: ride)
+            firestoreLoading = false
             return FirestoreResult(res: .success, message: "Succesfully wrote ride to db")
         } catch {
+            firestoreLoading = false
             return FirestoreResult(res: .failure, message: error.localizedDescription)
         }
     }
