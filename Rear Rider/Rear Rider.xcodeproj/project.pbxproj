@@ -18,6 +18,7 @@
 		20CEE3472922C03000D43613 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CEE3462922C03000D43613 /* ViewController.swift */; };
 		20CEE3492922C37E00D43613 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 20CEE3482922C37E00D43613 /* FirebaseFirestoreSwift */; };
 		20CEE34B2923090A00D43613 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CEE34A2923090A00D43613 /* AuthModel.swift */; };
+		20CEE34D29245C4700D43613 /* MetricsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CEE34C29245C4700D43613 /* MetricsModel.swift */; };
 		483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */; };
 		483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */; };
 		483E42B9291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -71,6 +72,7 @@
 		20CEE3412922BFAF00D43613 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		20CEE3462922C03000D43613 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		20CEE34A2923090A00D43613 /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
+		20CEE34C29245C4700D43613 /* MetricsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsModel.swift; sourceTree = "<group>"; };
 		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 			children = (
 				20B1A1BE291C04FC0023B920 /* MetricsView.swift */,
 				20B1A1C0291C060E0023B920 /* RideHistoryView.swift */,
+				20CEE34C29245C4700D43613 /* MetricsModel.swift */,
 			);
 			path = Metrics;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				48CB852D2902E60700283DBD /* RearRiderAlerts.swift in Sources */,
 				4845584B2909768E002D81FC /* ColorExtension.swift in Sources */,
 				20CEE33C2922BF8D00D43613 /* ViewRouter.swift in Sources */,
+				20CEE34D29245C4700D43613 /* MetricsModel.swift in Sources */,
 				484558412908941B002D81FC /* OptionsView.swift in Sources */,
 				C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */,
 				48F4414228F6258C00F7C9AA /* ImageIdentification.swift in Sources */,
