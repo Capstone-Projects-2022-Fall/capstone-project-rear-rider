@@ -30,6 +30,7 @@ class LedsParentProcess(ParentProcess):
         self.led_strip = led_strip
         self._leds_effects_loop_thread = None
         self._leds_effects_loop_ctx = LedsEffectsLoopContext(self.led_strip, frame=LedStripFrame(5))
+        self.color = WHITE
     
     async def on_turn_on(self):
         """
@@ -37,17 +38,14 @@ class LedsParentProcess(ParentProcess):
             
         """
         color_value_line = await self.readline()
-        
-        try:
-            color_value_split = color_value_line.split(' ')
+        color_value_split = color_value_line.split(' ')
+        if len(color_value_split) > 1:
             if len(color_value_split) != 3:
                 raise Exception('Color value was not 3 values long.')
-            color = (int(color_value_split[0]),
+            self.color = (int(color_value_split[0]),
                         int(color_value_split[1]),
                         int(color_value_split[2]))
-            self.led_strip.fill(color)
-        except Exception:
-            self.led_strip.fill(WHITE)
+        self.led_strip.fill(self.color)
         self.led_strip.turn_on()
         
     async def on_turn_off(self):
@@ -68,7 +66,7 @@ class LedsParentProcess(ParentProcess):
         params = params_line.split(' ')
         frequency = int(params[0])
         # duration = float(params[1])
-        self._set_strobe_effect(frequency, WHITE)
+        self._set_strobe_effect(frequency, self.color)
 
     async def pre_ready(self):
         if self._leds_effects_loop_thread is not None:
@@ -143,12 +141,12 @@ class LedsParentProcess(ParentProcess):
         2 - medium
         3 - high
         """
-        color = (int(params[2]), int(params[3]), int(params[4]))
+        self.color = (int(params[2]), int(params[3]), int(params[4]))
         if pattern != '1':
             # Since '1' defines the only pattern implemented we should return early if pattern is not '1'
             return
         self.led_strip.set_brightness(1.0 / (4 - int(brightness)))
-        self._set_strobe_effect(5, color)
+        self._set_strobe_effect(5, self.color)
         self._leds_effects_loop_ctx.play()
     
     def _set_strobe_effect(self, frequency, color):
