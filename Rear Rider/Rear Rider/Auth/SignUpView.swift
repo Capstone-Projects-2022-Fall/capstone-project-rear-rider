@@ -16,8 +16,6 @@ struct SignUpView: View {
     @State var email = ""
     @State var password = ""
     @State var passwordConfirmation = ""
-    
-    @State var signUpProcessing = false
     @State var signUpErrorMessage = ""
     
     var body: some View {
@@ -33,9 +31,9 @@ struct SignUpView: View {
                     .background(.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .opacity(!signUpProcessing && !email.isEmpty && !password.isEmpty && !passwordConfirmation.isEmpty && password == passwordConfirmation ? 0.9 : 0.4)
+                    .opacity(!auth.authLoading && !email.isEmpty && !password.isEmpty && !passwordConfirmation.isEmpty && password == passwordConfirmation ? 0.9 : 0.4)
             }
-            .disabled(!signUpProcessing && !email.isEmpty && !password.isEmpty && !passwordConfirmation.isEmpty && password == passwordConfirmation ? false : true)
+            .disabled(!auth.authLoading && !email.isEmpty && !password.isEmpty && !passwordConfirmation.isEmpty && password == passwordConfirmation ? false : true)
             if auth.authLoading {
                 ProgressView()
             }

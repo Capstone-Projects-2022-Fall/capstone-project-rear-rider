@@ -13,7 +13,6 @@ struct SignInView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @State var email = ""
     @State var password = ""
-    @State var signInProcessing = false
     @State var signInErrorMessage = ""
     
     var body: some View {
@@ -38,9 +37,9 @@ struct SignInView: View {
                     .background(.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .opacity(!signInProcessing && !email.isEmpty && !password.isEmpty ? 0.9 : 0.4)
+                    .opacity(!auth.authLoading && !email.isEmpty && !password.isEmpty ? 0.9 : 0.4)
             }
-            .disabled(!signInProcessing && !email.isEmpty && !password.isEmpty ? false : true)
+            .disabled(!auth.authLoading && !email.isEmpty && !password.isEmpty ? false : true)
             
             if auth.authLoading {
                 ProgressView()
@@ -71,7 +70,6 @@ struct SignInView: View {
         Task {
             let authResult = await auth.signInUser(userEmail: email, userPassword: password)
             if (authResult.res == .success) {
-                signInProcessing = false
                 withAnimation {
                     viewRouter.currentPage = .homePage
                 }

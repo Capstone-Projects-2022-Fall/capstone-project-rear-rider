@@ -12,7 +12,6 @@ struct ForgotPasswordView: View {
     @EnvironmentObject var auth: AuthModel
     @EnvironmentObject var viewRouter: ViewRouter
     @State var email = ""
-    @State var processing = false
     
     struct AppError: Identifiable {
         let id = UUID().uuidString
@@ -34,11 +33,11 @@ struct ForgotPasswordView: View {
                     .background(.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .opacity(processing || email.isEmpty ? 0.4 : 0.9)
+                    .opacity(auth.authLoading || email.isEmpty ? 0.4 : 0.9)
             }
-            .disabled(processing || email.isEmpty)
+                .disabled(auth.authLoading || email.isEmpty)
             
-            if processing {
+            if (auth.authLoading) {
                 ProgressView()
             }
             Spacer()
