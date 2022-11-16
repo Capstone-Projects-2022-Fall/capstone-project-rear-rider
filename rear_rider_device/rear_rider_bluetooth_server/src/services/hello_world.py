@@ -132,6 +132,9 @@ class LedConfig:
     (r, g, b)
     """
 
+    def to_bytes(self):
+        return [self.pattern, self.brightness, *self.color]
+
 class ConfigCharacteristic(Characteristic):
     """
     Configure the LED lights.
@@ -144,8 +147,12 @@ class ConfigCharacteristic(Characteristic):
                 self.TEST_CHRC_UUID,
                 ['write'],
                 service)
-        self.value = LedConfig()
+        self.value: LedConfig
         self._on_led_config: Union[None, Callable[[LedConfig], None]] = None
+        self._config_characteristic__init__()
+    
+    def _config_characteristic__init__(self):
+        self.value = LedConfig()
 
     def WriteValue(self, value, options):
         pattern = int(value[0])
@@ -187,7 +194,8 @@ class WifiCharacteristic(Characteristic):
         # This formats the first byte of the dbus value to an integer.
         state = int(value[0])
         if state == 0:
-            wifi.turn_off()
+            # wifi.turn_off()
+            pass
         elif state == 1:
             wifi.turn_on()
 
