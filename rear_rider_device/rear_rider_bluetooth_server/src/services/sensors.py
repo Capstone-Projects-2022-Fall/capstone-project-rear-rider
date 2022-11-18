@@ -15,7 +15,7 @@ class SensorsService(Service):
 
         # self.add_characteristic(CameraFeedCharacteristic(bus, 0, self))
         self.add_characteristic(accelerometer_characteristic)
-        # self.add_characteristic(RadarCharacteristic(bus, 2, self))
+        self.add_characteristic(LidarCharacteristic(bus, 2, self))
 
         self.accelerometer_characteristic = accelerometer_characteristic
 
