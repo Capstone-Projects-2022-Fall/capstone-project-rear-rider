@@ -5,6 +5,7 @@ from datetime import datetime
 from rear_rider_device.ipc.child_process import ChildProcess
 from rear_rider_device.leds_child_proc import LedsChildProcess
 from rear_rider_device.camera_child_proc import CameraChildProcess
+from rear_rider_device.bluetooth_server_child_proc import BluetoothServerChildProcess
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -16,7 +17,8 @@ class LidarChildProcess(ChildProcess):
     signal_strength = 0  # signal unreliable under 100
 
     def __init__(self, led_child_proc: LedsChildProcess,
-                 camera_child_proc: CameraChildProcess):
+                 camera_child_proc: CameraChildProcess,
+                 bluetooth_server_child_proc: BluetoothServerChildProcess):
         """
         Default `buf_size` of 64 frame datapoints at 60 `fps`.
         """
@@ -24,6 +26,7 @@ class LidarChildProcess(ChildProcess):
         self.ready = asyncio.Future()
         self.led_child_proc = led_child_proc
         self.camera_child_proc = camera_child_proc
+        self.bluetooth_child_proc = bluetooth_server_child_proc
 
     async def on_ready(self):
         self.start_time = datetime.now()
@@ -44,9 +47,10 @@ class LidarChildProcess(ChildProcess):
         self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(
             lidar_distance, signal_strength))
 
-        unsafe_distance = 50
+        unsafe_distance = 900
         if int(lidar_distance) < unsafe_distance:
             await self.led_child_proc.led_strobe_on()
+            await self.bluetooth_child_proc.object_detected(lidar_distance)
         else:
             await self.led_child_proc.led_strobe_off()
 
