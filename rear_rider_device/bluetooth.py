@@ -91,7 +91,10 @@ class BluetoothParentProcess(ParentProcess):
     def discoverable_changed(self, value: str):
         timeout = self.rear_rider_bt.get_discoverable_timeout()
         self.writeline(f'discoverable\n{value} {timeout}')
-        
+    
+    async def on_object_detected(self):
+        line = await self.readline()
+        self.rear_rider_bt.sensors_svc.lidar_chr.object_notify(int(line))
 
 
 if __name__ == '__main__':
