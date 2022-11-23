@@ -1,7 +1,4 @@
-import asyncio
-import concurrent.futures
 from rear_rider_device.ipc.child_process import ChildProcess
-from rear_rider_device.ipc.parent_process import ParentProcess
 
 import os
 
@@ -104,22 +101,3 @@ class BluetoothServerChildProcess(ChildProcess):
         line = await self.readline()
         self._print(f'led_config: {line}')
         await self._leds_child_process.add_led_effect(line)
-
-
-
-if __name__ == '__main__':
-    leds_proc = LedsChildProcess()
-    proc = BluetoothServerChildProcess(leds_child_process=leds_proc)
-    # parent = TestParent(leds_proc)
-    processes: list = [
-        proc,
-        leds_proc
-    ]
-    futures = []
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        # We create a thread for each to-be-executed child process
-        # so that asyncio manages one child process per thread.
-        for process in processes:
-            futures.append(executor.submit(asyncio.run, process.begin()))
-    print(len(futures))
-    concurrent.futures.wait(futures)
