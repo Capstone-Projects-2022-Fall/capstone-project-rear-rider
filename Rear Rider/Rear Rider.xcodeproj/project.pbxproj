@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20B1A1BF291C04FC0023B920 /* MetricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1BE291C04FC0023B920 /* MetricsView.swift */; };
+		20B1A1C1291C060F0023B920 /* RideHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1C0291C060E0023B920 /* RideHistoryView.swift */; };
 		483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */; };
 		483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */; };
 		483E42B9291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -14,8 +16,6 @@
 		483E42BD291BE82200B9A3C3 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BC291BE82200B9A3C3 /* FirebaseCrashlytics */; };
 		483E42BF291BE82200B9A3C3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42BE291BE82200B9A3C3 /* FirebaseDatabase */; };
 		483E42C1291BE82200B9A3C3 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42C0291BE82200B9A3C3 /* FirebaseDatabaseSwift */; };
-		20B1A1BF291C04FC0023B920 /* MetricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1BE291C04FC0023B920 /* MetricsView.swift */; };
-		20B1A1C1291C060F0023B920 /* RideHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B1A1C0291C060E0023B920 /* RideHistoryView.swift */; };
 		484558412908941B002D81FC /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484558402908941B002D81FC /* OptionsView.swift */; };
 		4845584929089EAA002D81FC /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584829089EAA002D81FC /* UserConfig.swift */; };
 		4845584B2909768E002D81FC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845584A2909768E002D81FC /* ColorExtension.swift */; };
@@ -53,9 +53,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		20B1A1BE291C04FC0023B920 /* MetricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsView.swift; sourceTree = "<group>"; };
 		20B1A1C0291C060E0023B920 /* RideHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistoryView.swift; sourceTree = "<group>"; };
+		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
 		4845584A2909768E002D81FC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -512,7 +512,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -526,7 +526,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -542,7 +542,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Rear Rider/Preview Content\"";
-				DEVELOPMENT_TEAM = GSVBY5A2AP;
+				DEVELOPMENT_TEAM = T53AYVVL5N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app requires Bluetooth for connecting to RaspberryPi";
@@ -556,7 +556,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = RearRider;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Calin.RearRider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
