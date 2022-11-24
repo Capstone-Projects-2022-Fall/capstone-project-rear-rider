@@ -1,4 +1,5 @@
 import os
+from typing import Awaitable, Callable, Union
 from rear_rider_device.ipc.child_process import ChildProcess
 from rear_rider_device.leds_child_proc import LedsChildProcess
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -10,6 +11,7 @@ class BluetoothServerChildProcess(ChildProcess):
     def __init__(self, leds_child_process: LedsChildProcess):
         super().__init__(f'python {dir_path}/bluetooth.py')
         self._leds_child_process = leds_child_process
+        self._read_accelerometer_cb: Union[None, Callable[[], Awaitable[tuple[float, float, float]]]] = None
 
     def _get_name(self) -> str:
         return 'BluetoothServerChildProcess'
@@ -38,6 +40,20 @@ class BluetoothServerChildProcess(ChildProcess):
 
     async def on_read_accelerometer(self):
         self._print('on_read_accelerometer')
+        accel = await self._read_accelerometer()
+        await self.writeline(
+            'set_data\n'
+            'accelerometer\n'
+            f'{accel[0]},{accel[1]},{accel[2]}')
+
+    async def _read_accelerometer(self):
+        read_accelerometer_cb = self._read_accelerometer_cb
+        if read_accelerometer_cb is None:
+            raise Exception('The read_accelerometer_cb is None')
+        return await read_accelerometer_cb()
+
+    def set_read_accelerometer_cb(self, callback: Callable[[], Awaitable[tuple[float, float, float]]]):
+        self._read_accelerometer_cb = callback
 
     #############
     # LED STUFF #

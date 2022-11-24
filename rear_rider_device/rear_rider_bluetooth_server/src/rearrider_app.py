@@ -9,13 +9,13 @@ class RearRiderApplication(dbus.service.Object):
     org.bluez.GattApplication1 interface implementation
     """
     services: list[Service]
-    def __init__(self, bus, read_data, strobe_light: StrobeLight):
+    def __init__(self, bus, strobe_light: StrobeLight):
         self.path = '/'
         self.services = []
         dbus.service.Object.__init__(self, bus, self.path)
 
         hello_world_service = HelloWorldService(bus, 0)
-        sensors_service = SensorsService(bus, 1, read_data)
+        sensors_service = SensorsService(bus, 1)
         actuators_service = ActuatorsService(bus, 2, strobe_light)
 
         self.add_service(hello_world_service)

@@ -134,15 +134,13 @@ class RearRiderBluetooth:
         return self._connected_device is not None
         
 
-def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_read: Callable[[], str],
-        strobe_light: StrobeLight):
+def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], strobe_light: StrobeLight):
     """
     """
     # First check all the variables are not none in order to ensure the main is valid.
     try:
         assert(print != None)
         assert(on_ready != None)
-        assert(on_read != None)
         assert(strobe_light != None)
     except AssertionError:
         print('Condition for main function not met!')
@@ -167,7 +165,7 @@ def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_
 
     ad_manager = get_object_interface(LE_ADVERTISING_MANAGER_IFACE)
 
-    app = RearRiderApplication(bus, read_data=on_read,
+    app = RearRiderApplication(bus,
         strobe_light=strobe_light
     )
 

@@ -9,10 +9,10 @@ class SensorsService(Service):
     """
     SENSORS_SVC_UUID = 'f0135e21-ad28-46e3-af7a-6e0829ab4c4a'
 
-    def __init__(self, bus, index, read_data: Callable[[], str]):
+    def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.SENSORS_SVC_UUID, True)
         accelerometer_characteristic = AccelerometerCharacteristic(
-            bus, 0, self, read_data=read_data)
+            bus, 0, self)
 
         # self.add_characteristic(CameraFeedCharacteristic(bus, 0, self))
         self.add_characteristic(accelerometer_characteristic)
