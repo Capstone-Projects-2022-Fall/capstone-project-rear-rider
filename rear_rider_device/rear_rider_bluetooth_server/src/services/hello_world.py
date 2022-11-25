@@ -39,15 +39,18 @@ class HelloWorldService(Service):
         config_chr = ConfigCharacteristic(bus, 2, self)
         wifi_chr = WifiCharacteristic(bus, 3, self)
         pic_chr = PictureCharacteristic(bus, 4, self)
+        lidar_chr = LiDARCharacteristic(bus, 5, self)
 
         self.add_characteristic(reverse_text_chr)
         self.add_characteristic(append_counter_chr)
         self.add_characteristic(config_chr)
         self.add_characteristic(wifi_chr)
         self.add_characteristic(pic_chr)
+        self.add_characteristic(lidar_chr)
         
         self.reverse_text_chr = reverse_text_chr
         self.config_chr = config_chr
+        self.lidar_chr = lidar_chr
 
 class ReverseTextCharacteristic(Characteristic):
     """
@@ -272,3 +275,46 @@ class PictureCharacteristic(Characteristic):
     
     def WriteValue(self, value, options):
         self.value = int(value[0])
+
+class LiDARCharacteristic(Characteristic):
+    """
+    Notifies the iOS app when an object is detected by the LiDAR sensor and sends
+    the distance.
+    """
+    UUID = '92cb916f-d996-4f30-8cba-cf3ab8aede56'
+    value: dbus.ByteArray
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.UUID,
+            ['notify'],
+            service)
+        self.notifying = False
+        self.value = 0
+        self.in_range = False
+    
+    def set_in_range(self):
+        self.in_range = True
+
+    def StartNotify(self):
+        if self.notifying:
+            print('Already in a notifying state.')
+            return
+        self.notifying = True
+        self._start_notifying()
+
+    def StopNotify(self):
+        if not self.notifying:
+            print('Not in a notifying state.')
+            return
+        self.notifying = False
+
+    def _start_notifying(self):
+        GObject.timeout_add(500, self._check_object_in_range)
+    
+    def _check_object_in_range(self):
+        if self.in_range:
+            value = dbus.ByteArray(self.value.encode('utf8'))
+            self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
+            self.in_range = False
+        return self.notifying

@@ -24,6 +24,7 @@ struct CBUUIDs {
     static let BLEConfigCharacteristicUUID = CBUUID(string: "501beabd-3f66-4cca-ba7a-0fbf4f81870c")
     static let BLEWifiCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8fcc")
     static let BLEPictureCharacteristicUUID = CBUUID(string: "cd41b278-6254-4c89-9cd1-fd2578ab8abb")
+    static let BLELiDARCharacteristicUUID = CBUUID(string: "92cb916f-d996-4f30-8cba-cf3ab8aede56")
 }
 
 /// The purpose of this class is to set the iPhone as a central manager and connect to the RaspberryPi as a peripheral
@@ -36,6 +37,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     private var configCharacteristic: CBCharacteristic!
     private var wifiCharacteristic: CBCharacteristic!
     private var picCharacteristic: CBCharacteristic!
+    private var lidarCharacteristic: CBCharacteristic!
     
     //mostly for testing purposes
     var ConfigCharacteristic: CBCharacteristic {
@@ -217,6 +219,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 log.addLog(from: "BT", message: "Picture Characteristic set")
                 connected = true
             }
+            else if characteristic.uuid.isEqual(CBUUIDs.BLELiDARCharacteristicUUID) {
+                lidarCharacteristic = characteristic
+                log.addLog(from: "BT", message: "LiDAR Characteristic set")
+                peripheral.setNotifyValue(true, for: lidarCharacteristic)
+                connected = true
+            }
         }
     }
     
@@ -267,6 +275,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 }
             }
         }
+        else if characteristic == lidarCharacteristic {
+            print("LiDAR")
+            let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
+            print(d!)
+        }
     }
     
     /// Called when the state of the connection changes
@@ -276,6 +289,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         connected = false
         log.addLog(from: "BT", message: "RPi disconnected")
+        startScanning() // try to reconnect
     }
     
     /// Called when the peripheral disconnects
@@ -289,6 +303,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             print("RPi disconnected")
             log.addLog(from: "BT", message: "RPi disconnected")
             connected = false
+            startScanning() // try to reconnect
         }
     }
     
