@@ -13,7 +13,6 @@ enum AlertErrors: Error {
     case fileNotFound(String)
 }
 
-
 /**
  * Class for managing any audio and visual alerts for the rider
  */
@@ -22,6 +21,12 @@ class RearRiderAlerts: ObservableObject {
     var player: AVAudioPlayer!
     var soundFile: URL! = nil
     
+    // this sound is played when an object is very close
+    var beep_player: AVAudioPlayer!
+    var beep_file: URL! = nil
+    var dist_far: Int = 900
+    var dist_close: Int = 100
+    
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()
     
@@ -29,6 +34,34 @@ class RearRiderAlerts: ObservableObject {
     var pic_size:Int = 0
     var pic_first_time:Bool = true
     
+    init() {
+        try! loadBeepSound()
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(
+                AVAudioSession.Category.multiRoute, // this setting allows the sound to be played on the speaker instead of Bluetooth
+                options: AVAudioSession.CategoryOptions.duckOthers)
+
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func loadBeepSound() throws {
+        beep_file = Bundle.main.url(forResource: "beep", withExtension: "mp3")
+
+        if beep_file == nil {
+            throw AlertErrors.fileNotFound("File \("beep").mp3 not found on device!")
+        }
+
+        beep_player = try! AVAudioPlayer(contentsOf: beep_file)
+    }
+    
+    func playBeepSound() {
+        if beep_file == nil { return }
+        beep_player.play()
+    }
     
     /// When this is set, the transfer of the packets will commence
     var pic_packets:Int = 0 {
@@ -79,18 +112,7 @@ class RearRiderAlerts: ObservableObject {
     func playAudioAlert() {
         // do nothing if we don't have a sound file configured
         if soundFile == nil { return }
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(
-                AVAudioSession.Category.multiRoute, // this setting allows the sound to be played on the speaker instead of Bluetooth
-                options: AVAudioSession.CategoryOptions.duckOthers
-            )
-
-            try AVAudioSession.sharedInstance().setActive(true)
-            player.play()
-        } catch let error {
-            print(error)
-        }
+        player.play()
     }
     
     /// Asks the RPi for the picture's metadata (size and number of packets)

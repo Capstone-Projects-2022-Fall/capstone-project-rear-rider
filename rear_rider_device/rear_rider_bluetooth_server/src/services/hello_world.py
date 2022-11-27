@@ -301,18 +301,14 @@ class LiDARCharacteristic(Characteristic):
             print('Already in a notifying state.')
             return
         self.notifying = True
-        self._start_notifying()
 
     def StopNotify(self):
         if not self.notifying:
             print('Not in a notifying state.')
             return
         self.notifying = False
-
-    def _start_notifying(self):
-        GObject.timeout_add(500, self._check_object_in_range)
     
-    def _check_object_in_range(self):
+    def check_object_in_range(self):
         if self.in_range:
             value = dbus.ByteArray(self.value.encode('utf8'))
             self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])

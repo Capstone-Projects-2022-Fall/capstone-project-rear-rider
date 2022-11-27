@@ -39,10 +39,22 @@ class LidarChildProcess(ChildProcess):
         lidar_data = (await self.readline()).split(' ')
         lidar_distance = lidar_data[0]
         signal_strength = lidar_data[1]
-        self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
+        #self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
         
-        unsafe_distance = 50 
-        if int(lidar_distance) < unsafe_distance:
+        unsafe_distance = 900
+        very_close = 100
+        dist = int(lidar_distance)
+        
+        # if the object detected is very close send data to iPhone continuously
+        if dist <= very_close:
+            await self.bt_child_proc.writeline('set_data\nlidar\n{}'.format(lidar_distance))
+            self.in_range = False
+            await self.led_child_proc.led_strobe_on()
+        else:
+            await self.led_child_proc.led_strobe_off()
+        
+        # if the object detected is at a safer distance, alert only once
+        if dist <= unsafe_distance and dist > very_close:
             if not self.in_range:
                 await self.bt_child_proc.writeline('set_data\nlidar\n{}'.format(lidar_distance))
                 self.in_range = True
