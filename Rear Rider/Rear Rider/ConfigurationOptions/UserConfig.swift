@@ -116,6 +116,8 @@ class UserConfig: ObservableObject {
                 self.lightBrightness = savedData.lightBrightness
                 self.lightColor = savedData.lightColor
                 
+                try! RearRiderAlerts.shared.loadSoundFile(fileName: self.audioFile)
+                
                 print("LOADED: \(savedData)")
                 log.addLog(from: "UserConfig", message: "Loaded config: \(savedData)")
             } else {

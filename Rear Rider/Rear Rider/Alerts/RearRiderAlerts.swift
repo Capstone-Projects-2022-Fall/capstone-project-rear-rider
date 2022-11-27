@@ -82,7 +82,7 @@ class RearRiderAlerts: ObservableObject {
         
         do {
             try AVAudioSession.sharedInstance().setCategory(
-                AVAudioSession.Category.playback,
+                AVAudioSession.Category.multiRoute, // this setting allows the sound to be played on the speaker instead of Bluetooth
                 options: AVAudioSession.CategoryOptions.duckOthers
             )
 

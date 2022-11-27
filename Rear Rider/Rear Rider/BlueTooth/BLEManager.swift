@@ -278,7 +278,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         else if characteristic == lidarCharacteristic {
             print("LiDAR")
             let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
-            print(d!)
+            if d?.count ?? 0 > 0 {
+                RearRiderAlerts.shared.playAudioAlert()
+            }
         }
     }
     

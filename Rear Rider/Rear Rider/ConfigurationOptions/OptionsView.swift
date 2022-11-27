@@ -31,7 +31,7 @@ struct OptionsView: View {
     let lightPatterns: [ConfigOptions.LightPattern] = ConfigOptions.LightPattern.allCases
     let lightBrightness: [ConfigOptions.LightBrightness] = ConfigOptions.LightBrightness.allCases
     
-    let alert = RearRiderAlerts()
+    let alert = RearRiderAlerts.shared
     
     var body: some View {
         VStack {
