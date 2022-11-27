@@ -279,12 +279,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
             if d?.count ?? 0 > 0 {
                 guard let distance = Int(d!) else { return }
+                RearRiderAlerts.shared.distance = distance
                 // when an object is very close a beeping sound will continuously play to alert the rider
                 if distance <= RearRiderAlerts.shared.dist_close { RearRiderAlerts.shared.playBeepSound() }
                 
                 // if an object is detected further away, an alert will be played once
                 else if distance <= RearRiderAlerts.shared.dist_far &&
-                            distance > RearRiderAlerts.shared.dist_close
+                            distance >= RearRiderAlerts.shared.dist_medium
                 {
                     RearRiderAlerts.shared.playAudioAlert()
                 }

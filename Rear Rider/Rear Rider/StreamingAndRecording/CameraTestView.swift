@@ -13,6 +13,7 @@ struct CameraTestView: View {
     @EnvironmentObject var mLModel: ImageIdentification
     @EnvironmentObject var bleManager: BLEManager
     @EnvironmentObject var wifiManager: WifiManager
+    @EnvironmentObject var alert: RearRiderAlerts
     @ObservedObject private var stream = MjpegStreamingController(url: "http://raspberrypi.local:8000/stream.mjpg")
     
     // declare a timer that will call a function every 0.3 seconds
@@ -42,6 +43,8 @@ struct CameraTestView: View {
             }
             .scaledToFit()
             
+            Text(String(alert.distance) + "cm")
+            
             RecordingView()
         }
         .onAppear() {
@@ -62,5 +65,6 @@ struct CameraTest_Previews: PreviewProvider {
     static var previews: some View {
         CameraTestView().environmentObject(BLEManager())
             .environmentObject(ImageIdentification())
+            .environmentObject(RearRiderAlerts())
     }
 }

@@ -25,7 +25,9 @@ class RearRiderAlerts: ObservableObject {
     var beep_player: AVAudioPlayer!
     var beep_file: URL! = nil
     var dist_far: Int = 900
+    var dist_medium: Int = 500
     var dist_close: Int = 100
+    @Published var distance: Int
     
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()
@@ -35,6 +37,7 @@ class RearRiderAlerts: ObservableObject {
     var pic_first_time:Bool = true
     
     init() {
+        self.distance = 0
         try! loadBeepSound()
         
         do {

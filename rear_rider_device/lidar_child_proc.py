@@ -42,6 +42,7 @@ class LidarChildProcess(ChildProcess):
         #self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
         
         unsafe_distance = 900
+        medium_distance = 500
         very_close = 100
         dist = int(lidar_distance)
         
@@ -54,7 +55,7 @@ class LidarChildProcess(ChildProcess):
             await self.led_child_proc.led_strobe_off()
         
         # if the object detected is at a safer distance, alert only once
-        if dist <= unsafe_distance and dist > very_close:
+        if dist <= unsafe_distance and dist >= medium_distance:
             if not self.in_range:
                 await self.bt_child_proc.writeline('set_data\nlidar\n{}'.format(lidar_distance))
                 self.in_range = True
