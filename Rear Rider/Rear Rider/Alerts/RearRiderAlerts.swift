@@ -26,8 +26,8 @@ class RearRiderAlerts: ObservableObject {
     var beep_file: URL! = nil
     var dist_far: Int = 900
     var dist_medium: Int = 500
-    var dist_close: Int = 100
-    @Published var distance: Int
+    var dist_close: Int = 200
+    @Published var distance: Int = 0
     
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()

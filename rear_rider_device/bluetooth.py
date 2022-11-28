@@ -70,7 +70,6 @@ class BluetoothParentProcess(ParentProcess):
         elif data_type_line == 'lidar':
             data = await self.readline()
             self.rear_rider_bt.hello_world_svc.lidar_chr.value = data
-            self.rear_rider_bt.hello_world_svc.lidar_chr.set_in_range()
             self.rear_rider_bt.hello_world_svc.lidar_chr.check_object_in_range()
         
         else:

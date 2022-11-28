@@ -277,8 +277,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         else if characteristic == lidarCharacteristic {
             let d = String(data: characteristic.value ?? Data(), encoding: String.Encoding.utf8)
-            if d?.count ?? 0 > 0 {
-                guard let distance = Int(d!) else { return }
+            if d != nil {
+                let distance: Int = Int(d ?? "0") ?? 0
                 RearRiderAlerts.shared.distance = distance
                 // when an object is very close a beeping sound will continuously play to alert the rider
                 if distance <= RearRiderAlerts.shared.dist_close { RearRiderAlerts.shared.playBeepSound() }

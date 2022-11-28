@@ -291,10 +291,6 @@ class LiDARCharacteristic(Characteristic):
             service)
         self.notifying = False
         self.value = 0
-        self.in_range = False
-    
-    def set_in_range(self):
-        self.in_range = True
 
     def StartNotify(self):
         if self.notifying:
@@ -309,8 +305,6 @@ class LiDARCharacteristic(Characteristic):
         self.notifying = False
     
     def check_object_in_range(self):
-        if self.in_range:
-            value = dbus.ByteArray(self.value.encode('utf8'))
-            self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
-            self.in_range = False
+        value = dbus.ByteArray(self.value.encode('utf8'))
+        self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
         return self.notifying

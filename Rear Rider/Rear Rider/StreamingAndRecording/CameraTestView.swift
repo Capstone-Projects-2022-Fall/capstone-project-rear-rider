@@ -43,7 +43,7 @@ struct CameraTestView: View {
             }
             .scaledToFit()
             
-            Text(String(alert.distance) + "cm")
+            Text(String(alert.distance) + " cm")
             
             RecordingView()
         }
