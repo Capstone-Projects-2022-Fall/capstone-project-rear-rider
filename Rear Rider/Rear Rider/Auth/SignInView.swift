@@ -37,9 +37,9 @@ struct SignInView: View {
                     .background(.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .opacity(!auth.authLoading && !email.isEmpty && !password.isEmpty ? 0.9 : 0.4)
+                    .opacity(auth.authLoading || email.isEmpty || password.isEmpty ? 0.4 : 0.9)
             }
-            .disabled(!auth.authLoading && !email.isEmpty && !password.isEmpty ? false : true)
+            .disabled(auth.authLoading || email.isEmpty || password.isEmpty ? true : false)
             
             if auth.authLoading {
                 ProgressView()
