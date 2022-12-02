@@ -33,13 +33,18 @@ struct HomeView: View {
                     .tabItem {
                         Image(systemName: "camera")
                     }
-                OptionsView()
+                ActiveView()
                     .tabItem {
-                        Image(systemName: "gear")
-                    }
+                    Image(systemName: "location")
+                }
+                
                 RideHistoryView()
                     .tabItem {
                         Image(systemName: "chart.bar.xaxis")
+                    }
+                OptionsView()
+                    .tabItem {
+                        Image(systemName: "gear")
                     }
             }
         }
