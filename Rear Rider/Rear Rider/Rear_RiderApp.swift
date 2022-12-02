@@ -25,7 +25,7 @@ struct Rear_RiderApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-    @StateObject var mLModel = ImageIdentification()
+    @StateObject var mLModel = ImageIdentification.shared
     @StateObject var bleManager = BLEManager.shared
     @StateObject var conf = UserConfig()
     @StateObject var log = RearRiderLog.shared
