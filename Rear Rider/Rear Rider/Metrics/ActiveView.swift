@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct ActiveView: View {
-    @StateObject var locationManager = LocationManager()
+    @StateObject var trackingManager = TrackingManager()
     var body: some View {
         NavigationView {
-            switch locationManager.authorizationStatus {
+            switch trackingManager.authorizationStatus {
             case .notDetermined:
                 AnyView(RequestLocationView())
-                    .environmentObject(locationManager)
+                    .environmentObject(trackingManager)
             case .restricted:
                 ErrorView(errorText: "Location use is restricted. Please enable location use while app is in use in settings")
             case .denied:
                 ErrorView(errorText: "The app does not have location permissions. Please enable them in settings.")
             case .authorizedAlways, .authorizedWhenInUse:
-                TrackingView()
-                    .environmentObject(locationManager)
+                TrackingView().environmentObject(trackingManager)
             default:
                 Text("Unexpected status")
             }
@@ -30,7 +29,7 @@ struct ActiveView: View {
 }
 
 struct RequestLocationView: View {
-    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var trackingManager: TrackingManager
     
     var body: some View {
         VStack {
@@ -39,7 +38,7 @@ struct RequestLocationView: View {
                 .frame(width: 100, height: 100, alignment: .center)
                 .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
             Button(action: {
-                locationManager.requestPermission()
+                trackingManager.requestPermission()
             }, label: {
                 Label("Allow tracking", systemImage: "location")
             })

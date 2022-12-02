@@ -19,10 +19,9 @@
 		20E49B9D293A72BE008EE278 /* ActiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B97293A72BE008EE278 /* ActiveView.swift */; };
 		20E49B9E293A72BE008EE278 /* MetricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B98293A72BE008EE278 /* MetricsView.swift */; };
 		20E49B9F293A72BE008EE278 /* RideHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B99293A72BE008EE278 /* RideHistoryView.swift */; };
-		20E49BA0293A72BE008EE278 /* TrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B9A293A72BE008EE278 /* TrackingManager.swift */; };
 		20E49BA1293A72BE008EE278 /* MetricsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B9B293A72BE008EE278 /* MetricsModel.swift */; };
 		20E49BA2293A72BE008EE278 /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B9C293A72BE008EE278 /* TrackingView.swift */; };
-		20E49BA4293A72DE008EE278 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA3293A72DE008EE278 /* LocationManager.swift */; };
+		20E49BA4293A72DE008EE278 /* TrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA3293A72DE008EE278 /* TrackingManager.swift */; };
 		20E49BA6293A76E4008EE278 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA5293A76E4008EE278 /* HomeView.swift */; };
 		483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */; };
 		483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */; };
@@ -77,10 +76,9 @@
 		20E49B97293A72BE008EE278 /* ActiveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveView.swift; sourceTree = "<group>"; };
 		20E49B98293A72BE008EE278 /* MetricsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricsView.swift; sourceTree = "<group>"; };
 		20E49B99293A72BE008EE278 /* RideHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideHistoryView.swift; sourceTree = "<group>"; };
-		20E49B9A293A72BE008EE278 /* TrackingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingManager.swift; sourceTree = "<group>"; };
 		20E49B9B293A72BE008EE278 /* MetricsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricsModel.swift; sourceTree = "<group>"; };
 		20E49B9C293A72BE008EE278 /* TrackingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
-		20E49BA3293A72DE008EE278 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		20E49BA3293A72DE008EE278 /* TrackingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingManager.swift; sourceTree = "<group>"; };
 		20E49BA5293A76E4008EE278 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		20E49BA7293A77B1008EE278 /* Rear-Rider-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Rear-Rider-Info.plist"; sourceTree = SOURCE_ROOT; };
 		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -167,11 +165,10 @@
 		20E49B96293A72BE008EE278 /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
-				20E49BA3293A72DE008EE278 /* LocationManager.swift */,
+				20E49BA3293A72DE008EE278 /* TrackingManager.swift */,
 				20E49B97293A72BE008EE278 /* ActiveView.swift */,
 				20E49B98293A72BE008EE278 /* MetricsView.swift */,
 				20E49B99293A72BE008EE278 /* RideHistoryView.swift */,
-				20E49B9A293A72BE008EE278 /* TrackingManager.swift */,
 				20E49B9B293A72BE008EE278 /* MetricsModel.swift */,
 				20E49B9C293A72BE008EE278 /* TrackingView.swift */,
 			);
@@ -428,7 +425,7 @@
 				C307D28928F2731F001D7F1D /* CameraTestView.swift in Sources */,
 				C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */,
 				20E49B9D293A72BE008EE278 /* ActiveView.swift in Sources */,
-				20E49BA4293A72DE008EE278 /* LocationManager.swift in Sources */,
+				20E49BA4293A72DE008EE278 /* TrackingManager.swift in Sources */,
 				C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */,
 				C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */,
 				C36AA2E628FC80B2001F24A3 /* RecordingView.swift in Sources */,
@@ -438,7 +435,6 @@
 				C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */,
 				20CEE3472922C03000D43613 /* ViewController.swift in Sources */,
 				20E49B9E293A72BE008EE278 /* MetricsView.swift in Sources */,
-				20E49BA0293A72BE008EE278 /* TrackingManager.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
 				4845584929089EAA002D81FC /* UserConfig.swift in Sources */,
 				20E49BA6293A76E4008EE278 /* HomeView.swift in Sources */,
