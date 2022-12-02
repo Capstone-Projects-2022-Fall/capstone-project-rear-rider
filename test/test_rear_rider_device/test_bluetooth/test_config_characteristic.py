@@ -1,4 +1,4 @@
-from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import ConfigCharacteristic, LedConfig
+from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import ConfigCharacteristic, RearRiderConfig
 import dbus
 import unittest
 
@@ -12,13 +12,13 @@ class StubbedConfigCharacteristic(ConfigCharacteristic):
 class TestConfigCharacteristic(unittest.TestCase):
     def test_set_on_led_config(self):
         callback_called = False
-        config_val = [0x01, 0x01, 0xFF, 0xFF, 0xFF]
-        def callback(new_led_config: LedConfig):
+        config_val = [0x01, 0x01, 0xFF, 0xFF, 0xFF, 0x02]
+        def callback(new_led_config: RearRiderConfig):
             nonlocal callback_called
             callback_called = True
             self.assertEqual(new_led_config.to_bytes(), config_val)
         test_cfg_chara = StubbedConfigCharacteristic()
-        test_cfg_chara.set_on_led_config(callback=callback)
+        test_cfg_chara.set_on_config(callback=callback)
         test_cfg_chara.WriteValue(dbus.ByteArray(config_val), None)
         self.assertTrue(callback_called, 'The on_led_config callback was not called.')
 

@@ -10,8 +10,9 @@ class BluetoothServerChildProcess(ChildProcess):
     '''
     def __init__(self, leds_child_process: LedsChildProcess):
         super().__init__(f'python {dir_path}/bluetooth.py')
-        self._leds_child_process = leds_child_process
+        self._leds_child_process: LedsChildProcess = leds_child_process
         self._read_accelerometer_cb: Union[None, Callable[[], Awaitable[tuple[float, float, float]]]] = None
+        self._lidar_config_cb: Union[None, Callable[[int], None]] = None
 
     def _get_name(self) -> str:
         return 'BluetoothServerChildProcess'
@@ -112,3 +113,25 @@ class BluetoothServerChildProcess(ChildProcess):
         line = await self.readline()
         self._print(f'led_config: {line}')
         await self._leds_child_process.add_led_effect(line)
+
+    async def on_lidar_config(self):
+        '''
+        The handler for the configuration data received from the bluetooth side.
+
+        This handler function will use the callback set in `self.set_lidar_config_cb(...)`
+        '''
+        line = await self.readline()
+        self._print(f'lidar_config: {line}')
+        self.__set_lidar_config(int(line))
+
+    def __set_lidar_config(self, dist_cfg: int):
+        if self._lidar_config_cb is None:
+            return
+        self._lidar_config_cb(dist_cfg)
+
+    def set_lidar_config_cb(self, callback: Callable[[int], None]):
+        '''
+        Set the callback `BluetoothServerChildProcess` will call when a new configuration value for
+        the lidar sensor is received.
+        '''
+        self._lidar_config_cb = callback

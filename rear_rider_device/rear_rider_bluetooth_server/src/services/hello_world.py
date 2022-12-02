@@ -119,7 +119,7 @@ class AppendCounterWithNotificationCharacteristic(Characteristic):
         return self.notifying
 
 @dataclass
-class LedConfig:
+class RearRiderConfig:
     pattern: int = 0
     """
     0 - no pattern
@@ -134,13 +134,21 @@ class LedConfig:
     """
     (r, g, b)
     """
+    lidar_unsafe_distance: int = 1
+    """
+    Far = 2: (9 meters)
+    Medium = 1: (5 meters)
+    Close = 0: (1 meter)
+    """
 
     def to_bytes(self):
-        return [self.pattern, self.brightness, *self.color]
+        return [self.pattern, self.brightness, *self.color, self.lidar_unsafe_distance]
 
 class ConfigCharacteristic(Characteristic):
     """
     Configure the LED lights.
+
+    TODO: Move this into seperate file.
     """
     TEST_CHRC_UUID = '501beabd-3f66-4cca-ba7a-0fbf4f81870c'
 
@@ -150,12 +158,12 @@ class ConfigCharacteristic(Characteristic):
                 self.TEST_CHRC_UUID,
                 ['write'],
                 service)
-        self.value: LedConfig
-        self._on_led_config: Union[None, Callable[[LedConfig], None]] = None
+        self.value: RearRiderConfig
+        self._on_led_config: Union[None, Callable[[RearRiderConfig], None]] = None
         self._config_characteristic__init__()
     
     def _config_characteristic__init__(self):
-        self.value = LedConfig()
+        self.value = RearRiderConfig()
 
     def WriteValue(self, value, options):
         pattern = int(value[0])
@@ -163,12 +171,13 @@ class ConfigCharacteristic(Characteristic):
         r = int(value[2])
         g = int(value[3])
         b = int(value[4])
+        lidar_unsafe_distance = int(value[5])
         # print(f'ConfigCharacteristic Write: {pattern} {brightness} {r} {g} {b}')
-        self.value = LedConfig(pattern, brightness, (r, g, b))
+        self.value = RearRiderConfig(pattern, brightness, (r, g, b), lidar_unsafe_distance)
         if self._on_led_config is not None:
             self._on_led_config(self.value)
     
-    def set_on_led_config(self, callback: Callable[[LedConfig], None]):
+    def set_on_config(self, callback: Callable[[RearRiderConfig], None]):
         self._on_led_config = callback
 
 

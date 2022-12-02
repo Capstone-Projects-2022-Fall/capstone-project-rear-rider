@@ -16,7 +16,7 @@ from typing import Any, Callable, Union
 from rear_rider_device.ipc.parent_process import ParentProcess
 from rear_rider_device.rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLight
 import rear_rider_device.rear_rider_bluetooth_server.src.main as bt_server_main
-from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import LedConfig
+from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import RearRiderConfig
 
 DATA_FUTURE_TIMEOUT = 0.016
 '''
@@ -45,9 +45,10 @@ class BluetoothParentProcess(ParentProcess):
         # self._bluetooth_ready.result() # FOR DEBUGGING ONLY
         # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ####################################################
-        def on_led_config(cfg: LedConfig):
+        def on_rear_rider_config(cfg: RearRiderConfig):
             self.writeline(f'led_config\n{cfg.pattern} {cfg.brightness} {cfg.color[0]} {cfg.color[1]} {cfg.color[2]}')
-        self.rear_rider_bt.hello_world_svc.config_chr.set_on_led_config(on_led_config)
+            self.writeline(f'lidar_config\b{cfg.lidar_unsafe_distance}')
+        self.rear_rider_bt.hello_world_svc.config_chr.set_on_config(on_rear_rider_config)
         self.rear_rider_bt.sensors_svc.accelerometer_characteristic.set_read_accelerometer_cb(self.read_accelerometer)
         self.writeline('bluetooth_is_ready')
     
