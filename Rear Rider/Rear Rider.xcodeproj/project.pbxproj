@@ -37,6 +37,7 @@
 		C36AA2E728FC80B2001F24A3 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */; };
 		C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */; };
 		C36AA2EC28FC8278001F24A3 /* RiderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36AA2EB28FC8278001F24A3 /* RiderView.swift */; };
+		C39C7C2D2933C2AD007A5884 /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C39C7C2C2933C2AD007A5884 /* beep.mp3 */; };
 		C3A64EB329172F2A0067FDF0 /* BLETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A64EB229172F2A0067FDF0 /* BLETests.swift */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */; };
@@ -80,6 +81,7 @@
 		C36AA2E428FC80B2001F24A3 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C36AA2E528FC80B2001F24A3 /* RecordingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingExtension.swift; sourceTree = "<group>"; };
 		C36AA2EB28FC8278001F24A3 /* RiderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderView.swift; sourceTree = "<group>"; };
+		C39C7C2C2933C2AD007A5884 /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
 		C3A64EB229172F2A0067FDF0 /* BLETests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLETests.swift; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5m.mlmodel; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		4845584329089489002D81FC /* Alerts */ = {
 			isa = PBXGroup;
 			children = (
+				C39C7C2C2933C2AD007A5884 /* beep.mp3 */,
 				48CB852E2902EF5200283DBD /* vehicleAlert.mp3 */,
 				48CB852C2902E60700283DBD /* RearRiderAlerts.swift */,
 			);
@@ -326,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4851CE1028E49485003B5B76 /* Preview Assets.xcassets in Resources */,
+				C39C7C2D2933C2AD007A5884 /* beep.mp3 in Resources */,
 				483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */,
 				4851CE0D28E49485003B5B76 /* Assets.xcassets in Resources */,
 				48CB852F2902EF5200283DBD /* vehicleAlert.mp3 in Resources */,
