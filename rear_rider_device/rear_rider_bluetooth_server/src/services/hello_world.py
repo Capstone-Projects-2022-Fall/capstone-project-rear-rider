@@ -136,13 +136,12 @@ class RearRiderConfig:
     """
     lidar_unsafe_distance: int = 1
     """
-    Far = 2: (9 meters)
-    Medium = 1: (5 meters)
-    Close = 0: (1 meter)
+    Distance represented in centimeters.
     """
 
     def to_bytes(self):
-        return [self.pattern, self.brightness, *self.color, self.lidar_unsafe_distance]
+        return [self.pattern, self.brightness, *self.color,
+                *self.lidar_unsafe_distance.to_bytes(length=2, byteorder='little')]
 
 class ConfigCharacteristic(Characteristic):
     """
@@ -171,7 +170,7 @@ class ConfigCharacteristic(Characteristic):
         r = int(value[2])
         g = int(value[3])
         b = int(value[4])
-        lidar_unsafe_distance = int(value[5])
+        lidar_unsafe_distance = int.from_bytes([value[5], value[6]], byteorder='little')
         # print(f'ConfigCharacteristic Write: {pattern} {brightness} {r} {g} {b}')
         self.value = RearRiderConfig(pattern, brightness, (r, g, b), lidar_unsafe_distance)
         if self._on_led_config is not None:

@@ -12,7 +12,8 @@ class StubbedConfigCharacteristic(ConfigCharacteristic):
 class TestConfigCharacteristic(unittest.TestCase):
     def test_set_on_led_config(self):
         callback_called = False
-        config_val = [0x01, 0x01, 0xFF, 0xFF, 0xFF, 0x02]
+        little_endian_int = [0x00, 0x02]
+        config_val = [0x01, 0x01, 0xFF, 0xFF, 0xFF, *little_endian_int]
         def callback(new_led_config: RearRiderConfig):
             nonlocal callback_called
             callback_called = True

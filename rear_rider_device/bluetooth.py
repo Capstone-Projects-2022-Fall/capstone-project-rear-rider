@@ -47,7 +47,7 @@ class BluetoothParentProcess(ParentProcess):
         ####################################################
         def on_rear_rider_config(cfg: RearRiderConfig):
             self.writeline(f'led_config\n{cfg.pattern} {cfg.brightness} {cfg.color[0]} {cfg.color[1]} {cfg.color[2]}')
-            self.writeline(f'lidar_config\b{cfg.lidar_unsafe_distance}')
+            self.writeline(f'lidar_config\n{cfg.lidar_unsafe_distance}')
         self.rear_rider_bt.hello_world_svc.config_chr.set_on_config(on_rear_rider_config)
         self.rear_rider_bt.sensors_svc.accelerometer_characteristic.set_read_accelerometer_cb(self.read_accelerometer)
         self.writeline('bluetooth_is_ready')
