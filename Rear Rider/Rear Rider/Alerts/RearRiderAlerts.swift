@@ -13,14 +13,18 @@ enum AlertErrors: Error {
     case fileNotFound(String)
 }
 
-
 /**
  * Class for managing any audio and visual alerts for the rider
  */
 class RearRiderAlerts: ObservableObject {
-    var mLModel = ImageIdentification()
+    var mLModel = ImageIdentification.shared
     var player: AVAudioPlayer!
     var soundFile: URL! = nil
+    
+    var unsafe_distance: Int = 900
+    @Published var distance: Int = 0
+    var alert_enabled: Bool = true
+    var vehicles_only: Bool = true
     
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()
@@ -29,6 +33,17 @@ class RearRiderAlerts: ObservableObject {
     var pic_size:Int = 0
     var pic_first_time:Bool = true
     
+    init() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(
+                AVAudioSession.Category.multiRoute, // this setting allows the sound to be played on the speaker instead of Bluetooth
+                options: AVAudioSession.CategoryOptions.duckOthers)
+
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch let error {
+            print(error)
+        }
+    }
     
     /// When this is set, the transfer of the packets will commence
     var pic_packets:Int = 0 {
@@ -46,7 +61,7 @@ class RearRiderAlerts: ObservableObject {
                 mLModel.detectObjects(image: frame)
                 pic_first_time = true
                 picData = NSMutableData()
-                if mLModel.detected_objs.isEmpty { askForPic() } // if no objects detect ask for another pic
+                if mLModel.bndRectsCopy.isEmpty { askForPic() } // if no objects detect ask for another pic
             }
             else {
                 BLEManager.shared.getPicPacket(index: packet_recv)
@@ -79,24 +94,30 @@ class RearRiderAlerts: ObservableObject {
     func playAudioAlert() {
         // do nothing if we don't have a sound file configured
         if soundFile == nil { return }
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(
-                AVAudioSession.Category.playback,
-                options: AVAudioSession.CategoryOptions.duckOthers
-            )
-
-            try AVAudioSession.sharedInstance().setActive(true)
-            player.play()
-        } catch let error {
-            print(error)
-        }
+        player.play()
     }
     
     /// Asks the RPi for the picture's metadata (size and number of packets)
     func askForPic() {
-        mLModel.detected_objs.removeAll()
+        //mLModel.detected_objs.removeAll()
         mLModel.clearBndRects()
         BLEManager.shared.getPicInfo()
+    }
+    
+    /// Play an alert sound when necessary
+    /// - Parameter d: Distance of the object detected by LiDAR
+    func alert_rider(distance d: Int) {
+        self.distance = d
+        
+        if d <= unsafe_distance && alert_enabled {
+            if vehicles_only {
+                if mLModel.checkForVehicles() {
+                    playAudioAlert()
+                }
+            }
+            else {
+                playAudioAlert()
+            }
+        }
     }
 }

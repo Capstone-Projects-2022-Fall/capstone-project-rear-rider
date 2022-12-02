@@ -10,13 +10,14 @@ import SwiftUI
 import AVKit
 
 struct CameraTestView: View {
+    @EnvironmentObject var mLModel: ImageIdentification
     @EnvironmentObject var bleManager: BLEManager
     @EnvironmentObject var wifiManager: WifiManager
+    @EnvironmentObject var alert: RearRiderAlerts
     @ObservedObject private var stream = MjpegStreamingController(url: "http://raspberrypi.local:8000/stream.mjpg")
-    private var mLModel = ImageIdentification()
     
     // declare a timer that will call a function every 0.3 seconds
-    private let timer = Timer.publish(every: 0.3, on: .main, in: .common)
+    private let timer = Timer.publish(every: 0.3, on: .main, in: .common).autoconnect()
     @State var timer_set = false
 
     var body: some View {
@@ -42,35 +43,13 @@ struct CameraTestView: View {
             }
             .scaledToFit()
             
-            RecordingView()
+            Text(String(alert.distance) + " cm")
             
-            HStack {
-                Button(action: {
-                    if wifiManager.wifiOn {
-                        stream.play()
-                        if !timer_set {
-                            _ = timer.connect()
-                            timer_set = true
-                        }
-                    }
-                }) {
-                    Text("Play")
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    mLModel.clearBndRects()
-                    mLModel.detectObjects(image: stream.uiImage)
-                }) {
-                    Text("Classify")
-                }
-            }
+            RecordingView()
         }
         .onAppear() {
             if (bleManager.connected) {
                 bleManager.toggleNotifyCharacteristic(enabled: false)
-                wifiManager.turnWifiOn()
             }
         }
         .onReceive(timer) { time in
@@ -79,18 +58,13 @@ struct CameraTestView: View {
                 mLModel.detectObjects(image: stream.uiImage)
             }
         }
-        .onDisappear() {
-            if (wifiManager.wifiOn) {
-                wifiManager.turnWifiOff()
-                timer.connect().cancel()
-                timer_set = false
-            }
-        }
     }
 }
 
 struct CameraTest_Previews: PreviewProvider {
     static var previews: some View {
         CameraTestView().environmentObject(BLEManager())
+            .environmentObject(ImageIdentification())
+            .environmentObject(RearRiderAlerts())
     }
 }

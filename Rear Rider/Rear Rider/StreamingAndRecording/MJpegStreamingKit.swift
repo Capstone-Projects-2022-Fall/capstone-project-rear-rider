@@ -41,6 +41,7 @@ open class MjpegStreamingController: NSObject, URLSessionDataDelegate, Observabl
         super.init()
         self.session = Foundation.URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
         self.contentURL = URL(string: url)
+        self.play()
     }
     
     deinit {

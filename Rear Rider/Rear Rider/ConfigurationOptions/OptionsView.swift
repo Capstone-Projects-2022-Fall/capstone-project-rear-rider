@@ -28,12 +28,19 @@ struct OptionsView: View {
     @State var confLightPattern: Int = 1
     @State var confLightBrightness: Int = 1
     @State var confLightColor: Color = .white
+    @State var confAlertToggle: Bool = true
+    @State var confVehiclesOnly: Bool = true
+    @State var confUnsafeDistance: Float = 17.0 // this index represents 900 in the array below
+    
+    var distance_text = ["50", "100", "150", "200", "250", "300",
+                         "350", "400", "450", "500", "550", "600",
+                         "650", "700", "750", "800", "850", "900", "950", "1000"]
     
     let audioFiles: [ConfigOptions.AudioFile] = ConfigOptions.AudioFile.allCases
     let lightPatterns: [ConfigOptions.LightPattern] = ConfigOptions.LightPattern.allCases
     let lightBrightness: [ConfigOptions.LightBrightness] = ConfigOptions.LightBrightness.allCases
     
-    let alert = RearRiderAlerts()
+    let alert = RearRiderAlerts.shared
     
     var body: some View {
         VStack {
@@ -45,8 +52,14 @@ struct OptionsView: View {
                                 audioFile in Text(audioFile.description).tag(audioFile.rawValue)
                             }
                         })
+                        Toggle("Sound", isOn: $confAlertToggle.onChange(setAlert))
+                        Toggle("Vehicles Only", isOn: $confVehiclesOnly.onChange(setVehiclesOnly))
+                        HStack {
+                            Slider(value: $confUnsafeDistance.onChange(setDistance), in: 0...19, step: 1)
+                            Text("Distance: \(distance_text[Int(confUnsafeDistance)])")
+                        }
                     } header: {
-                        Text("Audio")
+                        Text("LiDAR")
                     }
                     Section {
                         Picker("Pattern", selection: $confLightPattern.onChange(setLights), content: {
@@ -83,6 +96,9 @@ struct OptionsView: View {
             confLightBrightness = conf.lightBrightness
             confLightPattern = conf.lightPattern
             confLightColor = Color.fromRGBString(rgbString: conf.lightColor)
+            confAlertToggle = conf.alertToggle
+            confVehiclesOnly = conf.vehiclesOnly
+            confUnsafeDistance = Float(distance_text.lastIndex(of: String(conf.unsafeDistance)) ?? 0)
         }
     }
     
@@ -98,6 +114,27 @@ struct OptionsView: View {
             try! alert.loadSoundFile(fileName: conf.audioFile)
             alert.playAudioAlert()
         }
+    }
+    
+    /// Enable alerts
+    /// - Parameter value: true to enable
+    func setAlert(to value: Bool) {
+        conf.alertToggle = confAlertToggle
+        saveConf()
+    }
+    
+    /// Set the unsafe distance
+    /// - Parameter value: the index of distance_text array
+    func setDistance(to value: Float) {
+        conf.unsafeDistance = Int(distance_text[Int(confUnsafeDistance)]) ?? 0
+        saveConf()
+    }
+    
+    /// Alerts will be played only if the object detected is a vehicle
+    /// - Parameter value: true or false
+    func setVehiclesOnly(to value: Bool) {
+        conf.vehiclesOnly = confVehiclesOnly
+        saveConf()
     }
     
     /**

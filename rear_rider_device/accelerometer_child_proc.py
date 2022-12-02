@@ -1,4 +1,5 @@
 import asyncio
+import threading
 from datetime import datetime
 from rear_rider_device.ipc.child_process import ChildProcess
 from typing import Deque
@@ -18,16 +19,17 @@ class AccelerometerChildProcess(ChildProcess):
         self.fps = fps
         self.ready = asyncio.Future()
         self.bt_server_proc = bt_server_proc
+        self._data_cond = threading.Condition()
     
     async def on_ready(self):
         self.start_time = datetime.now()
         self._print('AccelerometerChildProcess is ready.')
-        # try:
-            # await self.writeline('ready_ack')
-        try:
+        async def read_accelerometer():
             await self.writeline('get_data')
-        except:
-            pass
+            with self._data_cond:
+                self._data_cond.wait(0.016)
+                return self.cyclic_buff.pop()
+        self.bt_server_proc.set_read_accelerometer_cb(read_accelerometer)
         self.ready.set_result(None)
         self._print('after_on_ready')
 
@@ -59,13 +61,9 @@ class AccelerometerChildProcess(ChildProcess):
             float(component[1]),
             float(component[2])
         )
-        self.cyclic_buff.append(data)
-        await self.bt_server_proc.writeline(
-            'set_data\n'
-            'accelerometer\n'
-            '{},{},{}'.format(data[0], data[1], data[2]))
-        await asyncio.sleep(1.0/self.fps)
-        await self.writeline('get_data')
+        with self._data_cond:
+            self.cyclic_buff.append(data)
+            self._data_cond.notify_all()
     
     def _get_name(self) -> str:
         return 'AccelerometerChildProcess'
