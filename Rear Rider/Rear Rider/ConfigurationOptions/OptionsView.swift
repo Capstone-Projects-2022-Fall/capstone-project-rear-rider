@@ -21,6 +21,8 @@ extension Binding {
 }
 
 struct OptionsView: View {
+    @EnvironmentObject var auth: AuthModel
+    @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var conf: UserConfig
     @State var confAudio: String = ""
     @State var confLightPattern: Int = 1
@@ -42,7 +44,6 @@ struct OptionsView: View {
     
     var body: some View {
         VStack {
-            Text("Options")
             NavigationView {
                 List {
                     Section {
@@ -83,9 +84,12 @@ struct OptionsView: View {
                     } header: {
                         Text("Log")
                     }
-                }
+                    Button(action: {signOut()}) {
+                        Text("Sign Out").foregroundColor(.red)
+                    }
+
+                }.navigationTitle("Options")
             }
-            .frame(maxHeight: 500)
         }
         .onAppear {
             confAudio = conf.audioFile
@@ -166,6 +170,19 @@ struct OptionsView: View {
             try conf.save()
         } catch let error{
             print(error)
+        }
+    }
+    
+    func signOut() {
+        let authResult = auth.signOutUser()
+        if (authResult.res == .success) {
+            // the warning thrown for this line is not genuine and should be ignored
+            // it is a bug with xcode 14
+            withAnimation {
+                viewRouter.currentPage = .signInPage
+            }
+        } else {
+            print("error signing out: \(authResult.message ?? "error signing out")")
         }
     }
 }
