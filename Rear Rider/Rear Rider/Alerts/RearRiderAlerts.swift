@@ -21,13 +21,10 @@ class RearRiderAlerts: ObservableObject {
     var player: AVAudioPlayer!
     var soundFile: URL! = nil
     
-    // this sound is played when an object is very close
-    var beep_player: AVAudioPlayer!
-    var beep_file: URL! = nil
-    var dist_far: Int = 900
-    var dist_medium: Int = 500
-    var dist_close: Int = 200
+    var unsafe_distance: Int = 900
     @Published var distance: Int = 0
+    var alert_enabled: Bool = true
+    var vehicles_only: Bool = true
     
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()
@@ -37,9 +34,6 @@ class RearRiderAlerts: ObservableObject {
     var pic_first_time:Bool = true
     
     init() {
-        self.distance = 0
-        try! loadBeepSound()
-        
         do {
             try AVAudioSession.sharedInstance().setCategory(
                 AVAudioSession.Category.multiRoute, // this setting allows the sound to be played on the speaker instead of Bluetooth
@@ -49,21 +43,6 @@ class RearRiderAlerts: ObservableObject {
         } catch let error {
             print(error)
         }
-    }
-    
-    func loadBeepSound() throws {
-        beep_file = Bundle.main.url(forResource: "beep", withExtension: "mp3")
-
-        if beep_file == nil {
-            throw AlertErrors.fileNotFound("File \("beep").mp3 not found on device!")
-        }
-
-        beep_player = try! AVAudioPlayer(contentsOf: beep_file)
-    }
-    
-    func playBeepSound() {
-        if beep_file == nil { return }
-        beep_player.play()
     }
     
     /// When this is set, the transfer of the packets will commence
@@ -123,5 +102,20 @@ class RearRiderAlerts: ObservableObject {
         mLModel.detected_objs.removeAll()
         mLModel.clearBndRects()
         BLEManager.shared.getPicInfo()
+    }
+    
+    /// Play an alert sound when necessary
+    /// - Parameter d: Distance of the object detected by LiDAR
+    func alert_rider(distance d: Int) {
+        self.distance = d
+        
+        if d <= unsafe_distance && alert_enabled {
+            if vehicles_only {
+                print("hi")
+            }
+            else {
+                playAudioAlert()
+            }
+        }
     }
 }

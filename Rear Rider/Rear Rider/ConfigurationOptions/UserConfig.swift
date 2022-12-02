@@ -16,6 +16,9 @@ struct ConfigData: Codable {
     let lightPattern: Int
     let lightBrightness: Int
     let lightColor: String
+    let alertToggle: Bool
+    let vehiclesOnly: Bool
+    let unsafeDistance: Int
 }
 
 /**
@@ -24,12 +27,15 @@ struct ConfigData: Codable {
 enum ConfigOptions {
     enum AudioFile: String, CaseIterable, Equatable {
         case honk = "vehicleAlert"
+        case beep = "beep"
         case off = ""
         
         var description: String {
             switch self {
                 case .honk:
                     return "Honk"
+                case .beep:
+                    return "Beep"
                 case .off:
                     return "None"
             }
@@ -88,6 +94,9 @@ class UserConfig: ObservableObject {
     var lightPattern: Int = ConfigOptions.LightPattern.strobe.rawValue
     var lightColor: String = "rgb(255,255,255)"
     var lightBrightness: Int = 1
+    var alertToggle: Bool = true
+    var vehiclesOnly: Bool = true
+    var unsafeDistance: Int = 900
     
     var colorRGB: [CGFloat]? // use this for sending rgb values to RPi
     
@@ -115,8 +124,14 @@ class UserConfig: ObservableObject {
                 self.lightPattern = savedData.lightPattern
                 self.lightBrightness = savedData.lightBrightness
                 self.lightColor = savedData.lightColor
+                self.alertToggle = savedData.alertToggle
+                self.vehiclesOnly = savedData.vehiclesOnly
+                self.unsafeDistance = savedData.unsafeDistance
                 
                 try! RearRiderAlerts.shared.loadSoundFile(fileName: self.audioFile)
+                RearRiderAlerts.shared.alert_enabled = self.alertToggle
+                RearRiderAlerts.shared.vehicles_only = self.vehiclesOnly
+                RearRiderAlerts.shared.unsafe_distance = self.unsafeDistance
                 
                 print("LOADED: \(savedData)")
                 log.addLog(from: "UserConfig", message: "Loaded config: \(savedData)")
@@ -146,7 +161,10 @@ class UserConfig: ObservableObject {
             audioFile: audioFile,
             lightPattern: lightPattern,
             lightBrightness: lightBrightness,
-            lightColor: lightColor
+            lightColor: lightColor,
+            alertToggle: alertToggle,
+            vehiclesOnly: vehiclesOnly,
+            unsafeDistance: unsafeDistance
         )
         let encoder = JSONEncoder()
         if let encodedData = try? encoder.encode(data) {
@@ -154,6 +172,10 @@ class UserConfig: ObservableObject {
             print("SAVED: \(data)")
             log.addLog(from: "UserConfig", message: "Saved config: \(data)")
         }
+        
+        RearRiderAlerts.shared.alert_enabled = self.alertToggle
+        RearRiderAlerts.shared.vehicles_only = self.vehiclesOnly
+        RearRiderAlerts.shared.unsafe_distance = self.unsafeDistance
         
         /* Prepare data to be sent over BT
          * The format is as follows:
@@ -170,12 +192,14 @@ class UserConfig: ObservableObject {
         var red: UInt8 = UInt8(colorRGB[0] * 255)
         var green: UInt8 = UInt8(colorRGB[1] * 255)
         var blue: UInt8 = UInt8(colorRGB[2] * 255)
+        var distance: UInt16 = UInt16(self.unsafeDistance)
 
         bytes.append(withUnsafeBytes(of: &pat) { Data($0) })
         bytes.append(withUnsafeBytes(of: &br) { Data($0) })
         bytes.append(withUnsafeBytes(of: &red) { Data($0) })
         bytes.append(withUnsafeBytes(of: &green) { Data($0) })
         bytes.append(withUnsafeBytes(of: &blue) { Data($0) })
+        bytes.append(withUnsafeBytes(of: &distance) { Data($0) })
         bleManager.sendConfigToPi(data: bytes)
     }
     
