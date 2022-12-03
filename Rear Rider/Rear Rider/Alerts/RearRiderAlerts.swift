@@ -61,7 +61,7 @@ class RearRiderAlerts: ObservableObject {
                 mLModel.detectObjects(image: frame)
                 pic_first_time = true
                 picData = NSMutableData()
-                if mLModel.bndRectsCopy.isEmpty { askForPic() } // if no objects detect ask for another pic
+                if mLModel.bndRects.isEmpty { askForPic() } // if no objects detect ask for another pic
             }
             else {
                 BLEManager.shared.getPicPacket(index: packet_recv)

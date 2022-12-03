@@ -22,16 +22,7 @@ struct BoundingRect: Identifiable {
 class ImageIdentification: ObservableObject {
     static var shared = ImageIdentification()
     private var visionModel: VNCoreMLModel!
-    private var bndRects = [BoundingRect]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.bndRectsCopy = self.bndRects // fix for Publishing from Background Thread purple warning
-            }
-        }
-    }
-    @Published var bndRectsCopy = [BoundingRect]()
-    //var detected_objs = [String]()
-    
+    var bndRects = [BoundingRect]()
     private var locked: Bool = false
     
     init() {
@@ -60,8 +51,6 @@ class ImageIdentification: ObservableObject {
                     if resultDetectionConfidence >= detectionConfidenceThreshold {
                         let detectedObject = result.labels.first?.identifier ?? "Nothing"
                         let detectedObjectConfidence = result.labels.first?.confidence ?? 0
-                        
-                        //self.detected_objs.append(detectedObject)
                         
                         let temp = CGRect(x: result.boundingBox.origin.x, y: 1 - result.boundingBox.origin.y, width: result.boundingBox.width, height: result.boundingBox.height)
                         // 389x288 is the size of the Image and ZStack views in CameraTestView with scaledToFit property
@@ -104,7 +93,6 @@ class ImageIdentification: ObservableObject {
     /// Clear all bouding rects
     func clearBndRects() {
         self.bndRects.removeAll()
-        self.bndRectsCopy.removeAll()
     }
     
     /// Check the labels of the detected object and compare it them with the allowed ones

@@ -23,7 +23,7 @@ struct CameraTestView: View {
     var body: some View {
         VStack {
             ZStack {
-                ForEach (mLModel.bndRectsCopy) { rect in
+                ForEach (mLModel.bndRects) { rect in
                     Rectangle()
                         .frame(width: rect.rect.width, height: rect.rect.height)
                         .border(.yellow, width: 1)
