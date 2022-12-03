@@ -66,6 +66,12 @@ class BluetoothParentProcess(ParentProcess):
             nums = data.split(',')
             self.rear_rider_bt.sensors_svc.accelerometer_characteristic.vector = (
                 float(nums[0]),float(nums[1]),float(nums[2]))
+        
+        elif data_type_line == 'lidar':
+            data = await self.readline()
+            self.rear_rider_bt.hello_world_svc.lidar_chr.value = data
+            self.rear_rider_bt.hello_world_svc.lidar_chr.check_object_in_range()
+        
         else:
             # TODO: Add critical section guard here
             # self.writeline('set_data_ack')

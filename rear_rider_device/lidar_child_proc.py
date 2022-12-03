@@ -20,6 +20,7 @@ class LidarChildProcess(ChildProcess):
         super().__init__('python {}/lidar_proc.py'.format(dir_path))
         self.ready = asyncio.Future()
         self.led_child_proc = led_child_proc
+        self.in_range = False
         
     
     async def on_ready(self):
@@ -38,10 +39,11 @@ class LidarChildProcess(ChildProcess):
         lidar_data = (await self.readline()).split(' ')
         lidar_distance = lidar_data[0]
         signal_strength = lidar_data[1]
-        self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
+        #self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
         
-        unsafe_distance = 50 
-        if int(lidar_distance) < unsafe_distance:
+        unsafe_distance = 200
+        if int(lidar_distance) <= unsafe_distance:
+            await self.bt_child_proc.writeline('set_data\nlidar\n{}'.format(lidar_distance))
             await self.led_child_proc.led_strobe_on()
         else:
             await self.led_child_proc.led_strobe_off()

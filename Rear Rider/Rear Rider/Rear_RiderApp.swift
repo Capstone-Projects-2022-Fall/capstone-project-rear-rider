@@ -26,9 +26,11 @@ struct Rear_RiderApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     @StateObject var viewRouter = ViewRouter()
+    @StateObject var mLModel = ImageIdentification.shared
     @StateObject var bleManager = BLEManager.shared
     @StateObject var conf = UserConfig()
     @StateObject var log = RearRiderLog.shared
+    @StateObject var alert = RearRiderAlerts.shared
     @StateObject var wifiManager = WifiManager.shared
     @StateObject var auth = AuthModel()
     @StateObject var db = FirestoreModel()
@@ -36,6 +38,7 @@ struct Rear_RiderApp: App {
     var body: some Scene {
         WindowGroup {
             ViewController()
+                .environmentObject(mLModel)
                 .environmentObject(bleManager)
                 .environmentObject(log)
                 .environmentObject(conf)
@@ -43,6 +46,7 @@ struct Rear_RiderApp: App {
                 .environmentObject(viewRouter)
                 .environmentObject(auth)
                 .environmentObject(db)
+                .environmentObject(alert)
         }
     }
 }
