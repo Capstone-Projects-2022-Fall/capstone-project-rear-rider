@@ -54,18 +54,18 @@ with open(rear_rider_service_file, 'w', encoding='utf8') as service_file:
     )
 print(f'Copied {rear_rider_service_file} -> {SYSTEMD_SERVICES_DIR}')
 
-def create_bluetooth_override_dir():
-    create_dir_res = subprocess.run(['mkdir', '-p', BLUETOOTH_OVERRIDE_DIR])
-    create_dir_res.check_returncode()
-create_bluetooth_override_dir()
-with open(f'{BLUETOOTH_OVERRIDE_DIR}/override.conf', 'w', encoding='utf8') as bluetooth_override:
-    bluetooth_override.write(
-        '[Service]\n'
-        # Clear the original value (yes we need to do this).
-        'ExecStart=\n'
-        # Assign a new value.
-        'ExecStart=/usr/libexec/bluetooth/bluetoothd --noplugin=sap,avrcp\n'
-    )
+# def create_bluetooth_override_dir():
+#     create_dir_res = subprocess.run(['mkdir', '-p', BLUETOOTH_OVERRIDE_DIR])
+#     create_dir_res.check_returncode()
+# create_bluetooth_override_dir()
+# with open(f'{BLUETOOTH_OVERRIDE_DIR}/override.conf', 'w', encoding='utf8') as bluetooth_override:
+#     bluetooth_override.write(
+#         '[Service]\n'
+#         # Clear the original value (yes we need to do this).
+#         'ExecStart=\n'
+#         # Assign a new value.
+#         'ExecStart=/usr/libexec/bluetooth/bluetoothd --noplugin=sap,avrcp\n'
+#     )
 
 
 service_enable_res = subprocess.run(['systemctl', 'enable', REAR_RIDER_SERVICE_FILE_NAME])
