@@ -302,7 +302,6 @@ class LiDARCharacteristic(Characteristic):
 
     def StartNotify(self):
         if self.notifying:
-            print('Already in a notifying state.')
             return
         self.notifying = True
 
