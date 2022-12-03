@@ -308,7 +308,6 @@ class LiDARCharacteristic(Characteristic):
 
     def StopNotify(self):
         if not self.notifying:
-            print('Not in a notifying state.')
             return
         self.notifying = False
     
