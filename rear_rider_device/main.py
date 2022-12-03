@@ -1,5 +1,10 @@
+#!/usr/bin/env python3
 import os
 import sys
+import subprocess
+
+subprocess.run(['source', '/home/pi/.venv/bin/activate'], shell=True)
+
 PROJECT_ROOT = os.path.abspath(os.path.join(
                   os.path.dirname(__file__),
                   f'{os.pardir}')

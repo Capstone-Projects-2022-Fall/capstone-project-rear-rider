@@ -56,7 +56,7 @@ struct OptionsView: View {
                         Toggle("Vehicles Only", isOn: $confVehiclesOnly.onChange(setVehiclesOnly))
                         HStack {
                             Slider(value: $confUnsafeDistance.onChange(setDistance), in: 0...19, step: 1)
-                            Text("Distance: \(distance_text[Int(confUnsafeDistance)])")
+                            Text("Distance: \(distance_text[Int(confUnsafeDistance)]) cm")
                         }
                     } header: {
                         Text("LiDAR")

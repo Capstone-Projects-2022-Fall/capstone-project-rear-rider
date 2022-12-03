@@ -32,7 +32,6 @@ struct Rear_RiderApp: App {
     @StateObject var log = RearRiderLog.shared
     @StateObject var alert = RearRiderAlerts.shared
     @StateObject var wifiManager = WifiManager.shared
-    @StateObject var alert = RearRiderAlerts.shared
     @StateObject var auth = AuthModel()
     @StateObject var db = FirestoreModel()
     
