@@ -106,9 +106,11 @@ class RearRiderBluetooth:
         self._adapter_props.Set('org.bluez.Adapter1', 'Pairable', dbus.Boolean(value))
     
     def _on_device_connection_change(self, connected: bool, device_path: str):
+        device = BluetoothDevice(self._bus, device_path)
         if connected:
-            device = BluetoothDevice(self._bus, device_path)
             if self._connected_device is not None:
+                if device.get_address() == self._connected_device.get_address():
+                    return
                 device.disconnect()
                 raise Exception('We only want one device at a time to be connected.')
             # Disable pairing since we only want one device at a time to be connected.
@@ -119,11 +121,11 @@ class RearRiderBluetooth:
             return
         # connect == False, therefore this device was just disconnected.
         if (self._connected_device is not None and
-            self._connected_device.get_object_path() != device_path):
+            self._connected_device.get_address() != device.get_address()):
             # Since we only expect one device to be connected, we do not expect to reach this. 
             raise Exception(
                 'Expected _connected_device to be not None and the object paths to be the same.\n'
-                f'{self._connected_device.get_object_path()} {device_path}')
+                f'{self._connected_device.get_address()} {device.get_address()}')
         self._connected_device = None
         self._set_pairable(True)
         self.set_discoverable('1')
@@ -132,15 +134,13 @@ class RearRiderBluetooth:
         return self._connected_device is not None
         
 
-def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_read: Callable[[], str],
-        strobe_light: StrobeLight):
+def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], strobe_light: StrobeLight):
     """
     """
     # First check all the variables are not none in order to ensure the main is valid.
     try:
         assert(print != None)
         assert(on_ready != None)
-        assert(on_read != None)
         assert(strobe_light != None)
     except AssertionError:
         print('Condition for main function not met!')
@@ -165,7 +165,7 @@ def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], on_
 
     ad_manager = get_object_interface(LE_ADVERTISING_MANAGER_IFACE)
 
-    app = RearRiderApplication(bus, read_data=on_read,
+    app = RearRiderApplication(bus,
         strobe_light=strobe_light
     )
 

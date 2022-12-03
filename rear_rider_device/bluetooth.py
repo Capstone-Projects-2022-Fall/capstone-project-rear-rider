@@ -1,5 +1,6 @@
 import sys
 import os
+import threading
 PROJECT_ROOT = os.path.abspath(os.path.join(
                 os.path.dirname(__file__),
                 # This file should be in `rear_rider_device/` so we need to travel up one directory.
@@ -10,12 +11,17 @@ sys.path.append(PROJECT_ROOT)
 import asyncio
 import concurrent.futures
 from concurrent.futures import Future, ThreadPoolExecutor
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
 from rear_rider_device.ipc.parent_process import ParentProcess
 from rear_rider_device.rear_rider_bluetooth_server.src.services.characteristics.strobe_light import StrobeLight
 import rear_rider_device.rear_rider_bluetooth_server.src.main as bt_server_main
-from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import LedConfig
+from rear_rider_device.rear_rider_bluetooth_server.src.services.hello_world import RearRiderConfig
+
+DATA_FUTURE_TIMEOUT = 0.016
+'''
+The amount of seconds to wait for future data.
+'''
 
 class BluetoothParentProcess(ParentProcess):
     rear_rider_bt: bt_server_main.RearRiderBluetooth
@@ -27,6 +33,9 @@ class BluetoothParentProcess(ParentProcess):
     def __init__(self, bluetooth_ready: Future, create_strobe_light: Callable[[Any],StrobeLight]):
         self._bluetooth_ready = bluetooth_ready
         self.strobe_light = create_strobe_light(self)
+        self._accel_data_cond = threading.Condition()
+        self._accel_data: Union[None, tuple[float, float, float]] = None
+
 
     async def pre_ready(self):
         print('pre_ready')
@@ -36,9 +45,11 @@ class BluetoothParentProcess(ParentProcess):
         # self._bluetooth_ready.result() # FOR DEBUGGING ONLY
         # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ####################################################
-        def on_led_config(cfg: LedConfig):
+        def on_rear_rider_config(cfg: RearRiderConfig):
             self.writeline(f'led_config\n{cfg.pattern} {cfg.brightness} {cfg.color[0]} {cfg.color[1]} {cfg.color[2]}')
-        self.rear_rider_bt.hello_world_svc.config_chr.set_on_led_config(on_led_config)
+            self.writeline(f'lidar_config\n{cfg.lidar_unsafe_distance}')
+        self.rear_rider_bt.hello_world_svc.config_chr.set_on_config(on_rear_rider_config)
+        self.rear_rider_bt.sensors_svc.accelerometer_characteristic.set_read_accelerometer_cb(self.read_accelerometer)
         self.writeline('bluetooth_is_ready')
     
     async def pre_loop(self):
@@ -60,18 +71,15 @@ class BluetoothParentProcess(ParentProcess):
         data_type_line = await self.readline()
 
         if data_type_line == 'accelerometer':
-            data = await self.readline()
             # TODO: Add critical section guard here
             # self.writeline('set_data_ack')
-            nums = data.split(',')
-            self.rear_rider_bt.sensors_svc.accelerometer_characteristic.vector = (
-                float(nums[0]),float(nums[1]),float(nums[2]))
-        
+            with self._accel_data_cond:
+                self._accel_data = _parse_acceleration_data(await self.readline())
+                self._accel_data_cond.notify_all()
         elif data_type_line == 'lidar':
             data = await self.readline()
             self.rear_rider_bt.hello_world_svc.lidar_chr.value = data
             self.rear_rider_bt.hello_world_svc.lidar_chr.check_object_in_range()
-        
         else:
             # TODO: Add critical section guard here
             # self.writeline('set_data_ack')
@@ -97,8 +105,24 @@ class BluetoothParentProcess(ParentProcess):
     def discoverable_changed(self, value: str):
         timeout = self.rear_rider_bt.get_discoverable_timeout()
         self.writeline(f'discoverable\n{value} {timeout}')
-        
 
+    def read_accelerometer(self) -> tuple[float, float, float]:
+        '''
+        This action could timeout.
+        '''
+        with self._accel_data_cond:
+            self.writeline('read_accelerometer')
+            try:
+                self._accel_data_cond.wait(DATA_FUTURE_TIMEOUT)
+                if self._accel_data is None:
+                    raise Exception('Acceleration data was None')
+                return self._accel_data
+            finally:
+                self._accel_data = None
+        
+def _parse_acceleration_data(line: str):
+    nums = line.split(',')
+    return (float(nums[0]),float(nums[1]),float(nums[2]))
 
 if __name__ == '__main__':
     # TODO: Synchronize writes to stdout using `with` keyword:
@@ -128,15 +152,8 @@ if __name__ == '__main__':
                     proc.rear_rider_bt = rear_rider_bt
                     proc._bluetooth_ready.set_result(None)
 
-                x=0
-                y=0
-                def on_read():
-                    x = x + 1
-                    y = y + 1
-                    return '{},{}'.format(x, y)
                 bt_server_main.main(print,
                         on_ready=bluetooth_is_ready,
-                        on_read=on_read,
                         strobe_light=proc.strobe_light,
                 )
 

@@ -2,18 +2,22 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
 from datetime import datetime
+from rear_rider_device.bluetooth_server_child_proc import BluetoothServerChildProcess
 from rear_rider_device.ipc.child_process import ChildProcess
 from rear_rider_device.leds_child_proc import LedsChildProcess
 import os 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+DEFAULT_UNSAFE_DISTANCE = 500
+
 class LidarChildProcess(ChildProcess):
 
     lidar_distance = 0 # default unit is cm
     signal_strength = 0 # signal unreliable under 100 
 
-    def __init__(self, led_child_proc: LedsChildProcess):
+    def __init__(self, led_child_proc: LedsChildProcess,
+            bt_child_proc: BluetoothServerChildProcess):
         """
         Default `buf_size` of 64 frame datapoints at 60 `fps`.
         """
@@ -21,6 +25,12 @@ class LidarChildProcess(ChildProcess):
         self.ready = asyncio.Future()
         self.led_child_proc = led_child_proc
         self.in_range = False
+        self.bt_child_proc = bt_child_proc
+        self._unsafe_distance = DEFAULT_UNSAFE_DISTANCE
+        def set_lidar_config(dist_cfg: int):
+            self._unsafe_distance = dist_cfg
+            self._print(f'Distance config: {self._unsafe_distance} cm')
+        self.bt_child_proc.set_lidar_config_cb(set_lidar_config)
         
     
     async def on_ready(self):
@@ -41,7 +51,7 @@ class LidarChildProcess(ChildProcess):
         signal_strength = lidar_data[1]
         #self._print('Lidar_distance:{}\n\tSignal_strength:{}\n'.format(lidar_distance, signal_strength))
         
-        unsafe_distance = 200
+        unsafe_distance = self._unsafe_distance
         if int(lidar_distance) <= unsafe_distance:
             await self.bt_child_proc.writeline('set_data\nlidar\n{}'.format(lidar_distance))
             await self.led_child_proc.led_strobe_on()
