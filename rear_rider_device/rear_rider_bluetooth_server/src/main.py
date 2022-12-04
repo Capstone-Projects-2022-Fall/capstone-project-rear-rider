@@ -246,12 +246,8 @@ def main(print, on_ready: Union[None, Callable[[RearRiderBluetooth], None]], str
         def register_ad_cb():
             print('Advertisement registered')
             print(rear_rider_adv.get_properties())
-            # rear_rider_adv.Powe
             if on_ready is not None:
                 rear_rider_bt = RearRiderBluetooth(bus, app.hello_world_service, app.sensors_service)
-                # Get initial value
-                # discoverable = '0'
-                # print(f'Initial "discoverable" value: {discoverable}')
                 rear_rider_bt.kick_and_remove_devices_if_not_alone()
                 rear_rider_bt.sync_discoverable_state()
                 on_ready(rear_rider_bt)
