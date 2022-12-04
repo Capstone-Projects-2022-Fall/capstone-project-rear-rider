@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import Rear_Rider
 
 final class Rear_RiderTests: XCTestCase {
 

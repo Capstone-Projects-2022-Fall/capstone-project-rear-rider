@@ -1,19 +1,19 @@
+////
+////  ViewRouter.swift
+////  Rear Rider
+////
+////  Created by Paul Sutton on 11/14/22.
+////
 //
-//  ViewRouter.swift
-//  Rear Rider
+//import SwiftUI
 //
-//  Created by Paul Sutton on 11/14/22.
+//class ViewRouter: ObservableObject {
+//    @Published var currentPage: Page = .signInPage
+//}
 //
-
-import SwiftUI
-
-class ViewRouter: ObservableObject {
-    @Published var currentPage: Page = .signInPage
-}
-
-enum Page {
-    case signUpPage
-    case signInPage
-    case forgotPasswordPage
-    case homePage
-}
+//enum Page {
+//    case signUpPage
+//    case signInPage
+//    case forgotPasswordPage
+//    case homePage
+//}

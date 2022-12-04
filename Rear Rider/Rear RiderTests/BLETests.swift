@@ -53,16 +53,6 @@ class BLETests: XCTestCase {
         }
     }
     
-    func testWifiTurnsOff() throws {
-        if result == XCTWaiter.Result.timedOut {
-            bleManager.turnWifiOff()
-            let r = XCTWaiter.wait(for: [XCTestExpectation()], timeout: 3) // wait for Wi-Fi to update
-            if r == XCTWaiter.Result.timedOut {
-                XCTAssertFalse(WifiManager.shared.wifiOn)
-            }
-        }
-    }
-    
     func testWifiTurnsOn() throws {
         if result == XCTWaiter.Result.timedOut {
             bleManager.turnWifiOn()
