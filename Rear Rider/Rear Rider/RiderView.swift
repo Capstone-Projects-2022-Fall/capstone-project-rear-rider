@@ -15,7 +15,7 @@ struct RiderView: View {
     var body: some View {
         VStack {
             ZStack {
-                ForEach (RearRiderAlerts.shared.mLModel.bndRectsCopy) { rect in
+                ForEach (ImageIdentification.shared.bndRects) { rect in
                     Rectangle()
                         .frame(width: rect.rect.width, height: rect.rect.height)
                         .border(.yellow, width: 1)

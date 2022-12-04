@@ -25,13 +25,9 @@ struct HomeView: View {
                     .foregroundColor(wifiManager.wifiOn ? .green : .red)
             }
             TabView {
-                RiderView()
-                    .tabItem {
-                        Image(systemName: "bicycle")
-                    }
                 CameraTestView()
                     .tabItem {
-                        Image(systemName: "camera")
+                        Image(systemName: "bicycle")
                     }
                 OptionsView()
                     .tabItem {

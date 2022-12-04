@@ -75,6 +75,25 @@ Now the Bluetooth server starts when the Pi boots. Also, Bluetooth has to be in 
 
 The application has three tabs. The first tab is the main view. Here the rider can see alerts when an object is approaching (TBD). The next view is the Live Streaming. The app will connect to the Pi over Wi-Fi and stream a live feed from the camera. The user has the option to record the streaming and to use ML to detect the objects in the feed. The last tab is the settings tab (TBD). At the top of the screen there are two icons that show if the Bluetooth and Wi-Fi connections are available by turning green.
 
+## Disabling Unnecessary Bluetooth Services
+
+By default Raspbian's bluetooth service includes AVRCP, which is for the capability of streaming audio to the raspberry pi, but we do not require this. Also, the bluetooth service includes SAP (Sim Access Profile) which we do not make use of. Do the following to disable those features:
+
+```bash
+sudo systemctl edit bluetooth.service
+```
+
+Then, add the following lines to the indicated regions.
+
+```conf
+[Service]
+# First clear the responsible variable.
+ExecStart=
+# Then reassign it with the aforemention plugins disabled.
+ExecStart=/usr/libexec/bluetooth/bluetoothd --noplugin=sap,avrcp
+```
+
+
 ## Contributing
 
 ### Updating requirements.txt

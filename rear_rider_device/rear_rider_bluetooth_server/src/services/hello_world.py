@@ -39,15 +39,18 @@ class HelloWorldService(Service):
         config_chr = ConfigCharacteristic(bus, 2, self)
         wifi_chr = WifiCharacteristic(bus, 3, self)
         pic_chr = PictureCharacteristic(bus, 4, self)
+        lidar_chr = LiDARCharacteristic(bus, 5, self)
 
         self.add_characteristic(reverse_text_chr)
         self.add_characteristic(append_counter_chr)
         self.add_characteristic(config_chr)
         self.add_characteristic(wifi_chr)
         self.add_characteristic(pic_chr)
+        self.add_characteristic(lidar_chr)
         
         self.reverse_text_chr = reverse_text_chr
         self.config_chr = config_chr
+        self.lidar_chr = lidar_chr
 
 class ReverseTextCharacteristic(Characteristic):
     """
@@ -116,7 +119,7 @@ class AppendCounterWithNotificationCharacteristic(Characteristic):
         return self.notifying
 
 @dataclass
-class LedConfig:
+class RearRiderConfig:
     pattern: int = 0
     """
     0 - no pattern
@@ -131,13 +134,20 @@ class LedConfig:
     """
     (r, g, b)
     """
+    lidar_unsafe_distance: int = 1
+    """
+    Distance represented in centimeters.
+    """
 
     def to_bytes(self):
-        return [self.pattern, self.brightness, *self.color]
+        return [self.pattern, self.brightness, *self.color,
+                *self.lidar_unsafe_distance.to_bytes(length=2, byteorder='little')]
 
 class ConfigCharacteristic(Characteristic):
     """
     Configure the LED lights.
+
+    TODO: Move this into seperate file.
     """
     TEST_CHRC_UUID = '501beabd-3f66-4cca-ba7a-0fbf4f81870c'
 
@@ -147,12 +157,12 @@ class ConfigCharacteristic(Characteristic):
                 self.TEST_CHRC_UUID,
                 ['write'],
                 service)
-        self.value: LedConfig
-        self._on_led_config: Union[None, Callable[[LedConfig], None]] = None
+        self.value: RearRiderConfig
+        self._on_led_config: Union[None, Callable[[RearRiderConfig], None]] = None
         self._config_characteristic__init__()
     
     def _config_characteristic__init__(self):
-        self.value = LedConfig()
+        self.value = RearRiderConfig()
 
     def WriteValue(self, value, options):
         pattern = int(value[0])
@@ -160,12 +170,13 @@ class ConfigCharacteristic(Characteristic):
         r = int(value[2])
         g = int(value[3])
         b = int(value[4])
+        lidar_unsafe_distance = int.from_bytes([value[5], value[6]], byteorder='little')
         # print(f'ConfigCharacteristic Write: {pattern} {brightness} {r} {g} {b}')
-        self.value = LedConfig(pattern, brightness, (r, g, b))
+        self.value = RearRiderConfig(pattern, brightness, (r, g, b), lidar_unsafe_distance)
         if self._on_led_config is not None:
             self._on_led_config(self.value)
     
-    def set_on_led_config(self, callback: Callable[[LedConfig], None]):
+    def set_on_config(self, callback: Callable[[RearRiderConfig], None]):
         self._on_led_config = callback
 
 
@@ -272,3 +283,34 @@ class PictureCharacteristic(Characteristic):
     
     def WriteValue(self, value, options):
         self.value = int(value[0])
+
+class LiDARCharacteristic(Characteristic):
+    """
+    Notifies the iOS app when an object is detected by the LiDAR sensor and sends
+    the distance.
+    """
+    UUID = '92cb916f-d996-4f30-8cba-cf3ab8aede56'
+    value: dbus.ByteArray
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.UUID,
+            ['notify'],
+            service)
+        self.notifying = False
+        self.value = 0
+
+    def StartNotify(self):
+        if self.notifying:
+            return
+        self.notifying = True
+
+    def StopNotify(self):
+        if not self.notifying:
+            return
+        self.notifying = False
+    
+    def check_object_in_range(self):
+        value = dbus.ByteArray(self.value.encode('utf8'))
+        self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
+        return self.notifying
