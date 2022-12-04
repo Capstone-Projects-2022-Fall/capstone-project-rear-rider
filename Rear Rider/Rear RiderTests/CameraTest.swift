@@ -2,35 +2,42 @@
 //  CameraTest.swift
 //  Rear RiderTests
 //
-//  Created by Lydia Pescaru on 12/4/22.
+//  Created by Calin Pescaru on 12/4/22.
 //
+// This test requries modifications which are not present in the main branch!
 
 import XCTest
 @testable import Rear_Rider
 
-final class CameraTest: XCTestCase {
+class CameraTest: XCTestCase {
+    private var bleManager: BLEManager! = nil
+    var result: XCTWaiter.Result!
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        try? super.setUpWithError()
+        
+        bleManager = BLEManager()
+        //give iPhone enough time to connect to the RPi
+        result = XCTWaiter.wait(for: [XCTestExpectation()], timeout: 3)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        bleManager.disconnectBLE()
+        try? super.tearDownWithError()
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testReceivingCameraFeed() throws {
+        // give enough time to connect to the Pi's Wi-Fi
+        result = XCTWaiter.wait(for: [XCTestExpectation()], timeout: 7)
+        let stream = MjpegStreamingController.shared
+        
+        // The first 2 bytes of a jpeg image are 0xff = 255 and 0xd8 = 216
+        let byte1 = UInt8(stream.receivedData?[0] ?? 0)
+        let byte2 = UInt8(stream.receivedData?[1] ?? 0)
+        
+        XCTAssertEqual(byte1, 255)
+        XCTAssertEqual(byte2, 216)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

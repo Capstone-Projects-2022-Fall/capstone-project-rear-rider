@@ -14,7 +14,7 @@ struct CameraTestView: View {
     @EnvironmentObject var bleManager: BLEManager
     @EnvironmentObject var wifiManager: WifiManager
     @EnvironmentObject var alert: RearRiderAlerts
-    @ObservedObject private var stream = MjpegStreamingController(url: "http://raspberrypi.local:8000/stream.mjpg")
+    @ObservedObject private var stream = MjpegStreamingController.shared
     
     // declare a timer that will call a function every 0.3 seconds
     private let timer = Timer.publish(every: 0.3, on: .main, in: .common).autoconnect()

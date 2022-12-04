@@ -21,7 +21,8 @@ open class MjpegStreamingController: NSObject, URLSessionDataDelegate, Observabl
         case playing
     }
     
-    fileprivate var receivedData: NSMutableData?
+    //fileprivate var receivedData: NSMutableData?
+    var receivedData: NSMutableData?
     fileprivate var dataTask: URLSessionDataTask?
     fileprivate var session: Foundation.URLSession!
     fileprivate var status: Status = .stopped
@@ -31,6 +32,8 @@ open class MjpegStreamingController: NSObject, URLSessionDataDelegate, Observabl
     open var didFinishLoading: (()->Void)?
     open var contentURL: URL?
     @Published open var uiImage = UIImage()
+    
+    static var shared = MjpegStreamingController(url: "http://raspberrypi.local:8000/stream.mjpg")
     
     override public init() {
         super.init()

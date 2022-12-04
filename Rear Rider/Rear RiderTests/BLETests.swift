@@ -5,6 +5,8 @@
 // October 2022
 //
 // Bluetooth Unit Tests
+//
+// This test requries modifications which are not present in the main branch!
 
 
 import XCTest
