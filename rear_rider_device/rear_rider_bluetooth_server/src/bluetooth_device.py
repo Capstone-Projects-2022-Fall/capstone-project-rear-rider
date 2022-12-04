@@ -23,13 +23,30 @@ class BluetoothDevice:
         '''
         return str(self._props.Get(BLUEZ_DEVICE_1, 'Address'))
 
+    def connected(self):
+        '''
+        Check if the devices is paired.
+        '''
+        return bool(self._props.Get(BLUEZ_DEVICE_1, 'Connected'))
+
     def disconnect(self):
         '''
         Disconnect this device.
         '''
         self._device.Disconnect()
 
+    def get_path(self):
+        return str(self._device.object_path)
+
+    
+    def paired(self):
+        '''
+        Check if the devices is paired.
+        '''
+        return bool(self._props.Get(BLUEZ_DEVICE_1, 'Paired'))
+
     def __str__(self) -> str:
         return (
             f'Address: {self.get_address()}'
+            f'Path: {self.get_path()}'
         )
