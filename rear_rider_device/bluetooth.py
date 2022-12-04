@@ -102,9 +102,18 @@ class BluetoothParentProcess(ParentProcess):
         self.writeline('is_strobe_on')
         return bool(self.readline_sync())
     
-    def discoverable_changed(self, value: str):
+    def discoverable_changed(self, value: bool):
+        '''
+        value
+            If this value is True, then the device is in a discoverable state.
+        '''
         timeout = self.rear_rider_bt.get_discoverable_timeout()
-        self.writeline(f'discoverable\n{value} {timeout}')
+        if value:
+            # report that the discoverability lights should be ON = '1'
+            self.writeline(f'discoverable\n1 {timeout}')
+        else:
+            # report that the discoverability lights should be OFF = '0'
+            self.writeline(f'discoverable\n0 {timeout}')
 
     def read_accelerometer(self) -> tuple[float, float, float]:
         '''
