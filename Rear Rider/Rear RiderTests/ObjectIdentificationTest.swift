@@ -4,14 +4,14 @@
 //
 // December 2022
 //
-// Camera Unit Test
+// ObjectIdentification Unit Test
 //
 // This test requries modifications which are not present in the main branch!
 
 import XCTest
 @testable import Rear_Rider
 
-class CameraTest: XCTestCase {
+final class ObjectIdentificationTest: XCTestCase {
     private var bleManager: BLEManager! = nil
     var result: XCTWaiter.Result!
 
@@ -30,16 +30,29 @@ class CameraTest: XCTestCase {
         try? super.tearDownWithError()
     }
     
-    func testReceivingCameraFeed() throws {
+    func testDetectFace() throws {
+        let model = ImageIdentification.shared
+        
         // give enough time to connect to the Pi's Wi-Fi
         result = XCTWaiter.wait(for: [XCTestExpectation()], timeout: 7)
-        let stream = MjpegStreamingController.shared
         
-        // The first 2 bytes of a jpeg image are 0xff = 255 and 0xd8 = 216
-        let byte1 = UInt8(stream.receivedData?[0] ?? 0)
-        let byte2 = UInt8(stream.receivedData?[1] ?? 0)
+        // you have 7 seconds to point the camera at your face
+        result = XCTWaiter.wait(for: [XCTestExpectation()], timeout: 7)
         
-        XCTAssertEqual(byte1, 255)
-        XCTAssertEqual(byte2, 216)
+        var max_area: CGFloat = 0.0
+        var index = 0
+        var i = 0
+        
+        // get the max area of the bounding boxes which should be your face
+        while i < model.bndRects.count {
+            let area = model.bndRects[i].rect.minX * model.bndRects[i].rect.minY
+            if area > max_area {
+                max_area = area
+                index = i
+            }
+            i += 1
+        }
+        
+        XCTAssertEqual(model.bndRects[index].object, "person")
     }
 }

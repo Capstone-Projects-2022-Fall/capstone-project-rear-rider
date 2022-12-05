@@ -1,8 +1,10 @@
+// RearRider
 //
-//  AlertTest.swift
-//  Rear RiderTests
+// Calin Pescaru
 //
-//  Created by Calin Pescaru on 12/4/22.
+// December 2022
+//
+// Alert Unit Test
 //
 // This test requries modifications which are not present in the main branch!
 
