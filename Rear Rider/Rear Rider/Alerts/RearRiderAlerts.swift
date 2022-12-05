@@ -26,6 +26,9 @@ class RearRiderAlerts: ObservableObject {
     var alert_enabled: Bool = true
     var vehicles_only: Bool = true
     
+    var face_detected = false
+    var played = false
+    
     @Published var frame: UIImage = UIImage()
     static var shared = RearRiderAlerts()
     
@@ -94,7 +97,10 @@ class RearRiderAlerts: ObservableObject {
     func playAudioAlert() {
         // do nothing if we don't have a sound file configured
         if soundFile == nil { return }
-        player.play()
+        if face_detected {
+            player.play()
+            played = true
+        }
     }
     
     /// Asks the RPi for the picture's metadata (size and number of packets)
@@ -112,6 +118,7 @@ class RearRiderAlerts: ObservableObject {
         if d <= unsafe_distance && alert_enabled {
             if vehicles_only {
                 if mLModel.checkForVehicles() {
+                    face_detected = true
                     playAudioAlert()
                 }
             }

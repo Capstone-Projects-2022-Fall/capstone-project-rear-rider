@@ -33,6 +33,7 @@
 		C3A64EB329172F2A0067FDF0 /* BLETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A64EB229172F2A0067FDF0 /* BLETests.swift */; };
 		C3B743F6293D4EC600321D0F /* ConfigurationOptionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B743F5293D4EC600321D0F /* ConfigurationOptionsTest.swift */; };
 		C3B743F8293D50E200321D0F /* CameraTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B743F7293D50E200321D0F /* CameraTest.swift */; };
+		C3B7440E293D6C3E00321D0F /* AlertTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7440D293D6C3E00321D0F /* AlertTest.swift */; };
 		C3BD658328E8DB3B0042CEB4 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */; };
 		C3FC5C66290C64B800929D1D /* yolov5m.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */; };
 /* End PBXBuildFile section */
@@ -86,6 +87,7 @@
 		C3A64EB229172F2A0067FDF0 /* BLETests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLETests.swift; sourceTree = "<group>"; };
 		C3B743F5293D4EC600321D0F /* ConfigurationOptionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationOptionsTest.swift; sourceTree = "<group>"; };
 		C3B743F7293D50E200321D0F /* CameraTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTest.swift; sourceTree = "<group>"; };
+		C3B7440D293D6C3E00321D0F /* AlertTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTest.swift; sourceTree = "<group>"; };
 		C3BD658228E8DB3B0042CEB4 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		C3FC5C65290C64B800929D1D /* yolov5m.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5m.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -253,6 +255,7 @@
 				C3A64EB229172F2A0067FDF0 /* BLETests.swift */,
 				C3B743F5293D4EC600321D0F /* ConfigurationOptionsTest.swift */,
 				C3B743F7293D50E200321D0F /* CameraTest.swift */,
+				C3B7440D293D6C3E00321D0F /* AlertTest.swift */,
 			);
 			path = "Rear RiderTests";
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 			files = (
 				C3B743F8293D50E200321D0F /* CameraTest.swift in Sources */,
 				C3B743F6293D4EC600321D0F /* ConfigurationOptionsTest.swift in Sources */,
+				C3B7440E293D6C3E00321D0F /* AlertTest.swift in Sources */,
 				C3A64EB329172F2A0067FDF0 /* BLETests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
