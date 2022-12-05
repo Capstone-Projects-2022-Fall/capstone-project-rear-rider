@@ -12,13 +12,20 @@ import FirebaseFirestoreSwift
 struct Split: Hashable, Codable, Identifiable {
     var id = UUID()
     var seconds: Int
-    var distance: Int
+    var distance: Double
+}
+
+struct FormattedSplit: Hashable, Codable, Identifiable {
+    var id = UUID()
+    var milestone: Int
+    var speed: Int
 }
 
 struct Ride: Hashable, Codable, Identifiable {
     @DocumentID var id: String?
     @ServerTimestamp var createdTime: Timestamp?
-    var totalDistance: Int
+    var totalDistance: Double
+    var totalSeconds: Int
     var metric: String
-    var creatorId: String
+    var splits: Array<Split>
 }
