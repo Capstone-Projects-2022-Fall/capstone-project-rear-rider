@@ -40,39 +40,48 @@ struct MetricsView: View {
                         
                         Text("\(avgMph, specifier: "%.2f") mph")
                     }
+                    Spacer()
+                    HStack {
+                        Text("Calories Burned").bold()
+                        Spacer()
+                        let cals = ride.totalDistance / 1000 * 32
+                        Text("\(cals, specifier: "%.2f") cals")
+                    }
                 }.padding()
             }.headerProminence(.increased)
             if (loading) {
                 ProgressView("Loading")
             } else {
-                Section("Splits") {
-                    ForEach(ride.splits.indices, id: \.self) {index in
-                        HStack {
-                            Text("Mile \(index + 1)")
-                            Spacer()
-                            let (splH,splM,splS) = secondsToHoursMinutesSeconds(ride.splits[index].seconds)
-                            let formattedSplitTime = String(format: "%02d:%02d", splM, splS)
-                            Text(formattedSplitTime)
-                        }
-                    }
-                }.headerProminence(.increased)
-                Section("Pace") {
-                    if #available(iOS 16.0, *) {
-                        Chart {
-                            ForEach(formattedSplits) { split in
-                                BarMark(
-                                    x: .value("Milestone", split.milestone),
-                                    y: .value("Speed", split.speed)
-                                )
-                                
+                if (!ride.splits.isEmpty) {
+                    Section("Splits") {
+                        ForEach(ride.splits.indices, id: \.self) {index in
+                            HStack {
+                                Text("Mile \(index + 1)")
+                                Spacer()
+                                let (splH,splM,splS) = secondsToHoursMinutesSeconds(ride.splits[index].seconds)
+                                let formattedSplitTime = String(format: "%02d:%02d", splM, splS)
+                                Text(formattedSplitTime)
                             }
-                        }.chartXAxisLabel("Distance (miles)").chartYAxisLabel("Pace (mph)")
-                            .frame(height: 250)
-                    } else {
-                        // Fallback on earlier versions
-                        Text("IOS 16 required to display chart")
-                    }
-                }.headerProminence(.increased)
+                        }
+                    }.headerProminence(.increased)
+                    Section("Pace") {
+                        if #available(iOS 16.0, *) {
+                            Chart {
+                                ForEach(formattedSplits) { split in
+                                    BarMark(
+                                        x: .value("Milestone", split.milestone),
+                                        y: .value("Speed", split.speed)
+                                    )
+                                    
+                                }
+                            }.chartXAxisLabel("Distance (miles)").chartYAxisLabel("Pace (mph)")
+                                .frame(height: 250)
+                        } else {
+                            // Fallback on earlier versions
+                            Text("IOS 16 required to display chart")
+                        }
+                    }.headerProminence(.increased)
+                }
             }
         }.navigationTitle("Metrics").onAppear {
             for split in ride.splits {
