@@ -39,20 +39,14 @@ final class ObjectIdentificationTest: XCTestCase {
         // you have 7 seconds to point the camera at your face
         result = XCTWaiter.wait(for: [XCTestExpectation()], timeout: 7)
         
-        var max_area: CGFloat = 0.0
-        var index = 0
-        var i = 0
-        
-        // get the max area of the bounding boxes which should be your face
-        while i < model.bndRects.count {
-            let area = model.bndRects[i].rect.minX * model.bndRects[i].rect.minY
-            if area > max_area {
-                max_area = area
-                index = i
+        var person: String = ""
+        for obj in model.bndRects {
+            if obj.object == "person" {
+                person = "person"
+                break
             }
-            i += 1
         }
-        
-        XCTAssertEqual(model.bndRects[index].object, "person")
+            
+        XCTAssertEqual(person, "person")
     }
 }
