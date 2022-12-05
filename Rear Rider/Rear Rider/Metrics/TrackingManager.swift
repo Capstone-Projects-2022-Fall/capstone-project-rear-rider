@@ -12,8 +12,17 @@ class TrackingManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var authorizationStatus: CLAuthorizationStatus
     @Published var lastSeenLocation: CLLocation?
     @Published var currentPlacemark: CLPlacemark?
-    @Published var secondsElapsed = 0.0
     @Published var mode: TrackingMode = .stopped
+    @Published var locationsArray = [CLLocation]()
+    @Published var cummulativeDistance = 0.0
+    private var milestone = 0.0
+    private var splitDistance = 50.00
+    @Published var hours = 0
+    @Published var minutes = 0
+    @Published var seconds = 0
+    private var secondsElapsed = 0
+    private var secondsMilestone = 0
+    private var splits = [Split]()
     
     private var timer = Timer()
     
@@ -47,8 +56,25 @@ class TrackingManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastSeenLocation = locations.first
-        fetchCountryAndCity(for: locations.first)
+        if (locationsArray.isEmpty) {
+            locationsArray.append(locations.first!)
+            lastSeenLocation = locations.first
+            guard let dist = locations.first?.distance(from: locationsArray.last!) else{return}
+            cummulativeDistance += dist
+            fetchCountryAndCity(for: locations.first)
+        } else {
+            lastSeenLocation = locations.first
+            guard let dist = locations.first?.distance(from: locationsArray.last!) else{return}
+            locationsArray.append(locations.first!)
+            cummulativeDistance += dist
+            fetchCountryAndCity(for: locations.first)
+            if (cummulativeDistance - milestone >= splitDistance) {
+                splits.append(Split(seconds: secondsMilestone, distance: splitDistance))
+                milestone = cummulativeDistance
+                secondsMilestone = 0
+                print(splits)
+            }
+        }
     }
     
     func fetchCountryAndCity(for location: CLLocation?) {
@@ -60,8 +86,13 @@ class TrackingManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func start() {
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-            self.secondsElapsed = self.secondsElapsed + 0.1
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            self.secondsElapsed = self.secondsElapsed + 1
+            self.secondsMilestone = self.secondsMilestone + 1
+            let (h,m,s) = self.secondsToHoursMinutesSeconds(self.secondsElapsed)
+            self.hours = h
+            self.minutes = m
+            self.seconds = s
         }
         locationManager.startUpdatingLocation()
         mode = .started
@@ -77,6 +108,15 @@ class TrackingManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
         timer.invalidate()
         secondsElapsed = 0
+        seconds = 0
+        minutes = 0
+        hours = 0
+        cummulativeDistance = 0.0
+        locationsArray.removeAll()
         mode = .stopped
+    }
+    
+    func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {
+        return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
 }
