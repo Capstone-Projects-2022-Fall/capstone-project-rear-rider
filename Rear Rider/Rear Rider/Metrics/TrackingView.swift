@@ -9,6 +9,9 @@ import SwiftUI
 
 struct TrackingView: View {
     @EnvironmentObject var trackingManager: TrackingManager
+    @EnvironmentObject var db: FirestoreModel
+    @State private var loading = false
+    @State private var err = false
     var body: some View {
         VStack {
             HStack{
@@ -24,6 +27,9 @@ struct TrackingView: View {
                         Text("\(String(format: "%.2f", mph)) mph").font(.system(size: 50)).fontWeight(.bold).monospacedDigit().padding(.bottom, 20)
                     } else {
                         Text("-/-").font(.system(size: 50)).fontWeight(.bold).padding(.bottom, 20)
+                    }
+                    if (loading) {
+                        ProgressView("Writing ride to db")
                     }
                 }
                 Spacer()
@@ -70,7 +76,8 @@ struct TrackingView: View {
                         }
                         Spacer()
                         Button(action: {
-                            self.trackingManager.stop()
+                            createRun()
+                            
                         }) {
                             Text("End Ride")
                                 .bold()
@@ -83,9 +90,27 @@ struct TrackingView: View {
                     }
                 }
             }.padding(.bottom, 40)
-        }.frame(maxHeight: .infinity, alignment: .bottom)
+        }.frame(maxHeight: .infinity, alignment: .bottom).alert("Error writing ride to DB", isPresented: $err) {
+            Button("OK", role: .cancel) { }
+        }
+    }
+    
+    func createRun() {
+        loading = true
+        let result = db.writeRide(ride: Ride(totalDistance: trackingManager.cummulativeDistance, totalSeconds: trackingManager.secondsElapsed, metric: "meters", creatorId: db.userId!, splits: trackingManager.splits))
+        if (result.res == .success) {
+            self.trackingManager.stop()
+            loading = false
+        }
+        if (result.res == .failure) {
+            self.trackingManager.stop()
+            loading = false
+            err = true
+        }
     }
 }
+
+
 
 func metersToMiles(meters: Double) -> Double {
     return meters/1609

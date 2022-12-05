@@ -19,6 +19,7 @@ struct Ride: Hashable, Codable, Identifiable {
     @DocumentID var id: String?
     @ServerTimestamp var createdTime: Timestamp?
     var totalDistance: Double
+    var totalSeconds: Int
     var metric: String
     var creatorId: String
     var splits: Array<Split>
