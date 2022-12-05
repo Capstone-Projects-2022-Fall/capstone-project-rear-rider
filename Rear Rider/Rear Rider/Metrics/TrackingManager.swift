@@ -21,7 +21,7 @@ class TrackingManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var milestone = 0.0
     private var secondsMilestone = 0
     @Published var splits = [Split]()
-    private var splitDistance = 50.00
+    private var splitDistance = 1609
     
     private var timer = Timer()
     
@@ -62,11 +62,13 @@ class TrackingManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             cummulativeDistance += dist
         } else {
             lastSeenLocation = locations.first
+            print("speed: \(lastSeenLocation?.speed ?? -7)")
+            print("accuracy: \(lastSeenLocation?.speedAccuracy ?? -7)")
             guard let dist = locations.first?.distance(from: locationsArray.last!) else{return}
             locationsArray.append(locations.first!)
             cummulativeDistance += dist
-            if (cummulativeDistance - milestone >= splitDistance) {
-                splits.append(Split(seconds: secondsMilestone, distance: splitDistance))
+            if (cummulativeDistance - milestone >= Double(splitDistance)) {
+                splits.append(Split(seconds: secondsMilestone, distance: Double(splitDistance)))
                 milestone = cummulativeDistance
                 secondsMilestone = 0
             }

@@ -21,14 +21,7 @@ struct TrackingView: View {
                     Text(formattedTime).font(.system(size: 50)).fontWeight(.bold).monospacedDigit().padding(.bottom, 20)
                     Text("Distance").bold().foregroundColor(.gray)
                     Text("\(metersToMiles(meters: trackingManager.cummulativeDistance), specifier: "%.2f") miles").font(.system(size: 50)).fontWeight(.bold).monospacedDigit().padding(.bottom, 20)
-                    Text("Speed").bold().foregroundColor(.gray)
-                    if (trackingManager.mode == .started) {
-                        let mph = (trackingManager.lastSeenLocation?.speed ?? 0) * 2.237
-                        Text("\(String(format: "%.2f", mph)) mph").font(.system(size: 50)).fontWeight(.bold).monospacedDigit().padding(.bottom, 20)
-                    } else {
-                        Text("-/-").font(.system(size: 50)).fontWeight(.bold).padding(.bottom, 20)
-                    }
-                    if (loading) {
+                    if (db.firestoreLoading) {
                         ProgressView("Writing ride to db")
                     }
                 }
@@ -96,15 +89,12 @@ struct TrackingView: View {
     }
     
     func createRun() {
-        loading = true
-        let result = db.writeRide(ride: Ride(totalDistance: trackingManager.cummulativeDistance, totalSeconds: trackingManager.secondsElapsed, metric: "meters", creatorId: db.userId!, splits: trackingManager.splits))
+        let result = db.writeRide(ride: Ride(totalDistance: trackingManager.cummulativeDistance, totalSeconds: trackingManager.secondsElapsed, metric: "meters", splits: trackingManager.splits))
         if (result.res == .success) {
             self.trackingManager.stop()
-            loading = false
         }
         if (result.res == .failure) {
             self.trackingManager.stop()
-            loading = false
             err = true
         }
     }

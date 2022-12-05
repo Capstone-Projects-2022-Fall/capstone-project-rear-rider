@@ -15,12 +15,17 @@ struct Split: Hashable, Codable, Identifiable {
     var distance: Double
 }
 
+struct FormattedSplit: Hashable, Codable, Identifiable {
+    var id = UUID()
+    var milestone: Int
+    var speed: Int
+}
+
 struct Ride: Hashable, Codable, Identifiable {
     @DocumentID var id: String?
     @ServerTimestamp var createdTime: Timestamp?
     var totalDistance: Double
     var totalSeconds: Int
     var metric: String
-    var creatorId: String
     var splits: Array<Split>
 }

@@ -14,10 +14,11 @@ import FirebaseFirestoreSwift
 class FirestoreModel: ObservableObject {
     
     var db = Firestore.firestore()
-    var userId = Auth.auth().currentUser?.uid
+    private var userId = Auth.auth().currentUser?.uid
     
     @Published var appError: AppError? = nil
     @Published var firestoreLoading = false
+    @Published var rides = [Ride]()
     
     struct AppError: Identifiable {
         let id = UUID().uuidString
@@ -33,6 +34,7 @@ class FirestoreModel: ObservableObject {
         var id = UUID()
         var res: Result
         var message: String?
+        var content: Any?
     }
     
     func writeRide(ride: Ride) -> FirestoreResult {
@@ -44,6 +46,30 @@ class FirestoreModel: ObservableObject {
         } catch {
             firestoreLoading = false
             return FirestoreResult(res: .failure, message: error.localizedDescription)
+        }
+    }
+    
+    func getRides() {
+        if (rides.isEmpty) {
+            firestoreLoading = true
+        }
+        db.collection("users").document(userId!).collection("rides").order(by: "createdTime", descending: true).addSnapshotListener() { (querySnapshot, err) in
+            if let err = err {
+                self.firestoreLoading = false
+                print("Error getting documents: \(err)")
+            } else {
+                self.rides.removeAll()
+                for document in querySnapshot!.documents {
+                    do {
+                        let docData = try document.data(as: Ride.self)
+                        self.rides.append(docData)
+                    } catch {
+                        print(error)
+                        self.firestoreLoading = false
+                    }
+                }
+            }
+            self.firestoreLoading = false
         }
     }
 

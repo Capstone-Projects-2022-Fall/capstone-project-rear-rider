@@ -23,6 +23,7 @@
 		20E49BA2293A72BE008EE278 /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49B9C293A72BE008EE278 /* TrackingView.swift */; };
 		20E49BA4293A72DE008EE278 /* TrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA3293A72DE008EE278 /* TrackingManager.swift */; };
 		20E49BA6293A76E4008EE278 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA5293A76E4008EE278 /* HomeView.swift */; };
+		20E49BA9293DA354008EE278 /* Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA8293DA353008EE278 /* Dates.swift */; };
 		483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */; };
 		483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */; };
 		483E42B9291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -81,6 +82,7 @@
 		20E49BA3293A72DE008EE278 /* TrackingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingManager.swift; sourceTree = "<group>"; };
 		20E49BA5293A76E4008EE278 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		20E49BA7293A77B1008EE278 /* Rear-Rider-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Rear-Rider-Info.plist"; sourceTree = SOURCE_ROOT; };
+		20E49BA8293DA353008EE278 /* Dates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dates.swift; sourceTree = "<group>"; };
 		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				20E49B97293A72BE008EE278 /* ActiveView.swift */,
 				20E49B98293A72BE008EE278 /* MetricsView.swift */,
 				20E49B99293A72BE008EE278 /* RideHistoryView.swift */,
+				20E49BA8293DA353008EE278 /* Dates.swift */,
 				20E49B9B293A72BE008EE278 /* MetricsModel.swift */,
 				20E49B9C293A72BE008EE278 /* TrackingView.swift */,
 			);
@@ -435,6 +438,7 @@
 				C36AA2E828FC80B2001F24A3 /* RecordingExtension.swift in Sources */,
 				20CEE3472922C03000D43613 /* ViewController.swift in Sources */,
 				20E49B9E293A72BE008EE278 /* MetricsView.swift in Sources */,
+				20E49BA9293DA354008EE278 /* Dates.swift in Sources */,
 				4851CE1F28E4C3A2003B5B76 /* UIImage+Extension.swift in Sources */,
 				4845584929089EAA002D81FC /* UserConfig.swift in Sources */,
 				20E49BA6293A76E4008EE278 /* HomeView.swift in Sources */,
