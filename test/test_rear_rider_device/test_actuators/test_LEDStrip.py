@@ -3,9 +3,14 @@ import time
 import unittest
 from unittest import IsolatedAsyncioTestCase
 import sys, os
-sys.path.append("../rear_rider_device")
 
-from actuators.led_strip import LedStripController, create_neopixel
+PROJECT_ROOT = os.path.abspath(os.path.join(
+                os.path.dirname(__file__),
+                # This file should be in `rear_rider_device/` so we need to travel up one directory.
+                f'{os.pardir}/../../')
+)
+sys.path.append(PROJECT_ROOT)
+from rear_rider_device.actuators.led_strip import LedStripController, create_neopixel
 
 
 class TestLEDStrip(unittest.IsolatedAsyncioTestCase):
@@ -20,7 +25,7 @@ class TestLEDStrip(unittest.IsolatedAsyncioTestCase):
         '''
         BRIGHTNESS = 0.70
         self.led_strip.set_brightness(BRIGHTNESS)
-        self.assertTrue(self.led_strip._brightness_value == BRIGHTNESS*0.1) #.1 Comes from MAX_BRIGHTNESS value specified in led_strip.py
+        self.assertTrue(self.led_strip._brightness_value == BRIGHTNESS)
         
     async def test_fill(self):
         '''
