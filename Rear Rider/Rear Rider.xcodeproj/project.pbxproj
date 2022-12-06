@@ -24,6 +24,11 @@
 		20E49BA4293A72DE008EE278 /* TrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA3293A72DE008EE278 /* TrackingManager.swift */; };
 		20E49BA6293A76E4008EE278 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA5293A76E4008EE278 /* HomeView.swift */; };
 		20E49BA9293DA354008EE278 /* Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E49BA8293DA353008EE278 /* Dates.swift */; };
+		480EC9A9293EE4F2004CA41A /* ConfigurationOptionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480EC9A4293EE4F2004CA41A /* ConfigurationOptionsTest.swift */; };
+		480EC9AA293EE4F2004CA41A /* ObjectIdentificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480EC9A5293EE4F2004CA41A /* ObjectIdentificationTest.swift */; };
+		480EC9AB293EE4F2004CA41A /* CameraTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480EC9A6293EE4F2004CA41A /* CameraTest.swift */; };
+		480EC9AC293EE4F2004CA41A /* BLETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480EC9A7293EE4F2004CA41A /* BLETests.swift */; };
+		480EC9AD293EE4F2004CA41A /* AlertTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480EC9A8293EE4F2004CA41A /* AlertTest.swift */; };
 		483E42B4291BE71800B9A3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */; };
 		483E42B7291BE82200B9A3C3 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B6291BE82200B9A3C3 /* FirebaseAnalyticsSwift */; };
 		483E42B9291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 483E42B8291BE82200B9A3C3 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -84,6 +89,11 @@
 		20E49BA5293A76E4008EE278 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		20E49BA7293A77B1008EE278 /* Rear-Rider-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Rear-Rider-Info.plist"; sourceTree = SOURCE_ROOT; };
 		20E49BA8293DA353008EE278 /* Dates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dates.swift; sourceTree = "<group>"; };
+		480EC9A4293EE4F2004CA41A /* ConfigurationOptionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfigurationOptionsTest.swift; path = ../../../../../../Downloads/Tests/ConfigurationOptionsTest.swift; sourceTree = "<group>"; };
+		480EC9A5293EE4F2004CA41A /* ObjectIdentificationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectIdentificationTest.swift; sourceTree = "<group>"; };
+		480EC9A6293EE4F2004CA41A /* CameraTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTest.swift; sourceTree = "<group>"; };
+		480EC9A7293EE4F2004CA41A /* BLETests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLETests.swift; path = ../../../../../../Downloads/Tests/BLETests.swift; sourceTree = "<group>"; };
+		480EC9A8293EE4F2004CA41A /* AlertTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertTest.swift; sourceTree = "<group>"; };
 		483E42B3291BE71800B9A3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		484558402908941B002D81FC /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsView.swift; sourceTree = "<group>"; };
 		4845584829089EAA002D81FC /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
@@ -287,7 +297,12 @@
 		48F4414928F62E7C00F7C9AA /* Rear RiderTests */ = {
 			isa = PBXGroup;
 			children = (
+				480EC9A8293EE4F2004CA41A /* AlertTest.swift */,
 				C3A64EB229172F2A0067FDF0 /* BLETests.swift */,
+				480EC9A7293EE4F2004CA41A /* BLETests.swift */,
+				480EC9A6293EE4F2004CA41A /* CameraTest.swift */,
+				480EC9A4293EE4F2004CA41A /* ConfigurationOptionsTest.swift */,
+				480EC9A5293EE4F2004CA41A /* ObjectIdentificationTest.swift */,
 				48F4414A28F62E7C00F7C9AA /* Rear_RiderTests.swift */,
 			);
 			path = "Rear RiderTests";
@@ -458,7 +473,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				480EC9A9293EE4F2004CA41A /* ConfigurationOptionsTest.swift in Sources */,
+				480EC9AD293EE4F2004CA41A /* AlertTest.swift in Sources */,
 				C3A64EB329172F2A0067FDF0 /* BLETests.swift in Sources */,
+				480EC9AB293EE4F2004CA41A /* CameraTest.swift in Sources */,
+				480EC9AC293EE4F2004CA41A /* BLETests.swift in Sources */,
+				480EC9AA293EE4F2004CA41A /* ObjectIdentificationTest.swift in Sources */,
 				48F4414B28F62E7C00F7C9AA /* Rear_RiderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
